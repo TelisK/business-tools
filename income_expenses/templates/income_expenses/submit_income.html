@@ -1,0 +1,17 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<h1>Submit Income</h1>
+<form method="POST">
+    {% csrf_token %}
+
+    <div>
+        {{ form.as_p }} 
+        <!-- !Το as_p βγάζει κάθε πεδίο μέσα σε <p> tag. -->
+        <button type="submit">Save</button>
+    </div>
+
+</form>
+
+
+{% endblock %}

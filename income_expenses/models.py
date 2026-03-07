@@ -1,8 +1,15 @@
 from django.db import models
 
 # Create your models here.
+class Store(models.Model):
+    name = models.TextField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Income(models.Model):
         
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     day = models.DateField(unique=True)
     income_cash = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     income_pos = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -17,15 +24,19 @@ class Income(models.Model):
     def __str__(self):
         return str(self.day) + ' : ' + str(self.income_sum) + ' €'
     
-    @property
+    @property  # creates sum from the data on the database. Best way in case the data are updated later.
     def income_sum(self):
         return self.income_cash + self.income_pos + self.income_deposit + self.income_check + self.income_other
 
 class Expenses(models.Model):
+    class Meta:
+        verbose_name_plural = 'expenses'
+        verbose_name = 'expense'
 
     def __str__(self):
         return str(self.day) + ' : ' + str(self.amount) + ' €'
 
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
     day = models.DateField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.CharField(max_length=100, blank=True)
