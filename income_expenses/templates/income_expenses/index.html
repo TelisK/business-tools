@@ -1,0 +1,16 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+
+    <h1>Welcome</h1>
+<ul>
+    {% for i in income_list %}
+    <li>
+        <a href="{% url 'income_expenses:detail' i.id %}">
+            {{ i.day }} : {{ i.income_sum }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
