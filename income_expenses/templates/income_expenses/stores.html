@@ -1,0 +1,19 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+
+    <h1>Stores</h1>
+<br>
+
+<p>
+    <ul>
+    {% for i in stores_list %}
+    <li>
+            {{ i.id }} : {{ i.name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+</p>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit">
+</form>
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from income_expenses.models import Income, Expenses
+from income_expenses.models import Income, Expenses, Store
 from django.shortcuts import get_object_or_404
 from .forms import IncomeForm, ExpenseForm, StoreForm
 
@@ -21,7 +21,7 @@ def expenses_detail(request,id):
     context_to_html = {'expense_detail': expense_detail}
     return render(request, 'income_expenses/expenses_detail.html', context=context_to_html)
 
-
+# needs completion
 def totals_by_date(request, date):
     incomes = Income.objects.filter(day=date)
     expenses = Expenses.objects.filter(day=date)
@@ -42,8 +42,6 @@ def submit_income(request):
         return render(request, 'income_expenses/submit_income.html', context=context_to_html)
     
 
-
-
 def submit_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
@@ -56,11 +54,29 @@ def submit_expense(request):
         context_to_html = {'form':form}
         return render(request, 'income_expenses/submit_expense.html', context=context_to_html)
     
-def update_income(request):
-    pass
+def update_income(request, id):
+    income_update = Income.objects.get(id=id)
+    if request.method == 'POST':
+        form = IncomeForm(request.POST, instance=income_update)
+        if form.is_valid():
+            form.save()
+            return redirect('income_expenses:detail', id=id)
+    else:
+        form = IncomeForm(instance=income_update)
+        context_to_html = {'form':form}
+        return render(request,'income_expenses/income_update.html', context=context_to_html)
 
-def update_expense(request):
-    pass
+def update_expense(request, id):
+    expense_update = Expenses.objects.get(id=id)
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST, instance=expense_update)
+        if form.is_valid():
+            form.save()
+            return redirect('income_expenses:expenses_detail', id=id)
+    else:
+        form = ExpenseForm(instance=expense_update)
+        context_to_html = {'form':form}
+        return render(request,'income_expenses/expense_update.html', context=context_to_html)
 
 def delete_income(request, id):
     if request.method == 'POST':
@@ -79,6 +95,11 @@ def delete_expense(request, id):
     else:
         return render(request, 'income_expenses/expense_delete.html')
     
+def stores(request):
+    stores_list = Store.objects.all()
+    context_to_html = {'stores_list': stores_list}
+    return render(request, 'income_expenses/stores.html', context=context_to_html)
+
 def add_store(request):
     if request.method == 'POST':
         form = StoreForm(request.POST)
@@ -90,3 +111,24 @@ def add_store(request):
         form = StoreForm()
         context_to_html = {'form':form}
         return render(request, 'income_expenses/add_store.html', context=context_to_html)
+    
+def update_store(request, id):
+    update_store = Store.objects.get(id=id)
+    if request.method == 'POST':
+        form = StoreForm(request.POST, instance=update_store)
+        if form.is_valid():
+            form.save()
+            return redirect('income_expenses:stores')
+    else:
+        form = StoreForm(instance=update_store)
+        context_to_html = {'form':form}
+        return render(request,'income_expenses/update_store.html', context=context_to_html)
+
+
+def delete_store(request, id):
+    if request.method == 'POST':
+        store_to_del = Store.objects.get(id=id)
+        store_to_del.delete()
+        return redirect('income_expenses:stores')
+    else:
+        return render(request, 'income_expenses/delete_store.html')
