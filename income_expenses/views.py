@@ -7,13 +7,19 @@ from .forms import IncomeForm, ExpenseForm, StoreForm
 # Create your views here.
 def index(request):
     income_list = Income.objects.all()
-    context_to_html = {'income_list':income_list}
+    expense_list = Expenses.objects.all()
+    context_to_html = {'income_list':income_list, 'expense_list':expense_list}
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
 def detail(request, id):
     income_detail = get_object_or_404(Income, id=id)
     context_to_html = {'income_detail': income_detail}
     return render (request, 'income_expenses/detail.html', context=context_to_html)
+
+def expenses_detail(request,id):
+    expense_detail = get_object_or_404(Expenses, id=id)
+    context_to_html = {'expense_detail': expense_detail}
+    return render(request, 'income_expenses/expenses_detail.html', context=context_to_html)
 
 
 def totals_by_date(request, date):
@@ -49,6 +55,29 @@ def submit_expense(request):
         form = ExpenseForm()
         context_to_html = {'form':form}
         return render(request, 'income_expenses/submit_expense.html', context=context_to_html)
+    
+def update_income(request):
+    pass
+
+def update_expense(request):
+    pass
+
+def delete_income(request, id):
+    if request.method == 'POST':
+        income_to_del = Income.objects.get(id=id)
+        income_to_del.delete()
+        return redirect('income_expenses:index')
+    else:
+        return render(request, 'income_expenses/income_delete.html')
+
+
+def delete_expense(request, id):
+    if request.method == 'POST':
+        expense_to_del = Expenses.objects.get(id=id)
+        expense_to_del.delete()
+        return redirect('income_expenses:index')
+    else:
+        return render(request, 'income_expenses/expense_delete.html')
     
 def add_store(request):
     if request.method == 'POST':

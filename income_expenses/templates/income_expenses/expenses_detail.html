@@ -1,0 +1,11 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<h1>{{ expense_detail.day }}</h1>
+<br>
+<h1>{{ expense_detail.amount }}</h1>
+<h1>{{ expense_detail.category }}</h1>
+<h1>{{ expense_detail.comments }}</h1>
+<h1>{{ expense_detail.created_at }}</h1>
+<h1>{{ expense_detail.updated_at }}</h1>
+{% endblock %}

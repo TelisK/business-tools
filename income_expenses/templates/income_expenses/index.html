@@ -3,7 +3,11 @@
 
 
     <h1>Welcome</h1>
-<ul>
+<br>
+
+<p>
+    <ul>
+        <h1>Income</h1>
     {% for i in income_list %}
     <li>
         <a href="{% url 'income_expenses:detail' i.id %}">
@@ -11,6 +15,15 @@
         </a>
     </li>
     {% endfor %}
+    <h1>Expenses</h1>
+        {% for i in expense_list %}
+    <li>
+        <a href="{% url 'income_expenses:expenses_detail' i.id %}">
+            {{ i.day }} : {{ i.amount }}
+        </a>
+    </li>
+    {% endfor %}
 </ul>
+</p>
 
 {% endblock %}
