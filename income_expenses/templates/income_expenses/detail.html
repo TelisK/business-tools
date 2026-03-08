@@ -1,14 +1,56 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<h1>{{ income_detail.day }}</h1>
-<br>
-<h1>{{ income_detail.income_cash }}</h1>
-<h1>{{ income_detail.income_pos }}</h1>
-<h1>{{ income_detail.income_deposit }}</h1>
-<h1>{{ income_detail.income_check }}</h1>
-<h1>{{ income_detail.income_other }}</h1>
-<h1>{{ income_detail.comments }}</h1>
-<h1>{{ income_detail.created_at }}</h1>
-<h1>{{ income_detail.updated_at }}</h1>
+<div class="page-header">
+    <div>
+        <h1>Λεπτομέρειες Εσόδου</h1>
+        <p>{{ income_detail.day|date:"d/m/Y" }}</p>
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+        <a href="{% url 'income_expenses:income_update' income_detail.id %}" class="btn btn-secondary">Επεξεργασία</a>
+        <a href="{% url 'income_expenses:income_delete' income_detail.id %}" class="btn btn-danger">Διαγραφή</a>
+        <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
+    </div>
+</div>
+
+<div class="detail-total">
+    <span class="detail-total-label">Σύνολο Εσόδων</span>
+    <span class="detail-total-value">{{ income_detail.income_sum }} €</span>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-item">
+        <div class="detail-label">Μετρητά</div>
+        <div class="detail-value income">{{ income_detail.income_cash }} €</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">POS</div>
+        <div class="detail-value income">{{ income_detail.income_pos }} €</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Κατάθεση</div>
+        <div class="detail-value income">{{ income_detail.income_deposit }} €</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Επιταγή</div>
+        <div class="detail-value income">{{ income_detail.income_check }} €</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Άλλο</div>
+        <div class="detail-value income">{{ income_detail.income_other }} €</div>
+    </div>
+</div>
+
+{% if income_detail.comments %}
+<div class="card" style="padding:1.25rem;">
+    <div class="detail-label" style="margin-bottom:0.5rem;">Σχόλια</div>
+    <p style="font-size:0.9rem;">{{ income_detail.comments }}</p>
+</div>
+{% endif %}
+
+<div style="margin-top:1rem; color:var(--text-muted); font-size:0.78rem; font-family:'DM Mono',monospace;">
+    Δημιουργήθηκε: {{ income_detail.created_at|date:"d/m/Y H:i" }} &nbsp;·&nbsp;
+    Ενημερώθηκε: {{ income_detail.updated_at|date:"d/m/Y H:i" }}
+</div>
+
 {% endblock %}

@@ -1,10 +1,39 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit">
-</form>
+<div class="page-header">
+    <div>
+        <h1>{% if form.instance.pk %}Επεξεργασία Εξόδου{% else %}Νέο Έξοδο{% endif %}</h1>
+    </div>
+    <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
+</div>
+
+<div class="form-card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Ημερομηνία</label>
+                {{ form.day }}
+            </div>
+            <div class="form-group">
+                <label>Ποσό (€)</label>
+                {{ form.amount }}
+            </div>
+            <div class="form-group full">
+                <label>Κατηγορία</label>
+                {{ form.category }}
+            </div>
+            <div class="form-group full">
+                <label>Σχόλια</label>
+                {{ form.comments }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+            <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Ακύρωση</a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

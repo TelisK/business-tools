@@ -1,11 +1,48 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<h1>{{ expense_detail.day }}</h1>
-<br>
-<h1>{{ expense_detail.amount }}</h1>
-<h1>{{ expense_detail.category }}</h1>
-<h1>{{ expense_detail.comments }}</h1>
-<h1>{{ expense_detail.created_at }}</h1>
-<h1>{{ expense_detail.updated_at }}</h1>
+<div class="page-header">
+    <div>
+        <h1>Λεπτομέρειες Εξόδου</h1>
+        <p>{{ expense_detail.day|date:"d/m/Y" }}</p>
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+        <a href="{% url 'income_expenses:expense_update' expense_detail.id %}" class="btn btn-secondary">Επεξεργασία</a>
+        <a href="{% url 'income_expenses:expense_delete' expense_detail.id %}" class="btn btn-danger">Διαγραφή</a>
+        <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
+    </div>
+</div>
+
+<div class="detail-total" style="background:var(--expense); ">
+    <span class="detail-total-label">Σύνολο Εξόδου</span>
+    <span class="detail-total-value">{{ expense_detail.amount }} €</span>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-item">
+        <div class="detail-label">Ημερομηνία</div>
+        <div class="detail-value">{{ expense_detail.day|date:"d/m/Y" }}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Κατηγορία</div>
+        <div class="detail-value">{{ expense_detail.category }}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Ποσό</div>
+        <div class="detail-value expense">{{ expense_detail.amount }} €</div>
+    </div>
+</div>
+
+{% if expense_detail.comments %}
+<div class="card" style="padding:1.25rem;">
+    <div class="detail-label" style="margin-bottom:0.5rem;">Σχόλια</div>
+    <p style="font-size:0.9rem;">{{ expense_detail.comments }}</p>
+</div>
+{% endif %}
+
+<div style="margin-top:1rem; color:var(--text-muted); font-size:0.78rem; font-family:'DM Mono',monospace;">
+    Δημιουργήθηκε: {{ expense_detail.created_at|date:"d/m/Y H:i" }} &nbsp;·&nbsp;
+    Ενημερώθηκε: {{ expense_detail.updated_at|date:"d/m/Y H:i" }}
+</div>
+
 {% endblock %}

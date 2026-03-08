@@ -38,6 +38,9 @@ def submit_income(request):
 
     else:
         form = IncomeForm()
+        stores = Store.objects.all()
+        if stores.count() == 1:
+            form.fields['store'].initial = stores.first() #if there's one store, the it is the default
         context_to_html = {'form':form}
         return render(request, 'income_expenses/submit_income.html', context=context_to_html)
     
@@ -45,12 +48,15 @@ def submit_income(request):
 def submit_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
-        if form.isvalid():
+        if form.is_valid():
             form.save()
             return redirect('income_expenses:index')
     
     else:
         form = ExpenseForm()
+        stores = Store.objects.all()
+        if stores.count() == 1:
+            form.fields['store'].initial = stores.first() #if there's one store, the it is the default
         context_to_html = {'form':form}
         return render(request, 'income_expenses/submit_expense.html', context=context_to_html)
     
@@ -127,8 +133,25 @@ def update_store(request, id):
 
 def delete_store(request, id):
     if request.method == 'POST':
-        store_to_del = Store.objects.get(id=id)
-        store_to_del.delete()
+        stores = Store.objects.all()
+        if stores.count() == 1:
+            return redirect('income_expenses:stores')
+        else:
+            store_to_del = Store.objects.get(id=id)
+            store_to_del.delete()
         return redirect('income_expenses:stores')
     else:
         return render(request, 'income_expenses/delete_store.html')
+
+def load_old_data(request): # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
+    pass
+
+def income_expenses_analysis(request): # Analysis with matplotlib?
+    pass
+
+def prediction_with_ai(request): # with gemini api analyse the old data and based on geopolitics, bookings, how many people except to come etc.
+    pass
+
+def prediction_with_ml(request):
+    pass
+

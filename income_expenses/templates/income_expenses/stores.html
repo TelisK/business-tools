@@ -1,19 +1,32 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
+<div class="page-header">
+    <div>
+        <h1>Καταστήματα</h1>
+        <p>Διαχείριση καταστημάτων</p>
+    </div>
+    <a href="{% url 'income_expenses:add_store' %}" class="btn btn-primary">+ Νέο Κατάστημα</a>
+</div>
 
-    <h1>Stores</h1>
-<br>
+<div class="card">
+    <ul class="entry-list">
+        {% for store in stores_list %}
+        <li class="entry-item">
+            <div class="entry-row">
+                <span style="font-size:0.9rem; font-weight:500;">{{ store.name }}</span>
+                <div class="entry-actions">
+                    <a href="{% url 'income_expenses:update_store' store.id %}" class="btn btn-edit">Επεξεργασία</a>
+                    {% if store_list.count > 1 %}
+                    <a href="{% url 'income_expenses:delete_store' store.id %}" class="btn btn-danger">Διαγραφή</a>
+                    {% endif %}
 
-<p>
-    <ul>
-    {% for i in stores_list %}
-    <li>
-            {{ i.id }} : {{ i.name }}
-        </a>
-    </li>
-    {% endfor %}
-</ul>
-</p>
+                </div>
+            </div>
+        </li>
+
+        {% endfor %}
+    </ul>
+</div>
 
 {% endblock %}

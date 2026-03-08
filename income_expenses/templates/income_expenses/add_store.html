@@ -1,16 +1,27 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<h1>Add Store</h1>
-<br>
-<form method="POST">
-    {% csrf_token %}
+<div class="page-header">
+    <div>
+        <h1>{% if form.instance.pk %}Επεξεργασία Καταστήματος{% else %}Νέο Κατάστημα{% endif %}</h1>
+    </div>
+    <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">← Πίσω</a>
+</div>
 
-    {{ form }} 
-    <!-- !Το as_p βγάζει κάθε πεδίο μέσα σε <p> tag. -->
-    <button type="submit">Save</button>
-
-</form>
-
+<div class="form-card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-group full">
+                <label>Όνομα Καταστήματος</label>
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+            <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">Ακύρωση</a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

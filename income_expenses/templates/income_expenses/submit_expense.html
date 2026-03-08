@@ -1,18 +1,43 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<h1>Submit Expense</h1>
-<br>
-<form method="POST">
-    {% csrf_token %}
-
+<div class="page-header">
     <div>
-        {{ form.as_p }} 
-        <!-- !Το as_p βγάζει κάθε πεδίο μέσα σε <p> tag. -->
-        <button type="submit">Save</button>
+        <h1>{% if form.instance.pk %}Επεξεργασία Εξόδου{% else %}Νέο Έξοδο{% endif %}</h1>
     </div>
+    <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
+</div>
 
-</form>
-
+<div class="form-card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-group full">
+                <label>Κατάστημα</label>
+                {{ form.store }}
+            </div>
+            <div class="form-group">
+                <label>Ημερομηνία</label>
+                {{ form.day }}
+            </div>
+            <div class="form-group">
+                <label>Ποσό (€)</label>
+                {{ form.amount }}
+            </div>
+            <div class="form-group full">
+                <label>Κατηγορία</label>
+                {{ form.category }}
+            </div>
+            <div class="form-group full">
+                <label>Σχόλια</label>
+                {{ form.comments }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+            <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Ακύρωση</a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
