@@ -11,7 +11,15 @@ from django.core.paginator import Paginator
 def index(request):
     income_list = Income.objects.all()
     expense_list = Expenses.objects.all()
-    context_to_html = {'income_list':income_list, 'expense_list':expense_list}
+
+    paginator_income = Paginator(income_list, 25)
+    paginator_expense = Paginator(expense_list, 25)
+    income_page = request.GET.get('income_page', 1)
+    expense_page = request.GET.get('expense_page', 1)
+    income_obj = paginator_income.get_page(income_page)
+    expense_obj = paginator_expense.get_page(expense_page)
+
+    context_to_html = {'income_list':income_obj, 'expense_list':expense_obj}
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
 def detail(request, id):

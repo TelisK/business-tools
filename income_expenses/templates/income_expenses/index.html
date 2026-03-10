@@ -38,6 +38,19 @@
             {% empty %}
             <li class="entry-empty">Δεν υπάρχουν εγγραφές</li>
             {% endfor %}
+            {% if income_list.has_other_pages %}
+<div style="display:flex; gap:0.5rem; padding:1rem 1.25rem;">
+    {% if income_list.has_previous %}
+        <a href="?income_page={{ income_list.previous_page_number }}" class="btn btn-secondary btn-sm">←</a>
+    {% endif %}
+    <span style="font-size:0.85rem; color:var(--text-muted); align-self:center;">
+        {{ income_list.number }} / {{ income_list.paginator.num_pages }}
+    </span>
+    {% if income_list.has_next %}
+        <a href="?income_page={{ income_list.next_page_number }}" class="btn btn-secondary btn-sm">→</a>
+    {% endif %}
+</div>
+{% endif %}
         </ul>
     </div>
 
@@ -70,6 +83,19 @@
             {% empty %}
             <li class="entry-empty">Δεν υπάρχουν εγγραφές</li>
             {% endfor %}
+{% if income_list.has_other_pages %}
+<div style="display:flex; gap:0.5rem; padding:1rem 1.25rem;">
+    {% if income_list.has_previous %}
+        <a href="?income_page={{ income_list.previous_page_number }}" class="btn btn-secondary btn-sm">←</a>
+    {% endif %}
+    <span style="font-size:0.85rem; color:var(--text-muted); align-self:center;">
+        {{ income_list.number }} / {{ income_list.paginator.num_pages }}
+    </span>
+    {% if income_list.has_next %}
+        <a href="?income_page={{ income_list.next_page_number }}" class="btn btn-secondary btn-sm">→</a>
+    {% endif %}
+</div>
+{% endif %}
         </ul>
     </div>
 
