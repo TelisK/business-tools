@@ -22,3 +22,6 @@ class StoreForm(forms.ModelForm):
     class Meta:
         model = Store
         fields = ['name']
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

@@ -411,7 +411,16 @@
         <li><a href="{% url 'income_expenses:stores' %}">Καταστήματα</a></li>
     </ul>
 </nav>
-
+{% if messages %}
+    {% for message in messages %}
+    <div style="background:{% if message.tags == 'error' %}#fdf0f0{% else %}#e8f5e9{% endif %}; 
+                border-left:4px solid {% if message.tags == 'error' %}#9b2226{% else %}#2d6a4f{% endif %}; 
+                padding:0.75rem 1.25rem; margin:1rem 2rem; border-radius:4px; font-size:0.875rem;
+                color:{% if message.tags == 'error' %}#9b2226{% else %}#2d6a4f{% endif %};">
+        {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
 <div class="container">
     {% block body %}{% endblock %}
 </div>

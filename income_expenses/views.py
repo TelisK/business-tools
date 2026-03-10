@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from income_expenses.models import Income, Expenses, Store
 from django.shortcuts import get_object_or_404
-from .forms import IncomeForm, ExpenseForm, StoreForm
+from .forms import IncomeForm, ExpenseForm, StoreForm, UploadFileForm
+import pandas as pd
+from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -144,7 +147,44 @@ def delete_store(request, id):
         return render(request, 'income_expenses/delete_store.html')
 
 def load_old_data(request): # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
-    pass
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                file = request.FILES['file']
+                df = pd.read_excel(file)
+
+                numeric_cols = ['income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other']
+                df[numeric_cols] = df[numeric_cols].fillna(0)
+                df['comments'] = df['comments'].fillna('')
+
+                for index, row in df.iterrows():
+                    store, created = Store.objects.get_or_create(name=row['store'])
+                    Income.objects.create(
+                        store = store,
+                        day = row['day'],
+                        income_cash = row['income_cash'],
+                        income_pos = row['income_pos'],
+                        income_deposit = row['income_deposit'],
+                        income_check = row['income_check'],
+                        income_other = row['income_other'],
+                        comments = row['comments']
+                    )
+                
+                messages.success(request, 'Data Uploaded Successfully')
+                return redirect('income_expenses:index')
+
+            except Exception as e:
+                messages.error(request, f'Σφάλμα: {str(e)}')
+        else:
+            messages.error(request, f'Σφάλματα form: {form.errors}')
+        
+    else:
+        form = UploadFileForm()
+
+    return render(request, 'income_expenses/load_old_data.html', {'form': form})
+
+
 
 def income_expenses_analysis(request): # Analysis with matplotlib?
     pass
