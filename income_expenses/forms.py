@@ -7,7 +7,7 @@ class IncomeForm(forms.ModelForm):
         fields = ['store', 'day', 'income_cash', 'income_pos', 'income_deposit', 
                   'income_check', 'income_other', 'comments']
         widgets = {
-            'day': forms.DateInput(attrs={'type':'date'}),
+            'day': forms.DateInput(attrs={'type':'date'}), # Displays a calendar
         }
 
 class ExpenseForm(forms.ModelForm):
@@ -15,7 +15,7 @@ class ExpenseForm(forms.ModelForm):
         model = Expenses
         fields = ['store', 'day', 'amount', 'category', 'comments']
         widgets = {
-            'day': forms.DateInput(attrs={'type':'date'}),
+            'day': forms.DateInput(attrs={'type':'date'}), # Displays a calendar
         }
 
 class StoreForm(forms.ModelForm):

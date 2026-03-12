@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect ,get_object_or_404
 from income_expenses.models import Income, Expenses, Store
-from django.shortcuts import get_object_or_404
 from .forms import IncomeForm, ExpenseForm, StoreForm, UploadFileForm
 import pandas as pd
-from django.contrib import messages
+from django.contrib import messages  # informs user with a pop up
 from django.core.paginator import Paginator
+from datetime import date
+from django.db.models import Sum
 
 
 # Create your views here.
@@ -31,6 +32,19 @@ def expenses_detail(request,id):
     expense_detail = get_object_or_404(Expenses, id=id)
     context_to_html = {'expense_detail': expense_detail}
     return render(request, 'income_expenses/expenses_detail.html', context=context_to_html)
+
+def summary_and_statistics(request):
+    #default page
+    today = date.today()
+    date_from = request.GET.get('date_from', today.replace(day=1))
+    date_to = request.GET.get('date_to', today)
+
+    income_result = Income.objects.filter(date__range=[date_from, date_to])
+    expenses_result = Expenses.objects.filter(date__range=[date_from, date_to])
+
+    fields_to_sum = ['income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other']
+    sum_income_result = Income.objects.aggregate(Sum(income_result[fields_to_sum]))
+    sum_expenses_result = Expenses.objects.aggregate(Sum(expenses_result[fields_to_sum]))
 
 # needs completion
 def totals_by_date(request, date):
@@ -145,7 +159,7 @@ def update_store(request, id):
 def delete_store(request, id):
     if request.method == 'POST':
         stores = Store.objects.all()
-        if stores.count() == 1:
+        if stores.count() == 1: # If there is one store, it cannot be deleted.
             return redirect('income_expenses:stores')
         else:
             store_to_del = Store.objects.get(id=id)
