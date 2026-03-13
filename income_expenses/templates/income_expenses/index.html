@@ -1,13 +1,66 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<div class="page-header">
-    <div>
-        <h1>Επισκόπηση</h1>
-        <p>Έσοδα & Έξοδα</p>
+<!-- SUMMARY SECTION -->
+<div style="margin-bottom:2rem;">
+
+    <!-- Date filter form -->
+    <form method="get" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+        <span style="font-size:0.8rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">Περίοδος</span>
+        <input type="date" name="date_from" value="{{ date_from }}" style="font-size:0.875rem;">
+        <span style="color:var(--text-muted); font-size:0.875rem;">—</span>
+        <input type="date" name="date_to" value="{{ date_to }}" style="font-size:0.875rem;">
+        <button type="submit" class="btn btn-primary btn-sm">Εφαρμογή</button>
+    </form>
+
+    <!-- Totals -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
+
+        <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
+            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Σύνολο Εσόδων</div>
+            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--income);">{{ sum_income_result }} €</div>
+        </div>
+
+        <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
+            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Σύνολο Εξόδων</div>
+            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--expense);">{{ sum_expenses_result }} €</div>
+        </div>
+
+        <div style="background:var(--text); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
+            <div style="font-size:0.75rem; font-weight:500; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Καθαρό Αποτέλεσμα</div>
+            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:#fff;">{{ net_result }} €</div>
+        </div>
+
+        <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
+            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Ανάλυση Εσόδων</div>
+            <div style="display:flex; flex-direction:column; gap:0.25rem;">
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span style="color:var(--text-muted);">Μετρητά</span>
+                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_cash }} €</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span style="color:var(--text-muted);">POS</span>
+                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_pos }} €</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span style="color:var(--text-muted);">Κατάθεση</span>
+                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_deposit }} €</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span style="color:var(--text-muted);">Επιταγή</span>
+                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_check }} €</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span style="color:var(--text-muted);">Άλλο</span>
+                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_other }} €</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
+<!-- LISTS SECTION -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
 
     <!-- INCOME -->
@@ -20,15 +73,15 @@
             {% for i in income_list %}
             <li class="entry-item">
                 <div class="entry-row">
-<a href="{% url 'income_expenses:detail' i.id %}" class="entry-link">
-    <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
-    <div>
-        <span class="entry-amount amount-income">{{ i.income_sum }} €</span>
-        {% if i.comments %}
-        <div style="font-size:0.78rem; color:var(--text-muted);">{{ i.comments }}</div>
-        {% endif %}
-    </div>
-</a>
+                    <a href="{% url 'income_expenses:detail' i.id %}" class="entry-link">
+                        <div>
+                            <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
+                            {% if i.comments %}
+                            <div style="font-size:0.78rem; color:var(--text-muted);">{{ i.comments }}</div>
+                            {% endif %}
+                        </div>
+                        <span class="entry-amount amount-income">{{ i.income_sum }} €</span>
+                    </a>
                     <div class="entry-actions">
                         <a href="{% url 'income_expenses:income_update' i.id %}" class="btn btn-edit">Επεξ.</a>
                         <a href="{% url 'income_expenses:income_delete' i.id %}" class="btn btn-danger">Διαγρ.</a>
@@ -38,20 +91,18 @@
             {% empty %}
             <li class="entry-empty">Δεν υπάρχουν εγγραφές</li>
             {% endfor %}
-            {% if income_list.has_other_pages %}
-<div style="display:flex; gap:0.5rem; padding:1rem 1.25rem;">
-    {% if income_list.has_previous %}
-        <a href="?income_page={{ income_list.previous_page_number }}" class="btn btn-secondary btn-sm">←</a>
-    {% endif %}
-    <span style="font-size:0.85rem; color:var(--text-muted); align-self:center;">
-        {{ income_list.number }} / {{ income_list.paginator.num_pages }}
-    </span>
-    {% if income_list.has_next %}
-        <a href="?income_page={{ income_list.next_page_number }}" class="btn btn-secondary btn-sm">→</a>
-    {% endif %}
-</div>
-{% endif %}
         </ul>
+        {% if income_list.has_other_pages %}
+        <div style="display:flex; gap:0.5rem; padding:0.75rem 1.25rem; border-top:1px solid var(--border); align-items:center;">
+            {% if income_list.has_previous %}
+                <a href="?income_page={{ income_list.previous_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">←</a>
+            {% endif %}
+            <span style="font-size:0.8rem; color:var(--text-muted);">{{ income_list.number }} / {{ income_list.paginator.num_pages }}</span>
+            {% if income_list.has_next %}
+                <a href="?income_page={{ income_list.next_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">→</a>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 
     <!-- EXPENSES -->
@@ -64,16 +115,15 @@
             {% for i in expense_list %}
             <li class="entry-item">
                 <div class="entry-row">
-<a href="{% url 'income_expenses:expenses_detail' i.id %}" class="entry-link">
-    <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
-    <div>
-        <span class="entry-amount amount-expense">{{ i.amount }} €</span>
-        {% if i.comments %}
-        <div style="font-size:0.78rem; color:var(--text-muted);">{{ i.comments }}</div>
-        {% endif %}
-    </div>
-</a>
-                    
+                    <a href="{% url 'income_expenses:expenses_detail' i.id %}" class="entry-link">
+                        <div>
+                            <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
+                            {% if i.comments %}
+                            <div style="font-size:0.78rem; color:var(--text-muted);">{{ i.comments }}</div>
+                            {% endif %}
+                        </div>
+                        <span class="entry-amount amount-expense">{{ i.amount }} €</span>
+                    </a>
                     <div class="entry-actions">
                         <a href="{% url 'income_expenses:expense_update' i.id %}" class="btn btn-edit">Επεξ.</a>
                         <a href="{% url 'income_expenses:expense_delete' i.id %}" class="btn btn-danger">Διαγρ.</a>
@@ -83,20 +133,18 @@
             {% empty %}
             <li class="entry-empty">Δεν υπάρχουν εγγραφές</li>
             {% endfor %}
-{% if income_list.has_other_pages %}
-<div style="display:flex; gap:0.5rem; padding:1rem 1.25rem;">
-    {% if income_list.has_previous %}
-        <a href="?income_page={{ income_list.previous_page_number }}" class="btn btn-secondary btn-sm">←</a>
-    {% endif %}
-    <span style="font-size:0.85rem; color:var(--text-muted); align-self:center;">
-        {{ income_list.number }} / {{ income_list.paginator.num_pages }}
-    </span>
-    {% if income_list.has_next %}
-        <a href="?income_page={{ income_list.next_page_number }}" class="btn btn-secondary btn-sm">→</a>
-    {% endif %}
-</div>
-{% endif %}
         </ul>
+        {% if expense_list.has_other_pages %}
+        <div style="display:flex; gap:0.5rem; padding:0.75rem 1.25rem; border-top:1px solid var(--border); align-items:center;">
+            {% if expense_list.has_previous %}
+                <a href="?expense_page={{ expense_list.previous_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">←</a>
+            {% endif %}
+            <span style="font-size:0.8rem; color:var(--text-muted);">{{ expense_list.number }} / {{ expense_list.paginator.num_pages }}</span>
+            {% if expense_list.has_next %}
+                <a href="?expense_page={{ expense_list.next_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">→</a>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 
 </div>

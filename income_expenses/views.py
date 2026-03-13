@@ -8,19 +8,55 @@ from datetime import date
 from django.db.models import Sum
 
 
+def get_totals(date_from,date_to):
+
+    income_result = Income.objects.filter(day__range=[date_from, date_to])
+    expenses_result = Expenses.objects.filter(day__range=[date_from, date_to])
+
+    income_totals = income_result.aggregate(  # ex. Entry.objects.aggregate we alredy have the object here.
+        total_cash = Sum('income_cash'),
+        total_pos = Sum('income_pos'),
+        total_deposit = Sum('income_deposit'),
+        total_check = Sum('income_check'),
+        total_other = Sum('income_other')                 
+    )
+    sum_income_result = sum(income_totals.values())
+
+    sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
+
+    return sum_income_result, sum_expenses_result, income_totals
+
+
 # Create your views here.
 def index(request):
-    income_list = Income.objects.all()
-    expense_list = Expenses.objects.all()
+    today = date.today()
+    date_from = request.GET.get('date_from', today.replace(day=1))
+    date_to = request.GET.get('date_to', today)
 
-    paginator_income = Paginator(income_list, 25)
-    paginator_expense = Paginator(expense_list, 25)
+    sum_income_result, sum_expenses_result, income_totals = get_totals(date_from,date_to)
+    net_result = sum_income_result - sum_expenses_result
+
+
+    income_list = Income.objects.all().order_by('-day')
+    expense_list = Expenses.objects.all().order_by('-day')
+
+    paginator_income = Paginator(income_list, 15)
+    paginator_expense = Paginator(expense_list, 15)
     income_page = request.GET.get('income_page', 1)
     expense_page = request.GET.get('expense_page', 1)
     income_obj = paginator_income.get_page(income_page)
     expense_obj = paginator_expense.get_page(expense_page)
 
-    context_to_html = {'income_list':income_obj, 'expense_list':expense_obj}
+    context_to_html = {
+        'sum_income_result':sum_income_result,
+        'sum_expenses_result':sum_expenses_result,
+        'income_totals':income_totals,
+        'net_result':net_result,
+        'date_from':date_from,
+        'date_to':date_to,
+        'income_list':income_obj,
+        'expense_list':expense_obj
+    }
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
 def detail(request, id):
@@ -33,18 +69,35 @@ def expenses_detail(request,id):
     context_to_html = {'expense_detail': expense_detail}
     return render(request, 'income_expenses/expenses_detail.html', context=context_to_html)
 
-def summary_and_statistics(request):
+'''def summary_and_statistics(request):
     #default page
     today = date.today()
     date_from = request.GET.get('date_from', today.replace(day=1))
     date_to = request.GET.get('date_to', today)
 
-    income_result = Income.objects.filter(date__range=[date_from, date_to])
-    expenses_result = Expenses.objects.filter(date__range=[date_from, date_to])
+    income_result = Income.objects.filter(day__range=[date_from, date_to])
+    expenses_result = Expenses.objects.filter(day__range=[date_from, date_to])
 
-    fields_to_sum = ['income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other']
-    sum_income_result = Income.objects.aggregate(Sum(income_result[fields_to_sum]))
-    sum_expenses_result = Expenses.objects.aggregate(Sum(expenses_result[fields_to_sum]))
+    income_totals = income_result.aggregate(  # ex. Entry.objects.aggregate we alredy have the object here.
+        total_cash = Sum('income_cash'),
+        total_pos = Sum('income_pos'),
+        total_deposit = Sum('income_deposit'),
+        total_check = Sum('income_check'),
+        total_other = Sum('income_other')                 
+    )
+    sum_income_result = sum(income_totals.values())
+
+    sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
+
+    context_to_html = {
+        'sum_income_result':sum_income_result,
+        'sum_expenses_result':sum_expenses_result,
+        'income_totals':income_totals,
+        'date_from':date_from,
+        'date_to':date_to
+    }
+    return render(request, 'income_expenses/index.html', context=context_to_html)'''
+
 
 # needs completion
 def totals_by_date(request, date):
