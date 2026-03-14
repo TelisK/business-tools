@@ -7,7 +7,7 @@ services:
              python manage.py migrate &&
              gunicorn business_tools.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - ./db.sqlite3:/app/db.sqlite3
+      - db_data:/app/db_data
       - ./static:/app/static
     env_file:
       - .env
@@ -24,3 +24,6 @@ services:
       - ./static:/app/static
     depends_on:
       - web
+
+volumes:
+  db_data:
