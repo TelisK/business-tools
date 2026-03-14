@@ -6,6 +6,7 @@ from django.contrib import messages  # informs user with a pop up
 from django.core.paginator import Paginator
 from datetime import date
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
 
 
 def get_totals(date_from,date_to):
@@ -28,6 +29,7 @@ def get_totals(date_from,date_to):
 
 
 # Create your views here.
+@login_required
 def index(request):
     today = date.today()
     date_from = request.GET.get('date_from', today.replace(day=1))
@@ -59,11 +61,13 @@ def index(request):
     }
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
+@login_required
 def detail(request, id):
     income_detail = get_object_or_404(Income, id=id)
     context_to_html = {'income_detail': income_detail}
     return render (request, 'income_expenses/detail.html', context=context_to_html)
 
+@login_required
 def expenses_detail(request,id):
     expense_detail = get_object_or_404(Expenses, id=id)
     context_to_html = {'expense_detail': expense_detail}
@@ -100,6 +104,7 @@ def expenses_detail(request,id):
 
 
 # needs completion
+@login_required
 def totals_by_date(request, date):
     incomes = Income.objects.filter(day=date)
     expenses = Expenses.objects.filter(day=date)
@@ -107,6 +112,7 @@ def totals_by_date(request, date):
     context_to_html = {'totals': totals}
     return render(request, 'income_expenses/totals_by_date.html', context=context_to_html)
 
+@login_required
 def submit_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)
@@ -122,7 +128,7 @@ def submit_income(request):
         context_to_html = {'form':form}
         return render(request, 'income_expenses/submit_income.html', context=context_to_html)
     
-
+@login_required
 def submit_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
@@ -137,7 +143,8 @@ def submit_expense(request):
             form.fields['store'].initial = stores.first() #if there's one store, the it is the default
         context_to_html = {'form':form}
         return render(request, 'income_expenses/submit_expense.html', context=context_to_html)
-    
+
+@login_required
 def update_income(request, id):
     income_update = Income.objects.get(id=id)
     if request.method == 'POST':
@@ -150,6 +157,7 @@ def update_income(request, id):
         context_to_html = {'form':form}
         return render(request,'income_expenses/income_update.html', context=context_to_html)
 
+@login_required
 def update_expense(request, id):
     expense_update = Expenses.objects.get(id=id)
     if request.method == 'POST':
@@ -162,6 +170,7 @@ def update_expense(request, id):
         context_to_html = {'form':form}
         return render(request,'income_expenses/expense_update.html', context=context_to_html)
 
+@login_required
 def delete_income(request, id):
     if request.method == 'POST':
         income_to_del = Income.objects.get(id=id)
@@ -170,7 +179,7 @@ def delete_income(request, id):
     else:
         return render(request, 'income_expenses/income_delete.html')
 
-
+@login_required
 def delete_expense(request, id):
     if request.method == 'POST':
         expense_to_del = Expenses.objects.get(id=id)
@@ -179,11 +188,13 @@ def delete_expense(request, id):
     else:
         return render(request, 'income_expenses/expense_delete.html')
     
+@login_required
 def stores(request):
     stores_list = Store.objects.all()
     context_to_html = {'stores_list': stores_list}
     return render(request, 'income_expenses/stores.html', context=context_to_html)
 
+@login_required
 def add_store(request):
     if request.method == 'POST':
         form = StoreForm(request.POST)
@@ -196,6 +207,7 @@ def add_store(request):
         context_to_html = {'form':form}
         return render(request, 'income_expenses/add_store.html', context=context_to_html)
     
+@login_required
 def update_store(request, id):
     update_store = Store.objects.get(id=id)
     if request.method == 'POST':
@@ -208,7 +220,7 @@ def update_store(request, id):
         context_to_html = {'form':form}
         return render(request,'income_expenses/update_store.html', context=context_to_html)
 
-
+@login_required
 def delete_store(request, id):
     if request.method == 'POST':
         stores = Store.objects.all()
@@ -221,6 +233,7 @@ def delete_store(request, id):
     else:
         return render(request, 'income_expenses/delete_store.html')
 
+@login_required
 def load_old_data(request): # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
