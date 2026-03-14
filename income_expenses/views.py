@@ -20,7 +20,7 @@ def get_totals(date_from,date_to):
         total_check = Sum('income_check'),
         total_other = Sum('income_other')                 
     )
-    sum_income_result = sum(income_totals.values())
+    sum_income_result = sum(v or 0 for v in income_totals.values())
 
     sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
 
@@ -227,7 +227,8 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
         if form.is_valid():
             try:
                 file = request.FILES['file']
-                df = pd.read_excel(file)
+                df = pd.read_excel(file, parse_dates=['day'])
+                df = df.dropna(subset=['day'])
 
                 numeric_cols = ['income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other']
                 df[numeric_cols] = df[numeric_cols].fillna(0)
