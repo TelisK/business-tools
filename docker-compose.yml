@@ -2,6 +2,10 @@ services:
   web:
     build: .
     restart: always
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             gunicorn business_tools.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - ./db.sqlite3:/app/db.sqlite3
       - ./static:/app/static
