@@ -16,11 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path , include
-
-
+from django.conf import settings 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('income_expenses.urls')),
+    path(f'{settings.APP_SUBPATH}/', include('income_expenses.urls')),
 
 ]
