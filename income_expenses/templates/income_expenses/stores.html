@@ -17,7 +17,7 @@
                 <span style="font-size:0.9rem; font-weight:500;">{{ store.name }}</span>
                 <div class="entry-actions">
                     <a href="{% url 'income_expenses:update_store' store.id %}" class="btn btn-edit">Επεξεργασία</a>
-                    {% if store_list.count > 1 %}
+                    {% if stores_list.count > 1 %}
                     <a href="{% url 'income_expenses:delete_store' store.id %}" class="btn btn-danger">Διαγραφή</a>
                     {% endif %}
 

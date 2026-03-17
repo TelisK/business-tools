@@ -9,10 +9,10 @@ from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 
 
-def get_totals(date_from,date_to):
+def get_totals(store,date_from,date_to):
 
-    income_result = Income.objects.filter(day__range=[date_from, date_to])
-    expenses_result = Expenses.objects.filter(day__range=[date_from, date_to])
+    income_result = Income.objects.filter(store=store, day__range=[date_from, date_to])
+    expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to])
 
     income_totals = income_result.aggregate(  # ex. Entry.objects.aggregate we alredy have the object here.
         total_cash = Sum('income_cash'),
@@ -35,12 +35,15 @@ def index(request):
     date_from = request.GET.get('date_from', today.replace(day=1))
     date_to = request.GET.get('date_to', today)
 
-    sum_income_result, sum_expenses_result, income_totals = get_totals(date_from,date_to)
+    store_id = request.GET.get('store', None)
+    store = Store.objects.get(name=store_id) if store_id else Store.objects.first() # It will crash if it has no id.
+    sum_income_result, sum_expenses_result, income_totals = get_totals(store,date_from,date_to)
     net_result = sum_income_result - sum_expenses_result
 
 
-    income_list = Income.objects.all().order_by('-day')
-    expense_list = Expenses.objects.all().order_by('-day')
+    income_list = Income.objects.filter(store=store).order_by('-day')
+    expense_list = Expenses.objects.filter(store=store).order_by('-day')
+    stores_list = Store.objects.all()
 
     paginator_income = Paginator(income_list, 15)
     paginator_expense = Paginator(expense_list, 15)
@@ -50,6 +53,8 @@ def index(request):
     expense_obj = paginator_expense.get_page(expense_page)
 
     context_to_html = {
+        'store':store,
+        'stores_list':stores_list,
         'sum_income_result':sum_income_result,
         'sum_expenses_result':sum_expenses_result,
         'income_totals':income_totals,

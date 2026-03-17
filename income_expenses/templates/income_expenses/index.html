@@ -5,7 +5,13 @@
 <div style="margin-bottom:2rem;">
 
     <!-- Date filter form -->
+
     <form method="get" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+        <select name="store">
+    {% for s in stores_list %}
+    <option value="{{ s.name }}" {% if s == store %}selected{% endif %}>{{ s.name }}</option>
+    {% endfor %}
+</select>
         <span style="font-size:0.8rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">Περίοδος</span>
         <input type="date" name="date_from" value="{{ date_from }}" style="font-size:0.875rem;">
         <span style="color:var(--text-muted); font-size:0.875rem;">—</span>
