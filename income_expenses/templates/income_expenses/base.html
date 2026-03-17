@@ -414,7 +414,12 @@
 </nav>
 {% if user.is_authenticated %}
     <li><span style="font-size:0.875rem; color:var(--text-muted);">{{ user.username }}</span></li>
-    <li><a href="{% url 'logout' %}">Αποσύνδεση</a></li>
+    <li>
+    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary btn-sm">Αποσύνδεση</button>
+    </form>
+</li>
 {% else %}
     <li><a href="{% url 'login' %}">Σύνδεση</a></li>
 {% endif %}
