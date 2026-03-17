@@ -4,8 +4,8 @@ services:
     restart: always
     command: >
       sh -c "python manage.py collectstatic --noinput &&
-             python manage.py migrate &&
-             gunicorn business_tools.wsgi:application --bind 0.0.0.0:8000"
+         python manage.py migrate &&
+         gunicorn business_tools.wsgi:application --bind 0.0.0.0:8000 --access-logfile - --error-logfile -"
     volumes:
       - db_data:/app/db_data
       - ./static:/app/static
