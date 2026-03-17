@@ -1,0 +1,24 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<div class="form-card" style="max-width:400px; margin:4rem auto;">
+    <h1 style="font-size:1.4rem; margin-bottom:1.5rem;">Σύνδεση</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-group full">
+                <label>Όνομα χρήστη</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group full">
+                <label>Κωδικός</label>
+                {{ form.password }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Σύνδεση</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

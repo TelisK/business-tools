@@ -412,6 +412,12 @@
         <li><a href="{% url 'income_expenses:stores' %}">Καταστήματα</a></li>
     </ul>
 </nav>
+{% if user.is_authenticated %}
+    <li><span style="font-size:0.875rem; color:var(--text-muted);">{{ user.username }}</span></li>
+    <li><a href="{% url 'logout' %}">Αποσύνδεση</a></li>
+{% else %}
+    <li><a href="{% url 'login' %}">Σύνδεση</a></li>
+{% endif %}
 {% if messages %}
     {% for message in messages %}
     <div style="background:{% if message.tags == 'error' %}#fdf0f0{% else %}#e8f5e9{% endif %}; 

@@ -125,6 +125,11 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'static'
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [x for x in csrf_origins.split(',') if x]
 
 APP_SUBPATH = os.getenv('APP_SUBPATH', '')
+
+LOGIN_REDIRECT_URL = f'/{APP_SUBPATH}/'
+
+LOGOUT_REDIRECT_URL = f'/{APP_SUBPATH}/'
