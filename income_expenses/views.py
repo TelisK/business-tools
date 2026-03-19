@@ -36,7 +36,11 @@ def index(request):
     date_to = request.GET.get('date_to', today)
 
     store_id = request.GET.get('store', None)
-    store = Store.objects.get(name=store_id) if store_id else Store.objects.first() # It will crash if it has no id.
+    store = get_object_or_404(Store, id=store_id, users=request.user) if store_id else Store.objects.filter(users=request.user).first()
+
+    # store_id = request.GET.get('store', None)
+    # store = Store.objects.get(name=store_id) if store_id else Store.objects.first() # It will crash if it has no id.
+
     sum_income_result, sum_expenses_result, income_totals = get_totals(store,date_from,date_to)
     net_result = sum_income_result - sum_expenses_result
 
@@ -111,8 +115,9 @@ def expenses_detail(request,id):
 # needs completion
 @login_required
 def totals_by_date(request, date):
-    incomes = Income.objects.filter(day=date)
-    expenses = Expenses.objects.filter(day=date)
+    store = Store.objects.filter(user=request.user).first()
+    incomes = Income.objects.filter(day=date, store=store)
+    expenses = Expenses.objects.filter(day=date, store=store)
     totals = incomes + expenses
     context_to_html = {'totals': totals}
     return render(request, 'income_expenses/totals_by_date.html', context=context_to_html)
@@ -127,7 +132,7 @@ def submit_income(request):
 
     else:
         form = IncomeForm()
-        stores = Store.objects.all()
+        stores = Store.objects.filter(user=request.user)
         if stores.count() == 1:
             form.fields['store'].initial = stores.first() #if there's one store, the it is the default
         context_to_html = {'form':form}
@@ -143,7 +148,7 @@ def submit_expense(request):
     
     else:
         form = ExpenseForm()
-        stores = Store.objects.all()
+        stores = Store.objects.filter(user=request.user)
         if stores.count() == 1:
             form.fields['store'].initial = stores.first() #if there's one store, the it is the default
         context_to_html = {'form':form}
@@ -195,7 +200,7 @@ def delete_expense(request, id):
     
 @login_required
 def stores(request):
-    stores_list = Store.objects.all()
+    stores_list = Store.objects.filter(user=request.user)
     context_to_html = {'stores_list': stores_list}
     return render(request, 'income_expenses/stores.html', context=context_to_html)
 
@@ -204,7 +209,8 @@ def add_store(request):
     if request.method == 'POST':
         form = StoreForm(request.POST)
         if form.is_valid():
-            form.save()
+            store = form.save()
+            store.user.add(request.user)
             return redirect('income_expenses:index')
         
     else:
@@ -214,25 +220,25 @@ def add_store(request):
     
 @login_required
 def update_store(request, id):
-    update_store = Store.objects.get(id=id)
+    store_to_upd = get_object_or_404(Store, id=id, user=request.user)
     if request.method == 'POST':
-        form = StoreForm(request.POST, instance=update_store)
+        form = StoreForm(request.POST, instance=store_to_upd)
         if form.is_valid():
             form.save()
             return redirect('income_expenses:stores')
     else:
-        form = StoreForm(instance=update_store)
+        form = StoreForm(instance=store_to_upd)
         context_to_html = {'form':form}
         return render(request,'income_expenses/update_store.html', context=context_to_html)
 
 @login_required
 def delete_store(request, id):
     if request.method == 'POST':
-        stores = Store.objects.all()
+        stores = Store.objects.filter(user=request.user)
         if stores.count() == 1: # If there is one store, it cannot be deleted.
             return redirect('income_expenses:stores')
         else:
-            store_to_del = Store.objects.get(id=id)
+            store_to_del = get_object_or_404(Store, id=id, user=request.user)
             store_to_del.delete()
         return redirect('income_expenses:stores')
     else:
@@ -254,6 +260,8 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
 
                 for index, row in df.iterrows():
                     store, created = Store.objects.get_or_create(name=row['store'])
+                    if created:
+                        store.user.add(request.user)
                     Income.objects.create(
                         store = store,
                         day = row['day'],
@@ -269,14 +277,17 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
                 return redirect('income_expenses:index')
 
             except Exception as e:
-                messages.error(request, f'Σφάλμα: {str(e)}')
+                messages.error(request, f'Error: {str(e)}')
         else:
-            messages.error(request, f'Σφάλματα form: {form.errors}')
+            messages.error(request, f'Errors form: {form.errors}')
         
     else:
         form = UploadFileForm()
 
     return render(request, 'income_expenses/load_old_data.html', {'form': form})
+
+def export_data(request):
+    pass
 
 
 
