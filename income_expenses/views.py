@@ -36,7 +36,7 @@ def index(request):
     date_to = request.GET.get('date_to', today)
 
     store_id = request.GET.get('store', None)
-    store = get_object_or_404(Store, id=store_id, users=request.user) if store_id else Store.objects.filter(users=request.user).first()
+    store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
     # store_id = request.GET.get('store', None)
     # store = Store.objects.get(name=store_id) if store_id else Store.objects.first() # It will crash if it has no id.
@@ -47,7 +47,7 @@ def index(request):
 
     income_list = Income.objects.filter(store=store).order_by('-day')
     expense_list = Expenses.objects.filter(store=store).order_by('-day')
-    stores_list = Store.objects.all()
+    stores_list = Store.objects.filter(user=request.user)
 
     paginator_income = Paginator(income_list, 15)
     paginator_expense = Paginator(expense_list, 15)
@@ -72,44 +72,15 @@ def index(request):
 
 @login_required
 def detail(request, id):
-    income_detail = get_object_or_404(Income, id=id)
+    income_detail = get_object_or_404(Income, id=id, store__user=request.user) # double underscore lookup, for relationship
     context_to_html = {'income_detail': income_detail}
     return render (request, 'income_expenses/detail.html', context=context_to_html)
 
 @login_required
 def expenses_detail(request,id):
-    expense_detail = get_object_or_404(Expenses, id=id)
+    expense_detail = get_object_or_404(Expenses, id=id, store__user=request.user)
     context_to_html = {'expense_detail': expense_detail}
     return render(request, 'income_expenses/expenses_detail.html', context=context_to_html)
-
-'''def summary_and_statistics(request):
-    #default page
-    today = date.today()
-    date_from = request.GET.get('date_from', today.replace(day=1))
-    date_to = request.GET.get('date_to', today)
-
-    income_result = Income.objects.filter(day__range=[date_from, date_to])
-    expenses_result = Expenses.objects.filter(day__range=[date_from, date_to])
-
-    income_totals = income_result.aggregate(  # ex. Entry.objects.aggregate we alredy have the object here.
-        total_cash = Sum('income_cash'),
-        total_pos = Sum('income_pos'),
-        total_deposit = Sum('income_deposit'),
-        total_check = Sum('income_check'),
-        total_other = Sum('income_other')                 
-    )
-    sum_income_result = sum(income_totals.values())
-
-    sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
-
-    context_to_html = {
-        'sum_income_result':sum_income_result,
-        'sum_expenses_result':sum_expenses_result,
-        'income_totals':income_totals,
-        'date_from':date_from,
-        'date_to':date_to
-    }
-    return render(request, 'income_expenses/index.html', context=context_to_html)'''
 
 
 # needs completion
@@ -124,59 +95,71 @@ def totals_by_date(request, date):
 
 @login_required
 def submit_income(request):
+    stores = Store.objects.filter(user=request.user)
+
     if request.method == 'POST':
         form = IncomeForm(request.POST)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
             return redirect('income_expenses:index')
 
     else:
         form = IncomeForm()
-        stores = Store.objects.filter(user=request.user)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         if stores.count() == 1:
             form.fields['store'].initial = stores.first() #if there's one store, the it is the default
-        context_to_html = {'form':form}
-        return render(request, 'income_expenses/submit_income.html', context=context_to_html)
+
+    context_to_html = {'form':form}
+    return render(request, 'income_expenses/submit_income.html', context=context_to_html)
     
 @login_required
 def submit_expense(request):
+    stores = Store.objects.filter(user=request.user)
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
             return redirect('income_expenses:index')
     
     else:
         form = ExpenseForm()
-        stores = Store.objects.filter(user=request.user)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         if stores.count() == 1:
             form.fields['store'].initial = stores.first() #if there's one store, the it is the default
-        context_to_html = {'form':form}
-        return render(request, 'income_expenses/submit_expense.html', context=context_to_html)
+    context_to_html = {'form':form}
+    return render(request, 'income_expenses/submit_expense.html', context=context_to_html)
 
 @login_required
 def update_income(request, id):
+    stores = Store.objects.filter(user=request.user)
     income_update = Income.objects.get(id=id)
     if request.method == 'POST':
         form = IncomeForm(request.POST, instance=income_update)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
             return redirect('income_expenses:detail', id=id)
     else:
         form = IncomeForm(instance=income_update)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         context_to_html = {'form':form}
         return render(request,'income_expenses/income_update.html', context=context_to_html)
 
 @login_required
 def update_expense(request, id):
+    stores = Store.objects.filter(user=request.user)
     expense_update = Expenses.objects.get(id=id)
     if request.method == 'POST':
         form = ExpenseForm(request.POST, instance=expense_update)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
             return redirect('income_expenses:expenses_detail', id=id)
     else:
         form = ExpenseForm(instance=expense_update)
+        form.fields['store'].queryset = stores  # this filters the dropdown
         context_to_html = {'form':form}
         return render(request,'income_expenses/expense_update.html', context=context_to_html)
 
@@ -225,6 +208,7 @@ def update_store(request, id):
         form = StoreForm(request.POST, instance=store_to_upd)
         if form.is_valid():
             form.save()
+            store_to_upd.user.add(request.user)
             return redirect('income_expenses:stores')
     else:
         form = StoreForm(instance=store_to_upd)

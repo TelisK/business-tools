@@ -1,10 +1,28 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit">
-</form>
+<div class="page-header">
+    <div>
+        <h1>Επεξεργασία Εξόδου</h1>
+    </div>
+    <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">← Πίσω</a>
+</div>
+
+<div class="form-card">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Όνομα</label>
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+            <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">Ακύρωση</a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
+

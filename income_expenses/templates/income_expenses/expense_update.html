@@ -3,15 +3,19 @@
 
 <div class="page-header">
     <div>
-        <h1>{% if form.instance.pk %}Επεξεργασία Εξόδου{% else %}Νέο Έξοδο{% endif %}</h1>
+        <h1>Επεξεργασία Εξόδου</h1>
     </div>
     <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
 </div>
 
 <div class="form-card">
-    <form method="post">
+    <form method="POST">
         {% csrf_token %}
         <div class="form-grid">
+            <div class="form-group full">
+    <label>Κατάστημα</label>
+    {{ form.store }}
+</div>
             <div class="form-group">
                 <label>Ημερομηνία</label>
                 {{ form.day }}
@@ -37,3 +41,4 @@
 </div>
 
 {% endblock %}
+
