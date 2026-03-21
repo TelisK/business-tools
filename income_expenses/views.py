@@ -195,11 +195,11 @@ def add_store(request):
             store = form.save()
             store.user.add(request.user)
             return redirect('income_expenses:index')
-        
     else:
         form = StoreForm()
-        context_to_html = {'form':form}
-        return render(request, 'income_expenses/add_store.html', context=context_to_html)
+        
+    context_to_html = {'form':form}
+    return render(request, 'income_expenses/add_store.html', context=context_to_html)
     
 @login_required
 def update_store(request, id):
