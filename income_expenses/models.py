@@ -27,7 +27,7 @@ class Income(models.Model):
 
 
     def __str__(self):
-        return str(self.day) + ' : ' + str(self.income_sum) + ' €'
+        return f"{self.day} : {self.income_sum} €"
     
     @property  # creates sum from the data on the database. Best way in case the data are updated later.
     def income_sum(self):
@@ -39,7 +39,7 @@ class Expenses(models.Model):
         verbose_name = 'expense'
 
     def __str__(self):
-        return str(self.day) + ' : ' + str(self.amount) + ' €'
+        return f"{self.day} : {self.amount} €"
 
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     day = models.DateField()
