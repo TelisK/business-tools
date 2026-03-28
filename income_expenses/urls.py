@@ -19,4 +19,5 @@ urlpatterns = [
     path('expense_update/<int:id>/', views.update_expense, name='expense_update'),
     path('load_old_data/', views.load_old_data, name='load_old_data'),
     path('export_data/', views.export_data, name='export_data'),
+    path('prediction/', views.prediction_with_ml, name='prediction_with_ml')
 ]

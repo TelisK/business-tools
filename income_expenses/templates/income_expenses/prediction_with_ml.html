@@ -1,0 +1,10 @@
+{% extends 'income_expenses/base.html' %}
+{% load static %}
+
+{% block body %}
+
+{% for row in result %}
+    <p>{{ row.day }} → {{ row.predicted_income }} €</p>
+{% endfor %}
+
+{% endblock %}

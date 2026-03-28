@@ -9,6 +9,7 @@ from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import io
+from .ml import prediction_model
 
 
 def get_totals(store,date_from,date_to):
@@ -38,8 +39,13 @@ def index(request):
     date_to = request.GET.get('date_to', today)
 
     store_id = request.GET.get('store', None)
-    store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
+    if store_id:
+        request.session['selected_store'] = store_id  # save to session
+    else:
+        store_id = request.session.get('selected_store', None)  # read from session
+
+    store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
 
     sum_income_result, sum_expenses_result, income_totals = get_totals(store,date_from,date_to)
@@ -211,6 +217,8 @@ def update_store(request, id):
             form.save()
             store_to_upd.user.add(request.user)
             return redirect('income_expenses:stores')
+        else:
+            return redirect('income_expenses/update_store.html')  # Needs fix because when user gives same store name as another it returns error
     else:
         form = StoreForm(instance=store_to_upd)
         context_to_html = {'form':form}
@@ -273,7 +281,7 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
 
 
 def export_data(request):
-    store_id = request.GET.get('store', None)
+    store_id = request.session.get('selected_store', None)
     store_to_export = get_object_or_404(Store, id=store_id, user=request.user)
     income_list = Income.objects.filter(store=store_to_export)
     expenses_list = Expenses.objects.filter(store=store_to_export)
@@ -306,6 +314,18 @@ def income_expenses_analysis(request): # Analysis with matplotlib?
 def prediction_with_ai(request): # with gemini api analyse the old data and based on geopolitics, bookings, how many people except to come etc.
     pass
 
+@login_required
 def prediction_with_ml(request):
-    pass
+    store_id = request.session.get('selected_store', None)
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    income_data = Income.objects.filter(store=store).values('day', 'income_cash', 'income_pos')
+    # expense_data = Expenses.objects.filter(store=store).values('day', 'amount')
+    
+    df = pd.DataFrame.from_records(income_data)
+
+    result = prediction_model(df, days_prediction=15)
+    return render(request, 'income-expenses/prediction_with_ml.html', context={'result': result})
+
+
 
