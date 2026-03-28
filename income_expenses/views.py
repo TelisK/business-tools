@@ -40,8 +40,7 @@ def index(request):
     store_id = request.GET.get('store', None)
     store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
-    # store_id = request.GET.get('store', None)
-    # store = Store.objects.get(name=store_id) if store_id else Store.objects.first() # It will crash if it has no id.
+
 
     sum_income_result, sum_expenses_result, income_totals = get_totals(store,date_from,date_to)
     net_result = sum_income_result - sum_expenses_result
@@ -278,7 +277,8 @@ def export_data(request):
     store_to_export = get_object_or_404(Store, id=store_id, user=request.user)
     income_list = Income.objects.filter(store=store_to_export)
     expenses_list = Expenses.objects.filter(store=store_to_export)
-    income_values = income_list.values('store','day','income_cash','income_pos','income_deposit','income_check','income_other','comments')
+    income_values = income_list.values('store','day','income_cash','income_pos','income_deposit','income_check',
+                                       'income_other','comments')
     expenses_values = expenses_list.values('store','day','amount','category','comments')
     df_income = pd.DataFrame.from_records(income_values)
     df_expenses = pd.DataFrame.from_records(expenses_values)

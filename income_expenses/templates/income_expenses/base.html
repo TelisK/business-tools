@@ -406,6 +406,15 @@
     <a href="{% url 'income_expenses:index' %}" class="nav-brand">BizTools</a>
     <ul class="nav-links">
         <li><a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Αρχική</a></li>
+<li>
+    <form method="get" action="{% url 'income_expenses:index' %}">
+        <select name="store" onchange="this.form.submit()">
+            {% for s in stores_list %}
+            <option value="{{ s.id }}" {% if s == current_store %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</li>
         <li><a href="{% url 'income_expenses:load_old_data' %}" class="btn btn-secondary">Εισαγωγή Δεδομένων</a></li>
         <li><a href="{% url 'income_expenses:export_data' %}?store={{ store.id }}" class="btn btn-secondary">Εξαγωγή σε Excel</a></li>
         <li><a href="{% url 'income_expenses:submit_income' %}" class="btn-income btn btn-sm">+ Έσοδο</a></li>
