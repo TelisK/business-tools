@@ -17,6 +17,9 @@
         <span style="color:var(--text-muted); font-size:0.875rem;">—</span>
         <input type="date" name="date_to" value="{{ date_to }}" style="font-size:0.875rem;">
         <button type="submit" class="btn btn-primary btn-sm">Εφαρμογή</button>
+        <a href="{% url 'income_expenses:export_data' %}?store={{ store.id }}" class="btn btn-secondary">
+    Εξαγωγή σε Excel
+</a>
     </form>
 
     <!-- Totals -->

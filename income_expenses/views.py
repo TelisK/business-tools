@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from datetime import date
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+import io
 
 
 def get_totals(store,date_from,date_to):
@@ -270,8 +272,31 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
 
     return render(request, 'income_expenses/load_old_data.html', {'form': form})
 
+
 def export_data(request):
-    pass
+    store_id = request.GET.get('store', None)
+    store_to_export = get_object_or_404(Store, id=store_id, user=request.user)
+    income_list = Income.objects.filter(store=store_to_export)
+    expenses_list = Expenses.objects.filter(store=store_to_export)
+    income_values = income_list.values('store','day','income_cash','income_pos','income_deposit','income_check','income_other','comments')
+    expenses_values = expenses_list.values('store','day','amount','category','comments')
+    df_income = pd.DataFrame.from_records(income_values)
+    df_expenses = pd.DataFrame.from_records(expenses_values)
+    
+    #We need buffer to save the file to the users computer, not to the server.
+    buffer = io.BytesIO()  # create empty virtual file
+    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:   # write excel data into it
+        df_income.to_excel(writer, sheet_name='Έσοδα', index=False)
+        df_expenses.to_excel(writer, sheet_name='Έξοδα', index=False) 
+
+    buffer.seek(0)         # go back to the beginning
+
+
+    response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=export.xlsx'
+    return response
+
+
 
 
 
