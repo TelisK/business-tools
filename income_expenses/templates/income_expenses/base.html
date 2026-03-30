@@ -415,6 +415,7 @@
         </select>
     </form>
 </li>
+        <li><a href="{% url 'income_expenses:prediction_with_ml' %}" class="btn btn-secondary">Πρόβλεψη Εισοδημάτων</a></li>
         <li><a href="{% url 'income_expenses:load_old_data' %}" class="btn btn-secondary">Εισαγωγή Δεδομένων</a></li>
         <li><a href="{% url 'income_expenses:export_data' %}?store={{ store.id }}" class="btn btn-secondary">Εξαγωγή σε Excel</a></li>
         <li><a href="{% url 'income_expenses:submit_income' %}" class="btn-income btn btn-sm">+ Έσοδο</a></li>

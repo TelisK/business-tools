@@ -3,6 +3,10 @@
 
 {% block body %}
 
+<div class="page-header">
+    <h1>Πρόβλεψη Εσόδων</h1>
+</div>
+
 {% for row in result %}
     <p>{{ row.day }} → {{ row.predicted_income }} €</p>
 {% endfor %}

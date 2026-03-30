@@ -325,7 +325,7 @@ def prediction_with_ml(request):
     df = pd.DataFrame.from_records(income_data)
 
     result = prediction_model(df, days_prediction=15)
-    return render(request, 'income-expenses/prediction_with_ml.html', context={'result': result})
+    return render(request, 'income_expenses/prediction_with_ml.html', context={'result': result})
 
 
 
