@@ -9,6 +9,7 @@ services:
     volumes:
       - db_data:/app/db_data
       - ./static:/app/static
+      - backups:/backups
     env_file:
       - .env
     expose:
@@ -27,3 +28,4 @@ services:
 
 volumes:
   db_data:
+  backups:
