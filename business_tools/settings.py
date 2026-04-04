@@ -138,3 +138,8 @@ APP_SUBPATH = os.getenv('APP_SUBPATH', '')
 LOGIN_REDIRECT_URL = f'/{APP_SUBPATH}/'
 
 LOGOUT_REDIRECT_URL = f'/{APP_SUBPATH}/'
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {
+    'location': os.getenv('BACKUP_DIR', '/backups'),
+}
