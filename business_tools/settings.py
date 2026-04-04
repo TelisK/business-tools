@@ -139,7 +139,17 @@ LOGIN_REDIRECT_URL = f'/{APP_SUBPATH}/'
 
 LOGOUT_REDIRECT_URL = f'/{APP_SUBPATH}/'
 
-DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {
-    'location': os.getenv('BACKUP_DIR', '/backups'),
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+    "dbbackup": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "location": os.getenv('BACKUP_DIR', '/backups'),
+        }
+    }
 }
