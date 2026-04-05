@@ -45,6 +45,12 @@ def index(request):
     else:
         store_id = request.session.get('selected_store', None)  # read from session
 
+    # if not store_id:  # When user didn't use the dropdown menu, store id was not saved to the session. With this lines it's working
+    #     first_store = Store.objects.filter(user=request.user).first()
+    # if first_store:
+    #     store_id = first_store.id
+    #     request.session['selected_store'] = str(store_id)
+
     store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
 
