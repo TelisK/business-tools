@@ -8,6 +8,7 @@
 
 
 </select>
+    <form method="get" action="{% url 'income_expenses:index' %}">
         <span style="font-size:0.8rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">Περίοδος</span>
         <input type="date" name="date_from" value="{{ date_from }}" style="font-size:0.875rem;">
         <span style="color:var(--text-muted); font-size:0.875rem;">—</span>

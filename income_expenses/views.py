@@ -53,10 +53,8 @@ def index(request):
 
     store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
-
     sum_income_result, sum_expenses_result, income_totals = get_totals(store,date_from,date_to)
     net_result = sum_income_result - sum_expenses_result
-
 
     income_list = Income.objects.filter(store=store).order_by('-day')
     expense_list = Expenses.objects.filter(store=store).order_by('-day')
