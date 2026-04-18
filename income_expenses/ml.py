@@ -11,8 +11,11 @@ def prediction_model(df, days_prediction=15):
 
     df['income_cash'] = df['income_cash'].astype(float)
     df['income_pos'] = df['income_pos'].astype(float)
+    df['income_deposit'] = df['income_deposit'].astype(float)
+    df['income_check'] = df['income_check'].astype(float)
+    df['income_other'] = df['income_other'].astype(float)
     df = df.drop('index', axis=1)
-    df['total'] = df['income_cash'] + df['income_pos']
+    df['total'] = df['income_cash'] + df['income_pos'] + df['income_deposit'] + df['income_check'] + df['income_other']
 
     # Date Features
     df['Year'] = df['day'].dt.year
