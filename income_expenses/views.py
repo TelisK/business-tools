@@ -13,24 +13,45 @@ from .ml import prediction_model
 from django.db import transaction
 
 
-def get_totals(store,date_from,date_to):
-
-    income_result = Income.objects.filter(store=store, day__range=[date_from, date_to])
-    expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to])
-
-    income_totals = income_result.aggregate(  # ex. Entry.objects.aggregate we alredy have the object here.
+def income_totals_calculation(data): # Calculates the data for filtering
+    totals = data.aggregate(
         total_cash = Sum('income_cash'),
         total_pos = Sum('income_pos'),
         total_deposit = Sum('income_deposit'),
         total_check = Sum('income_check'),
         total_other = Sum('income_other')                 
     )
-    sum_income_result = sum(v or 0 for v in income_totals.values())
+    result = sum(v or 0 for v in totals.values())
+    return totals, result
+
+def get_totals(store,date_from,date_to):
+
+    income_result = Income.objects.filter(store=store, day__range=[date_from, date_to])
+    expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to])
+
+    income_totals, sum_income_result =income_totals_calculation(income_result)
 
     sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
 
-    return sum_income_result, sum_expenses_result, income_totals
+    first_day_of_year = date_from.replace(month=1, day=1)
+    YTD_income_result = Income.objects.filter(store=store, day__range=[first_day_of_year, date_to])
+    YTD_totals, YTD_result = income_totals_calculation(YTD_income_result)
 
+    return sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals
+
+def last_years_income_comparison(store, date_from, date_to):
+    last_year_date_from = date_from.replace(year=date_from.year - 1)
+    last_year_date_to = date_to.replace(year=date_to.year - 1)
+    last_year_first_day = date_from.replace(year=date_from.year - 1, month=1, day=1)
+
+    last_year_result = Income.objects.filter(store=store, day__range=[last_year_date_from, last_year_date_to])
+    last_year_income_totals, last_year_sum_income_result = income_totals_calculation(last_year_result)
+
+    last_year_result_YTD = Income.objects.filter(store=store, day__range=[last_year_first_day, last_year_date_to])
+    last_year_YTD_totals, last_year_YTD_result = income_totals_calculation(last_year_result_YTD)
+
+
+    return last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals
 
 # Create your views here.
 @login_required
@@ -54,7 +75,7 @@ def index(request):
 
     store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
-    sum_income_result, sum_expenses_result, income_totals = get_totals(store,date_from,date_to)
+    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals = get_totals(store,date_from,date_to)
     net_result = sum_income_result - sum_expenses_result
 
     income_list = Income.objects.filter(store=store).order_by('-day')
@@ -68,6 +89,8 @@ def index(request):
     income_obj = paginator_income.get_page(income_page)
     expense_obj = paginator_expense.get_page(expense_page)
 
+    last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = last_years_income_comparison(store,date_from,date_to)
+
     context_to_html = {
         'store':store,
         'stores_list':stores_list,
@@ -78,7 +101,8 @@ def index(request):
         'date_from':date_from,
         'date_to':date_to,
         'income_list':income_obj,
-        'expense_list':expense_obj
+        'expense_list':expense_obj,
+        'YTD_result':YTD_result
     }
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
@@ -333,7 +357,6 @@ def prediction_with_ml(request):
     income_data = Income.objects.filter(store=store).values('day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other',)
     # expense_data = Expenses.objects.filter(store=store).values('day', 'amount')
     df = pd.DataFrame.from_records(income_data)
-    print(df.tail())
     result = prediction_model(df, days_prediction=15)
     return render(request, 'income_expenses/prediction_with_ml.html', context={'result': result})
 
