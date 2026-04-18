@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import io
 from .ml import prediction_model
+from django.db import transaction
 
 
 def get_totals(store,date_from,date_to):
@@ -244,7 +245,7 @@ def delete_store(request, id):
 @login_required
 def load_old_data(request): # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
+        #form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 file = request.FILES['file']
@@ -255,23 +256,29 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
                 df[numeric_cols] = df[numeric_cols].fillna(0)
                 df['comments'] = df['comments'].fillna('')
 
-                for index, row in df.iterrows():
-                    store, created = Store.objects.get_or_create(name=row['store'])
-                    if created:
-                        store.user.add(request.user)
-                    Income.objects.create(
-                        store = store,
-                        day = row['day'],
-                        income_cash = row['income_cash'],
-                        income_pos = row['income_pos'],
-                        income_deposit = row['income_deposit'],
-                        income_check = row['income_check'],
-                        income_other = row['income_other'],
-                        comments = row['comments']
-                    )
-                
-                messages.success(request, 'Data Uploaded Successfully')
-                return redirect('income_expenses:index')
+                try:
+                    with transaction.atomic(): # reads all the data if there are errors, before import to the database
+
+                        for index, row in df.iterrows():
+                            store, created = Store.objects.get_or_create(name=row['store'])
+                            if created:
+                                store.user.add(request.user)
+                            Income.objects.create(
+                                store = store,
+                                day = row['day'],
+                                income_cash = row['income_cash'],
+                                income_pos = row['income_pos'],
+                                income_deposit = row['income_deposit'],
+                                income_check = row['income_check'],
+                                income_other = row['income_other'],
+                                comments = row['comments']
+                            )
+                        
+                        messages.success(request, 'Data Uploaded Successfully')
+                        return redirect('income_expenses:index')
+                except Exception as e:
+                    # Informing the user the line of the error
+                    messages.error(request, f'Σφάλμα. Ελέγξε τη γραμμή στο excel: {index + 2}: {str(e)}') 
 
             except Exception as e:
                 messages.error(request, f'Error: {str(e)}')
@@ -323,11 +330,10 @@ def prediction_with_ml(request):
     store_id = request.session.get('selected_store', None)
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
-    income_data = Income.objects.filter(store=store).values('day', 'income_cash', 'income_pos')
+    income_data = Income.objects.filter(store=store).values('day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other',)
     # expense_data = Expenses.objects.filter(store=store).values('day', 'amount')
-    
     df = pd.DataFrame.from_records(income_data)
-
+    print(df.tail())
     result = prediction_model(df, days_prediction=15)
     return render(request, 'income_expenses/prediction_with_ml.html', context={'result': result})
 
