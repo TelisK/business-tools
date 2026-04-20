@@ -33,7 +33,8 @@ def get_totals(store,date_from,date_to):
 
     sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
 
-    first_day_of_year = datetime.strptime(date_from, '%Y-%m-%d').date().replace(month=1, day=1)
+    d_from = datetime.strptime(date_from, '%Y-%m-%d').date()
+    first_day_of_year = d_from.replace(month=1, day=1)
     YTD_income_result = Income.objects.filter(store=store, day__range=[first_day_of_year, date_to])
     YTD_totals, YTD_result = income_totals_calculation(YTD_income_result)
 
@@ -42,6 +43,8 @@ def get_totals(store,date_from,date_to):
 def last_years_income_comparison(store, date_from, date_to):
     d_from = datetime.strptime(date_from, '%Y-%m-%d')
     d_to = datetime.strptime(date_to, '%Y-%m-%d')
+    #d_from = date_from
+    #d_to = date_to
 
     last_year_date_from = d_from.replace(year=d_from.year - 1)
     last_year_date_to = d_to.replace(year=d_to.year - 1)
