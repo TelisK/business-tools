@@ -21,9 +21,26 @@
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
 
         <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
-            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Σύνολο Εσόδων</div>
+            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Σύνολο Εσόδων Μήνα</div>
             <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--income);">{{ sum_income_result }} €</div>
+            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Σύνολο Εσόδων Έτους</div>
+            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--income);">{{ YTD_result }} €</div>
+            <div style="font-size:0.50rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Διαφορά Εισοδήματος Μήνα / YTD</div>
+            <div style="font-family:'DM Mono',monospace; font-size:1rem; font-weight:500;">
+    
+    <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
+        {{ diff_by_percentage }}%
+    </span>
+    
+    <span style="color: var(--income);"> / </span>
+
+    <span class="{% if diff_by_percentage_YTD >= 0 %}text-success{% else %}text-danger{% endif %}">
+        {{ diff_by_percentage_YTD }}%
+    </span>
+
+</div>
         </div>
+
 
         <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
             <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Σύνολο Εξόδων</div>

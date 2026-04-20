@@ -4,7 +4,7 @@ from .forms import IncomeForm, ExpenseForm, StoreForm, UploadFileForm
 import pandas as pd
 from django.contrib import messages  # informs user with a pop up
 from django.core.paginator import Paginator
-from datetime import date
+from datetime import date, datetime
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -29,20 +29,23 @@ def get_totals(store,date_from,date_to):
     income_result = Income.objects.filter(store=store, day__range=[date_from, date_to])
     expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to])
 
-    income_totals, sum_income_result =income_totals_calculation(income_result)
+    income_totals, sum_income_result = income_totals_calculation(income_result)
 
     sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
 
-    first_day_of_year = date_from.replace(month=1, day=1)
+    first_day_of_year = datetime.strptime(date_from, '%Y-%m-%d').date().replace(month=1, day=1)
     YTD_income_result = Income.objects.filter(store=store, day__range=[first_day_of_year, date_to])
     YTD_totals, YTD_result = income_totals_calculation(YTD_income_result)
 
     return sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals
 
 def last_years_income_comparison(store, date_from, date_to):
-    last_year_date_from = date_from.replace(year=date_from.year - 1)
-    last_year_date_to = date_to.replace(year=date_to.year - 1)
-    last_year_first_day = date_from.replace(year=date_from.year - 1, month=1, day=1)
+    d_from = datetime.strptime(date_from, '%Y-%m-%d')
+    d_to = datetime.strptime(date_to, '%Y-%m-%d')
+
+    last_year_date_from = d_from.replace(year=d_from.year - 1)
+    last_year_date_to = d_to.replace(year=d_to.year - 1)
+    last_year_first_day = d_from.replace(year=d_from.year - 1, month=1, day=1)
 
     last_year_result = Income.objects.filter(store=store, day__range=[last_year_date_from, last_year_date_to])
     last_year_income_totals, last_year_sum_income_result = income_totals_calculation(last_year_result)
@@ -91,6 +94,9 @@ def index(request):
 
     last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = last_years_income_comparison(store,date_from,date_to)
 
+    diff_by_percentage = float(f'{(sum_income_result * 100) / last_year_sum_income_result:.2f}')
+    diff_by_percentage_YTD = float(f'{(YTD_result * 100) / last_year_YTD_result:.2f}')
+
     context_to_html = {
         'store':store,
         'stores_list':stores_list,
@@ -102,7 +108,10 @@ def index(request):
         'date_to':date_to,
         'income_list':income_obj,
         'expense_list':expense_obj,
-        'YTD_result':YTD_result
+        'YTD_result':YTD_result,
+        'diff_by_percentage':diff_by_percentage,
+        'diff_by_percentage_YTD':diff_by_percentage_YTD
+
     }
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
