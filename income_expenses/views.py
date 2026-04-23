@@ -40,6 +40,7 @@ def get_totals(store,date_from,date_to):
 
     sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
 
+    #d_from = datetime.strptime(date_from, '%Y-%m-%d').date()
     first_day_of_year = d_from.replace(month=1, day=1)
     YTD_income_result = Income.objects.filter(store=store, day__range=[first_day_of_year, date_to])
     YTD_totals, YTD_result = income_totals_calculation(YTD_income_result)
@@ -71,19 +72,12 @@ def last_years_income_comparison(store, date_from, date_to):
 
     return last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals
 
-def percentage_difference(last,first):
-    diff = last - first
-    percentage = (last / diff) * 100
-    result = float(f'{percentage:.2f}')
-    return result
-
-
 # Create your views here.
 @login_required
 def index(request):
     today = date.today()
     date_from = request.GET.get('date_from', today.replace(day=1))
-    date_to = request.GET.get('date_to', today)
+    date_to = request.GET.get('date_to', today.replace(day=today.day -1))
 
     store_id = request.GET.get('store', None)
 
@@ -116,8 +110,8 @@ def index(request):
 
     last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = last_years_income_comparison(store,date_from,date_to)
 
-    diff_by_percentage = percentage_difference(sum_income_result,last_year_sum_income_result)
-    diff_by_percentage_YTD = percentage_difference(YTD_result,last_year_YTD_result)
+    diff_by_percentage = float(f'{((sum_income_result * 100) / last_year_sum_income_result)-100:.2f}')
+    diff_by_percentage_YTD = float(f'{((YTD_result * 100) / last_year_YTD_result)-100:.2f}')
 
     context_to_html = {
         'store':store,
