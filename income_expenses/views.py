@@ -4,7 +4,7 @@ from .forms import IncomeForm, ExpenseForm, StoreForm, UploadFileForm
 import pandas as pd
 from django.contrib import messages  # informs user with a pop up
 from django.core.paginator import Paginator
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -76,8 +76,10 @@ def last_years_income_comparison(store, date_from, date_to):
 @login_required
 def index(request):
     today = date.today()
+    yesterday = today - timedelta(days=1)
     date_from = request.GET.get('date_from', today.replace(day=1))
-    date_to = request.GET.get('date_to', today.replace(day=today.day -1))
+    # Using the previous day of today because the income submit is at the end of the day. This way we have correct percentage.
+    date_to = request.GET.get('date_to', yesterday)
 
     store_id = request.GET.get('store', None)
 
