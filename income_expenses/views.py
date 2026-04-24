@@ -166,6 +166,8 @@ def submit_income(request):
         if form.is_valid():
             form.save()
             return redirect('income_expenses:index')
+        else:
+            messages.error(request, 'H Ημερομηνία είναι καταχωρημένη ήδη.')
 
     else:
         form = IncomeForm()
