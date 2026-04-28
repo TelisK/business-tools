@@ -112,8 +112,14 @@ def index(request):
 
     last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = last_years_income_comparison(store,date_from,date_to)
 
-    diff_by_percentage = float(f'{((sum_income_result * 100) / last_year_sum_income_result)-100:.2f}')
-    diff_by_percentage_YTD = float(f'{((YTD_result * 100) / last_year_YTD_result)-100:.2f}')
+    if last_year_sum_income_result != 0:
+        diff_by_percentage = float(f'{((sum_income_result * 100) / last_year_sum_income_result)-100:.2f}')
+    else:
+        diff_by_percentage = '-'
+    if last_year_YTD_result !=0:
+        diff_by_percentage_YTD = float(f'{((YTD_result * 100) / last_year_YTD_result)-100:.2f}')
+    else:
+        diff_by_percentage_YTD = '-'
 
     context_to_html = {
         'store':store,
