@@ -1,0 +1,47 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<div class="form-card" style="max-width:400px; margin:4rem auto;">
+    <h1 style="font-size:1.4rem; margin-bottom:1.5rem;">Εγγραφή</h1>
+    <form method="post">
+
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="bg-red-500 text-white p-2">
+            {% for error in form.non_field_errors %}
+
+            <p>{{error}}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% for field in form %}
+    
+        <div class="form-grid">
+            <div class="form-group full">
+            <label for="">{{field.label}}</label>
+            <div class="border rounded p-2">{{field}}</div>
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Εγγραφή</button>
+        </div>
+    </form>
+        <p>Έχεις ήδη λογαριασμό; <a href="{% url 'login' %}">Σύνδεση</a></p>
+</div>
+
+{% endblock %}
+
+
+        <!-- {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-group full">
+                <label>Όνομα χρήστη</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group full">
+                <label>Κωδικός</label>
+                {{ form.password }}
+            </div>
+        </div>
+                
+         -->
