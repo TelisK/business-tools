@@ -161,3 +161,6 @@ STORAGES = {
 
 SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+#For password reset
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

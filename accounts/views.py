@@ -18,6 +18,3 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form':form}) 
-
-def login(request):
-    pass
