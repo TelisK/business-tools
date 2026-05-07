@@ -3,8 +3,11 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Store(models.Model):
-    name = models.TextField(max_length=100, unique=True)
-    user = models.ManyToManyField(User, blank=True)
+    name = models.TextField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('name', 'user')
 
     def __str__(self):
         return self.name
