@@ -20,6 +20,13 @@
             <div class="form-group full">
             <label for="">{{field.label}}</label>
             <div class="border rounded p-2">{{field}}</div>
+            {% if field.errors %}
+                <div class="text-red-500 text-sm">
+                    {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
         </div>
         {% endfor %}
         <div class="form-actions">

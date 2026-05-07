@@ -3,6 +3,13 @@
 
 <div class="form-card" style="max-width:400px; margin:4rem auto;">
     <h1 style="font-size:1.4rem; margin-bottom:1.5rem;">Σύνδεση</h1>
+        {% if form.non_field_errors %}
+    <div class="bg-red-500 text-white p-2">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <div class="form-grid">
@@ -17,6 +24,7 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Σύνδεση</button>
+            
         </div>
     </form>
         <p>Δέν έχεις λογαριασμό; <a href="{% url 'accounts:register' %}">Εγγραφή</a></p>

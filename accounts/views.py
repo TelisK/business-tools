@@ -14,7 +14,7 @@ def register(request):
                                     password = form.cleaned_data['password1'],)
             
             login(request, new_user)
-            return redirect('income_expenses:index.html')
+            return redirect('income_expenses:index')
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form':form}) 
