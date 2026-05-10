@@ -81,7 +81,13 @@ def index(request):
     # Using the previous day of today because the income submit is at the end of the day. This way we have correct percentage.
     date_to = request.GET.get('date_to', yesterday)
 
-    store_id = request.GET.get('store', None)
+    user_store = Store.objects.filter(user=request.user)
+    if not user_store.exists():
+        raise Exception('User has no stores')
+     
+    store_id_backup = user_store.first().id
+
+    store_id = request.GET.get('store', store_id_backup)
 
     if store_id:
         request.session['selected_store'] = store_id  # save to session
@@ -263,8 +269,9 @@ def add_store(request):
     if request.method == 'POST':
         form = StoreForm(request.POST)
         if form.is_valid():
-            store = form.save()
-            store.user.add(request.user)
+            store = form.save(commit=False)
+            store.user = request.user
+            store.save()
             return redirect('income_expenses:index')
     else:
         form = StoreForm()
@@ -321,7 +328,8 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
                         for index, row in df.iterrows():
                             store, created = Store.objects.get_or_create(name=row['store'])
                             if created:
-                                store.user.add(request.user)
+                                store.user = request.user
+                                store.save()
                             Income.objects.create(
                                 store = store,
                                 day = row['day'],
