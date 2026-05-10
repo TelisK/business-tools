@@ -398,6 +398,9 @@ def prediction_with_ml(request):
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
     income_data = Income.objects.filter(store=store).values('day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other',)
+    if not income_data:
+        messages.error(request, 'There are no data to make predictions!')
+        return redirect('income_expenses:index')
     # expense_data = Expenses.objects.filter(store=store).values('day', 'amount')
     df = pd.DataFrame.from_records(income_data)
     result = prediction_model(df, days_prediction=15)
