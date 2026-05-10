@@ -84,6 +84,7 @@ def index(request):
     user_store = Store.objects.filter(user=request.user)
     if not user_store.exists():
         messages.error(request, 'User has no stores')
+        return redirect('income_expenses:stores')
 
     store_id = request.GET.get('store')
     if user_store.filter(id=store_id).exists():
