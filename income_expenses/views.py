@@ -83,22 +83,21 @@ def index(request):
 
     user_store = Store.objects.filter(user=request.user)
     if not user_store.exists():
-        raise Exception('User has no stores')
-     
-    store_id_backup = user_store.first().id
+        messages.error(request, 'User has no stores')
 
-    store_id = request.GET.get('store', store_id_backup)
-
-    if store_id:
+    store_id = request.GET.get('store')
+    if user_store.filter(id=store_id).exists():
         request.session['selected_store'] = store_id  # save to session
     else:
-        store_id = request.session.get('selected_store', None)  # read from session
+        store_id = None
 
-    # if not store_id:  # When user didn't use the dropdown menu, store id was not saved to the session. With this lines it's working
-    #     first_store = Store.objects.filter(user=request.user).first()
-    # if first_store:
-    #     store_id = first_store.id
-    #     request.session['selected_store'] = str(store_id)
+    if not store_id:
+        store_id = request.session.get('selected_store')
+    
+    if not store_id:
+        store_id = user_store.first().id # pick up the first one from the database
+        request.session['selected_store'] = store_id  # save to session
+
 
     store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
 
