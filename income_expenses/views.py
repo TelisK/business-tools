@@ -169,7 +169,8 @@ def totals_by_date(request, date):
 
 @login_required
 def submit_income(request):
-    stores = Store.objects.filter(user=request.user)
+    store_id = request.session.get('selected_store')
+    stores = Store.objects.filter(user=request.user, id=store_id)
 
     if request.method == 'POST':
         form = IncomeForm(request.POST)
@@ -191,7 +192,8 @@ def submit_income(request):
     
 @login_required
 def submit_expense(request):
-    stores = Store.objects.filter(user=request.user)
+    store_id = request.session.get('selected_store')
+    stores = Store.objects.filter(user=request.user, id=store_id)
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         form.fields['store'].queryset = stores  # this filters the dropdown
