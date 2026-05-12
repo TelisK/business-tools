@@ -317,39 +317,71 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
         if form.is_valid():
             try:
                 file = request.FILES['file']
-                df = pd.read_excel(file, parse_dates=['day'])
-                df = df.dropna(subset=['day'])
+                df = pd.read_excel(file, parse_dates=['day'], sheet_name='Έσοδα') # convert the 'day' column from Excel to Python datetime
+                df = df.dropna(subset=['day']) # Drops data if day is missing
 
                 numeric_cols = ['income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other']
                 df[numeric_cols] = df[numeric_cols].fillna(0)
                 df['comments'] = df['comments'].fillna('')
 
+                df_expenses = pd.read_excel(file, parse_dates=['day'], sheet_name='Έξοδα')
+                df_expenses = df_expenses.dropna(subset=['day'])
+
+                numeric_cols_expenses = ['amount']
+                df_expenses[numeric_cols_expenses] = df_expenses[numeric_cols_expenses].fillna(0)
+                df_expenses['comments'] = df_expenses['comments'].fillna('')
+                df_expenses['category'] = df_expenses['category'].fillna('')
+
                 try:
                     with transaction.atomic(): # reads all the data if there are errors, before import to the database
+                        
+                        try:
+                            for index, row in df.iterrows():
+                                store, created = Store.objects.get_or_create(name=row['store'], defaults={'user':request.user})
 
-                        for index, row in df.iterrows():
-                            store, created = Store.objects.get_or_create(name=row['store'], defaults={'user':request.user})
+                                Income.objects.create(
+                                    store = store,
+                                    day = row['day'],
+                                    income_cash = row['income_cash'],
+                                    income_pos = row['income_pos'],
+                                    income_deposit = row['income_deposit'],
+                                    income_check = row['income_check'],
+                                    income_other = row['income_other'],
+                                    comments = row['comments']
+                                )
 
-                            Income.objects.create(
-                                store = store,
-                                day = row['day'],
-                                income_cash = row['income_cash'],
-                                income_pos = row['income_pos'],
-                                income_deposit = row['income_deposit'],
-                                income_check = row['income_check'],
-                                income_other = row['income_other'],
-                                comments = row['comments']
-                            )
+                        except Exception as e:
+                            # Informing the user the line of the error
+                            messages.error(request, f'Σφάλμα. Ελέγξε τη γραμμή στο φύλλο Έσοδα: {index + 2}: {str(e)}')
+                            raise # If there is an error on first loop, it stops here. We don't want to go to the second for loop.                       
 
-                        messages.success(request, 'Data Uploaded Successfully')
+                        try:
 
-                        return redirect('income_expenses:index')
+                            for index, row in df_expenses.iterrows():
+                                store, created = Store.objects.get_or_create(name=row['store'], defaults={'user':request.user})
+
+                                Expenses.objects.create(
+                                    store = store,
+                                    day = row['day'],
+                                    amount = row['amount'],
+                                    category = row['category'],
+                                    comments = row['comments']
+                                )
+
+                            messages.success(request, 'Data Uploaded Successfully')
+
+                            return redirect('income_expenses:index')
+
+                        except Exception as e:
+                            # Informing the user the line of the error
+                            messages.error(request, f'Σφάλμα. Ελέγξε τη γραμμή στο φύλλο Έξοδα: {index + 2}: {str(e)}')
+                            raise # If the error is in the second loop, it stops here. We don't want to see more erros!
+
                 except Exception as e:
-                    # Informing the user the line of the error
-                    messages.error(request, f'Σφάλμα. Ελέγξε τη γραμμή στο excel: {index + 2}: {str(e)}') 
-
+                    messages.error(request, f'Error: {str(e)}')
             except Exception as e:
-                messages.error(request, f'Error: {str(e)}')
+                    messages.error(request, f'Error: {str(e)}')
+            
         else:
             messages.error(request, f'Errors form: {form.errors}')
         
