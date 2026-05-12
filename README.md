@@ -82,6 +82,6 @@ Or register your own account to test full functionality.
 Tilemahos Koutsogiannakis  
 GitHub: [@TelisK](https://github.com/TelisK)
 
-## Licence
+## License
 
-MIT Licence
+MIT License
