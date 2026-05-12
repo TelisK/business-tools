@@ -6,6 +6,8 @@ A Django web application for managing store income and expenses with ML-powered 
 
 This is my first real-life project. I've built several apps, but this is the first one I'm actually using and deploying. I created it to help my family businesses track their income and expenses efficiently, and add more features, which I will add as time goes. It's currently running on a small server in my living room and has a lot of room for improvement, but it's a solid foundation to build on.
 
+**Note:** The application interface is in Greek, designed for Greek-speaking users.
+
 ## Features
 
 - User authentication (register, login, password reset)
