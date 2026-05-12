@@ -313,7 +313,7 @@ def delete_store(request, id):
 @login_required
 def load_old_data(request): # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
     if request.method == 'POST':
-        #form = UploadFileForm(request.POST, request.FILES)
+        form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 file = request.FILES['file']
@@ -328,10 +328,8 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
                     with transaction.atomic(): # reads all the data if there are errors, before import to the database
 
                         for index, row in df.iterrows():
-                            store, created = Store.objects.get_or_create(name=row['store'])
-                            if created:
-                                store.user = request.user
-                                store.save()
+                            store, created = Store.objects.get_or_create(name=row['store'], defaults={'user':request.user})
+
                             Income.objects.create(
                                 store = store,
                                 day = row['day'],
@@ -342,8 +340,9 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
                                 income_other = row['income_other'],
                                 comments = row['comments']
                             )
-                        
+
                         messages.success(request, 'Data Uploaded Successfully')
+
                         return redirect('income_expenses:index')
                 except Exception as e:
                     # Informing the user the line of the error
