@@ -288,7 +288,7 @@ def update_store(request, id):
         form = StoreForm(request.POST, instance=store_to_upd)
         if form.is_valid():
             form.save()
-            store_to_upd.user.add(request.user)
+            #store_to_upd.user.add(request.user)
             return redirect('income_expenses:stores')
         else:
             return redirect('income_expenses/update_store.html')  # Needs fix because when user gives same store name as another it returns error
