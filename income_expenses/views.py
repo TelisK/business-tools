@@ -211,6 +211,15 @@ def submit_expense(request):
     return render(request, 'income_expenses/submit_expense.html', context=context_to_html)
 
 @login_required
+def fixed_expenses(request):
+    pass
+    # store_id = request.session.get('selected_store')
+    # stores = Store.objects.filter(user=request.user, id=store_id)
+    # if request.method == 'POST':
+
+
+
+@login_required
 def update_income(request, id):
     stores = Store.objects.filter(user=request.user)
     income_update = Income.objects.get(id=id)

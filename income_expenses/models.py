@@ -51,3 +51,27 @@ class Expenses(models.Model):
     comments = models.CharField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class FixedExpenses(models.Model):
+
+    def __str__(self):
+        return f'{self.store.name} - {self.name} : {self.amount} - {self.frequency}'
+    
+    FIXED_EXPENSES_CHOICES = [
+        ('DAILY','Daily'),
+        ('WEEKLY','Weekly'),
+        ('MONTHLY','Monthly'),
+        ('ANNUAL','Annual')
+    ]
+
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, null=False)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    frequency = models.CharField(choices=FIXED_EXPENSES_CHOICES, default='MONTHLY')
+    start_date = models.DateField()
+    next_charge_date = models.DateField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateField(auto_now_add=True)
+
+
+
