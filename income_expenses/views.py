@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect ,get_object_or_404
-from income_expenses.models import Income, Expenses, Store
-from .forms import IncomeForm, ExpenseForm, StoreForm, UploadFileForm
+from income_expenses.models import Income, Expenses, Store, FixedExpenses
+from .forms import IncomeForm, ExpenseForm, StoreForm, UploadFileForm, FixedExpenseForm
 import pandas as pd
 from django.contrib import messages  # informs user with a pop up
 from django.core.paginator import Paginator
 from datetime import date, datetime, timedelta
+from dateutil.relativedelta import relativedelta
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -38,7 +39,8 @@ def get_totals(store,date_from,date_to):
 
     income_totals, sum_income_result = income_totals_calculation(income_result)
 
-    sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  #The last part gives me just the number
+    sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  
+    #The last part gives me just the number
 
     #d_from = datetime.strptime(date_from, '%Y-%m-%d').date()
     first_day_of_year = d_from.replace(month=1, day=1)
@@ -72,13 +74,32 @@ def last_years_income_comparison(store, date_from, date_to):
 
     return last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals
 
+def calculate_next_charge(start_date, frequency):
+    '''Calculation of next charge for fixed expenses.
+    The user will enter the start date and the amount, and this function will calculate
+    the next charge.
+    Returns the next charge date as a date object
+    '''
+    if frequency == 'ANNUAL':
+        next_charge = start_date + relativedelta(years=1)
+    elif frequency == 'MONTHLY':
+        next_charge = start_date + relativedelta(months=1)
+    elif frequency == 'WEEKLY':
+        next_charge = start_date + timedelta(weeks=1)
+    elif frequency == 'DAILY':
+        next_charge = start_date + timedelta(days=1)
+    
+    return next_charge
+
+
 # Create your views here.
 @login_required
 def index(request):
     today = date.today()
     yesterday = today - timedelta(days=1)
     date_from = request.GET.get('date_from', today.replace(day=1))
-    # Using the previous day of today because the income submit is at the end of the day. This way we have correct percentage.
+    # Using the previous day of today because the income submit is at the end of the day. 
+    # This way we have correct percentage.
     date_to = request.GET.get('date_to', yesterday)
 
     user_store = Store.objects.filter(user=request.user)
@@ -212,11 +233,24 @@ def submit_expense(request):
 
 @login_required
 def fixed_expenses(request):
-    pass
-    # store_id = request.session.get('selected_store')
-    # stores = Store.objects.filter(user=request.user, id=store_id)
-    # if request.method == 'POST':
+    store_id = request.session.get('selected_store')
+    stores = Store.objects.filter(user=request.user, id=store_id)
+    fixed_expenses_list = FixedExpenses.objects.filter(store=stores)
+    if request.method == 'POST':
+        form = FixedExpenseForm(request.POST)
+        if form.is_valid():
+            fixed_expense = form.save(commit=False)
+            fixed_expense.next_charge_date = calculate_next_charge(
+                fixed_expense.start_date, fixed_expense.frequency
+            )
+            fixed_expense.save()
+            return redirect('income_expenses:fixed_expenses')
 
+
+    else:
+        form = FixedExpenseForm()
+    context_to_html = {'fixed_expenses_list':fixed_expenses_list, 'form':form}
+    return render(request, 'income_expenses/fixed_expenses.html', context=context_to_html)
 
 
 @login_required
