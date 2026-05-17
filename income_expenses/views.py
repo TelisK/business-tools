@@ -250,6 +250,15 @@ def fixed_expenses(request):
     context_to_html = {'fixed_expenses_list':fixed_expenses_list, 'form':form}
     return render(request, 'income_expenses/fixed_expenses.html', context=context_to_html)
 
+@login_required
+def delete_fixed_expense(request, id):
+    if request.method == 'POST':
+        expense = FixedExpenses.objects.filter(id=id)
+        expense.delete()
+        return redirect('income_expenses:fixed_expenses')
+    else:
+        return render(request,'income_expenses/delete_fixed_expense.html')
+
 
 @login_required
 def update_income(request, id):

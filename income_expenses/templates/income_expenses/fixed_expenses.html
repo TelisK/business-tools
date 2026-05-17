@@ -16,7 +16,11 @@
 {% for fixed_expense in fixed_expenses_list %}
 <li class="entry-item">
             <div class="entry-row">
-<span style="font-size:0.9rem; font-weight:500;">{{ fixed_expense.name }} : {{ fixed_expense.amount }} - {{ fixed_expense.frequency}}</span>
+<span style="font-size:0.9rem; font-weight:500;">
+    <label>{{ fixed_expense.name }}</label>
+    {{ fixed_expense.amount }} € - {{ fixed_expense.frequency}}</span>
+    <div class="entry-actions">
+                    <a href="{% url 'income_expenses:delete_fixed_expense' fixed_expense.id %}" class="btn btn-danger">Διαγραφή</a>
 {% endfor %}
 {% else %}
 <p>You have no expenses</p>

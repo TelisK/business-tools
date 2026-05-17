@@ -21,4 +21,5 @@ urlpatterns = [
     path('export_data/', views.export_data, name='export_data'),
     path('prediction/', views.prediction_with_ml, name='prediction_with_ml'),
     path('fixed_expenses/', views.fixed_expenses, name='fixed_expenses'),
+    path('fixed_expenses/<int:id>/', views.delete_fixed_expense, name='delete_fixed_expense'),
 ]
