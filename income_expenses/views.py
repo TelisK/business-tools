@@ -234,8 +234,7 @@ def submit_expense(request):
 @login_required
 def fixed_expenses(request):
     store_id = request.session.get('selected_store')
-    stores = Store.objects.filter(user=request.user, id=store_id)
-    fixed_expenses_list = FixedExpenses.objects.filter(store=stores)
+    fixed_expenses_list = FixedExpenses.objects.filter(store=store_id)
     if request.method == 'POST':
         form = FixedExpenseForm(request.POST)
         if form.is_valid():
@@ -245,7 +244,6 @@ def fixed_expenses(request):
             )
             fixed_expense.save()
             return redirect('income_expenses:fixed_expenses')
-
 
     else:
         form = FixedExpenseForm()

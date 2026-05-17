@@ -1,0 +1,55 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<div class="page-header">
+    <div>
+        <h1>Πάγια Έξοδα</h1>
+        <p>Διαχείριση Πάγιων Εξόδων</p>
+
+    </div>
+</div>
+
+<div class="form-card">
+    <h2>Καταχωρημένα Πάγια εξόδα</h2>
+    <ul class="entry-list">
+    {% if fixed_expenses_list %}
+{% for fixed_expense in fixed_expenses_list %}
+<li class="entry-item">
+            <div class="entry-row">
+<span style="font-size:0.9rem; font-weight:500;">{{ fixed_expense.name }} : {{ fixed_expense.amount }} - {{ fixed_expense.frequency}}</span>
+{% endfor %}
+{% else %}
+<p>You have no expenses</p>
+{% endif %}
+</ul>
+
+</div>
+
+<div class="form-card">
+    <h2>Προσθήκη Πάγιου εξόδου</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-grid">
+        
+            {% for field in form %}
+            <div class="form-group full">
+                <label>{{ field.label }}</label>
+                {{ field }}
+            </div>
+           
+            {% if field.errors %}
+            <span class="error">{{ field.errors }}</span>
+            {% endif %}
+            {% endfor %}
+
+
+        </div>
+        
+        <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Αποθήκευση Πάγιου Εξόδου</button>
+            </div>
+
+    </form>
+
+</div>
+{% endblock %}
