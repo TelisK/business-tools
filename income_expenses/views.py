@@ -234,7 +234,8 @@ def submit_expense(request):
 @login_required
 def fixed_expenses(request):
     store_id = request.session.get('selected_store')
-    fixed_expenses_list = FixedExpenses.objects.filter(store=store_id)
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+    fixed_expenses_list = FixedExpenses.objects.filter(store=store)
     if request.method == 'POST':
         form = FixedExpenseForm(request.POST)
         if form.is_valid():
@@ -282,14 +283,16 @@ def update_income(request, id):
 @login_required
 def update_expense(request, id):
     stores = Store.objects.filter(user=request.user)
-    expense_update = Expenses.objects.get(id=id)
+    expense_update = get_object_or_404(Expenses, id=id, store__user=request.user)
     if request.method == 'POST':
         form = ExpenseForm(request.POST, instance=expense_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
             return redirect('income_expenses:expenses_detail', id=id)
-
+        else:
+            messages.error(request, 'Έλεγξε τη φόρμα')
+            return render(request, 'income_expenses/expense_update.html', {'form':form})
     else:
         form = ExpenseForm(instance=expense_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
