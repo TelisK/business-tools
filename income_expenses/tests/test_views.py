@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
-from income_expenses.models import Store, Income
+from income_expenses.models import Store, Income, Expenses
 
 class AuthenticationTest(TestCase):
     def setUp(self):
@@ -68,7 +68,119 @@ class SecurityTest(TestCase):
         client2 = Client()  # Need seperate client for diferrent user
         client2.login(username='user2', password='user2pass')
 
-        store_url = reverse('income_expenses:detail', args=[self.store.id]) # args puts the id on the url's id section
-        response = client2.get(store_url)
+        # store_url = reverse('income_expenses:detail', args=[self.store.id]) # args puts the id on the url's id section
+        # response = client2.get(store_url)
+
+        # store_url = reverse('income_expenses:update_store', args=[self.store.id])
+        # response = client2.get(store_url)
+
+        # self.assertNotEqual(response.status_code, 200)
+        delete_url = reverse('income_expenses:delete_store', args=[self.store.id])
+        response = client2.post(delete_url)
+        
+        self.assertNotEqual(response.status_code, 200)
+        
+        # Verify store isn't deleted
+        self.assertTrue(Store.objects.filter(id=self.store.id).exists())
+
+    def test_if_different_user_can_see_income(self):
+        user2 = User.objects.create_user(
+            username='user2',
+            password='user2pass'
+        )
+
+        client2 = Client()  # Need seperate client for diferrent user
+        client2.login(username='user2', password='user2pass')
+
+        add_income = Income.objects.create(
+            store = self.store,
+            day = '2026-05-01',
+            income_cash = 200,
+            income_pos = 100,
+            income_other = 50
+        )
+
+        check_income = reverse('income_expenses:detail', args=[add_income.id])
+        response = client2.get(check_income)
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_if_different_user_can_delete_income(self):
+        user2 = User.objects.create_user(
+            username='user2',
+            password='user2pass'
+        )
+
+        client2 = Client()  # Need seperate client for diferrent user
+        client2.login(username='user2', password='user2pass')
+
+        add_income = Income.objects.create(
+            store = self.store,
+            day = '2026-05-01',
+            income_cash = 200,
+            income_pos = 100,
+            income_deposit = 25,
+            income_check = 25,
+            income_other = 50,
+            comments = 'testing...'
+        )
+
+        delete_income = reverse('income_expenses:income_delete', args=[add_income.id])
+        response = client2.post(delete_income)
+        self.assertNotEqual(response.status_code, 200)
+
+        self.assertTrue(Income.objects.filter(id=add_income.id).exists())
+
+    def test_if_different_user_can_update_income(self):
+        user2 = User.objects.create_user(
+            username='user2',
+            password='user2pass'
+        )
+
+        client2 = Client()  # Need seperate client for diferrent user
+        client2.login(username='user2', password='user2pass')
+
+        add_income = Income.objects.create(
+            store = self.store,
+            day = '2026-05-01',
+            income_cash = 200,
+            income_pos = 100,
+            income_deposit = 25,
+            income_check = 25,
+            income_other = 50,
+            comments = 'testing...'
+        )
+
+        update_income = reverse('income_expenses:income_update', args=[add_income.id])
+        response = client2.post(update_income, {
+            'income_cash':500,
+            'income_other':50,
+        })
 
         self.assertNotEqual(response.status_code, 200)
+
+    def test_if_different_user_can_delete_expense(self):
+        user2 = User.objects.create_user(
+            username='user2',
+            password='user2pass'
+        )
+
+        client2 = Client()  # Need seperate client for diferrent user
+        client2.login(username='user2', password='user2pass')
+
+        add_expense = Expenses.objects.create(
+            store = self.store,
+            day = '2026-05-01',
+            amount = 200,
+            category = 'test',
+            comments = 'testing...'
+        )
+
+        delete_expense = reverse('income_expenses:expense_delete', args=[add_expense.id])
+        response = client2.post(delete_expense)
+        self.assertNotEqual(response.status_code, 200)
+
+        self.assertTrue(Expenses.objects.filter(id=add_expense.id).exists())
+
+
+    def test_if_different_user_can_update_expense(self):
+        pass

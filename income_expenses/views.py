@@ -263,13 +263,16 @@ def delete_fixed_expense(request, id):
 @login_required
 def update_income(request, id):
     stores = Store.objects.filter(user=request.user)
-    income_update = Income.objects.get(id=id)
+    income_update = get_object_or_404(Income, id=id, store__user=request.user)
     if request.method == 'POST':
         form = IncomeForm(request.POST, instance=income_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
             return redirect('income_expenses:detail', id=id)
+        else:
+            messages.error(request, 'Ελέγξε τη φόρμα')
+            return render(request, 'income_expenses/income_update.html', {'form':form})
     else:
         form = IncomeForm(instance=income_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
@@ -286,6 +289,7 @@ def update_expense(request, id):
         if form.is_valid():
             form.save()
             return redirect('income_expenses:expenses_detail', id=id)
+
     else:
         form = ExpenseForm(instance=expense_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
@@ -294,8 +298,8 @@ def update_expense(request, id):
 
 @login_required
 def delete_income(request, id):
+    income_to_del = get_object_or_404(Income, id=id, store__user=request.user)
     if request.method == 'POST':
-        income_to_del = Income.objects.get(id=id)
         income_to_del.delete()
         return redirect('income_expenses:index')
     else:
@@ -303,8 +307,8 @@ def delete_income(request, id):
 
 @login_required
 def delete_expense(request, id):
+    expense_to_del = get_object_or_404(Expenses, id=id, store__user=request.user)
     if request.method == 'POST':
-        expense_to_del = Expenses.objects.get(id=id)
         expense_to_del.delete()
         return redirect('income_expenses:index')
     else:
@@ -350,12 +354,12 @@ def update_store(request, id):
 @login_required
 def delete_store(request, id):
     if request.method == 'POST':
+        store_to_del = get_object_or_404(Store, id=id, user=request.user)
         stores = Store.objects.filter(user=request.user)
         if stores.count() == 1: # If there is one store, it cannot be deleted.
             return redirect('income_expenses:stores')
-        else:
-            store_to_del = get_object_or_404(Store, id=id, user=request.user)
-            store_to_del.delete()
+        
+        store_to_del.delete()
         return redirect('income_expenses:stores')
     else:
         return render(request, 'income_expenses/delete_store.html')
