@@ -45,7 +45,7 @@ class LoginTest(TestCase):
             'username' : 'testuser',
             'password' : 'testpass123'
         })
-            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.status_code, 302) # 302 is redirect status
 
 class SecurityTest(TestCase):
     def setUp(self):
@@ -184,7 +184,7 @@ class SecurityTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_if_different_user_can_see_fixed_expenses(self):
-        self.user = FixedExpenses.objects.create(
+        fixed_expense = FixedExpenses.objects.create(
             store=self.store,
             name='fixed test',
             amount=50,
@@ -198,4 +198,31 @@ class SecurityTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_if_different_user_can_delete_fixed_expenses(self):
-        pass
+        fixed_expense = FixedExpenses.objects.create(
+            store=self.store,
+            name='fixed test',
+            amount=50,
+            frequency='MONTHLY',
+            start_date=date.today(),
+            next_charge_date='2026-06-21'
+        )
+
+        delete_fixed_expense = reverse('income_expenses:delete_fixed_expense', args=[fixed_expense.id])
+        response = self.client2.post(delete_fixed_expense)
+        self.assertNotEqual(response.status_code, 200)
+
+        self.assertTrue(FixedExpenses.objects.filter(id=fixed_expense.id).exists())
+
+from unittest.mock import patch
+from datetime import date
+class ViewsTest(TestCase):
+
+    def test_index_on_first_day_of_month(self):
+        user = User.objects.create_user(username='test', password='pass')
+        self.client.login(username='test', password='pass')
+        # Mock and patch predends it's a different date
+        with patch('income_expenses.views.date') as mock_date:
+            mock_date.today.return_value = date(2026, 6, 1)
+            response = self.client.get(reverse('income_expenses:index'))
+
+        self.assertEqual(response.status_code, 200)
