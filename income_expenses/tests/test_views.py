@@ -218,11 +218,19 @@ from datetime import date
 class ViewsTest(TestCase):
 
     def test_index_on_first_day_of_month(self):
-        user = User.objects.create_user(username='test', password='pass')
-        self.client.login(username='test', password='pass')
+        user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.login(username='testuser', password='testpass123')
+
+        # Create a store for the user
+        store = Store.objects.create(name='Test Store', user=user)
+        
+        session = self.client.session
+        session['selected_store'] = store.id
+        session.save()
+
         # Mock and patch predends it's a different date
         with patch('income_expenses.views.date') as mock_date:
-            mock_date.today.return_value = date(2026, 6, 1)
+            mock_date.today.return_value = date(2026, 5, 1)
             response = self.client.get(reverse('income_expenses:index'))
 
         self.assertEqual(response.status_code, 200)
