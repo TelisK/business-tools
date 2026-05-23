@@ -71,6 +71,28 @@ docker compose exec web python manage.py migrate
 - `static/` - CSS, JS, images
 - `templates/` - HTML templates
 
+## Testing
+
+Run all tests:
+```bash
+python manage.py test
+```
+
+Run specific test file:
+```bash
+python manage.py test income_expenses.tests.test_models
+python manage.py test income_expenses.tests.test_views
+python manage.py test income_expenses.tests.test_forms
+```
+
+### Test Coverage
+
+- **Models:** Income, Store
+- **Views:** Authentication, Login, Security
+- **Forms:** Registration, Income creation and Expenses creation validation
+
+All critical features are tested.
+
 ## Live Demo
 
 https://tkoutsogiannakis.site/biztools/
