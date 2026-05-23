@@ -83,7 +83,3 @@ Or register your own account to test full functionality.
 
 Tilemahos Koutsogiannakis  
 GitHub: [@TelisK](https://github.com/TelisK)
-
-## License
-
-MIT License
