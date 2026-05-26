@@ -15,6 +15,7 @@ services:
       - "8000"
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:17
@@ -34,6 +35,12 @@ services:
       - ./static:/app/static
     depends_on:
       - web
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:

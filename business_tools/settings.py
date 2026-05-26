@@ -178,3 +178,6 @@ if 'test' in sys.argv:
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': ':memory:',
     }
+
+    
+CELERY_BROKER_URL = 'redis://localhost:6379'
