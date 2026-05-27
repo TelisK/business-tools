@@ -29,28 +29,32 @@ def generate_fixed_expenses():
 
     fixed_expenses = FixedExpenses.objects.all()
     for data in fixed_expenses:
-        if data.next_charge_date:
-            expense_day = data.next_charge_date
-        else:
-            expense_day = data.start_date
-            
-        expense_exists = Expenses.objects.filter(
-            store = data.store,
-            day = expense_day,
-            amount = data.amount,
-            category = 'Autocreated from Fixed Expenses',
-            comments = data.name + data.frequency
-        ).exists()
+        today = date.today().strftime('%d-%m-%Y')
 
-        if not expense_exists:
-            create_expense = Expenses.objects.create(
-                store = data.store,            
+        while expense_day <= today: # Charges only until today.
+            # Using the expense_day function, gives the user the ability to add expense on the past.
+            if data.next_charge_date:
+                expense_day = data.next_charge_date
+            else:
+                expense_day = data.start_date
+
+            expense_exists = Expenses.objects.filter(
+                store = data.store,
                 day = expense_day,
                 amount = data.amount,
                 category = 'Autocreated from Fixed Expenses',
                 comments = data.name + data.frequency
-            )
-            data.next_charge_date = calculate_next_charge(create_expense.day, data.frequency)
-            data.save()
+            ).exists()
+
+            if not expense_exists:
+                create_expense = Expenses.objects.create(
+                    store = data.store,            
+                    day = expense_day,
+                    amount = data.amount,
+                    category = 'Autocreated from Fixed Expenses',
+                    comments = data.name + data.frequency
+                )
+                data.next_charge_date = calculate_next_charge(create_expense.day, data.frequency)
+        data.save()
 
 

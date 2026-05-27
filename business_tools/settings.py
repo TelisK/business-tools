@@ -180,4 +180,14 @@ if 'test' in sys.argv:
     }
 
     
+# Celery
 CELERY_BROKER_URL = 'redis://localhost:6379'
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'generate-fixed-expenses-daily': {
+        'task': 'income_expenses.tasks.generate_fixed_expenses',
+        'schedule': crontab(hour=1, minute=0),  # Run daily at 1 AM
+    },
+}
