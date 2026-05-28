@@ -1,7 +1,6 @@
 from celery import shared_task
 from datetime import date, timedelta
 from .models import FixedExpenses, Expenses, Store
-from .views import calculate_next_charge
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
@@ -28,16 +27,24 @@ def generate_fixed_expenses():
     when the user selects (daily, weekly, monthly or yearly)'''
 
     fixed_expenses = FixedExpenses.objects.all()
+    print(f"Found {fixed_expenses.count()} fixed expenses")
     for data in fixed_expenses:
-        today = date.today().strftime('%d-%m-%Y')
+        print(f"Processing: {data.name}")
+        print(f"start_date: {data.start_date}")
+        print(f"next_charge_date: {data.next_charge_date}")
+        print(f"is_active: {data.is_active}")
+
+        today = date.today()
+
+        # Using the expense_day function, gives the user the ability to add expense on the past.
+        if data.next_charge_date:
+            expense_day = data.next_charge_date
+        else:
+            expense_day = data.start_date
+        print(f"expense_day: {expense_day}, today: {today}")
 
         while expense_day <= today: # Charges only until today.
-            # Using the expense_day function, gives the user the ability to add expense on the past.
-            if data.next_charge_date:
-                expense_day = data.next_charge_date
-            else:
-                expense_day = data.start_date
-
+            print(f"Entering while loop: {expense_day} <= {today}")
             expense_exists = Expenses.objects.filter(
                 store = data.store,
                 day = expense_day,
@@ -45,8 +52,9 @@ def generate_fixed_expenses():
                 category = 'Autocreated from Fixed Expenses',
                 comments = data.name + data.frequency
             ).exists()
-
+            print(f"Expense exists: {expense_exists}")
             if not expense_exists:
+                print(f"Creating expense for {expense_day}")
                 create_expense = Expenses.objects.create(
                     store = data.store,            
                     day = expense_day,
@@ -54,7 +62,8 @@ def generate_fixed_expenses():
                     category = 'Autocreated from Fixed Expenses',
                     comments = data.name + data.frequency
                 )
-                data.next_charge_date = calculate_next_charge(create_expense.day, data.frequency)
+        data.next_charge_date = calculate_next_charge(create_expense.day, data.frequency)
+                
         data.save()
 
 

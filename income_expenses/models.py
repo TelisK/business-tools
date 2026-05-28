@@ -69,7 +69,7 @@ class FixedExpenses(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     frequency = models.CharField(choices=FIXED_EXPENSES_CHOICES, default='MONTHLY')
     start_date = models.DateField()
-    next_charge_date = models.DateField()
+    next_charge_date = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateField(auto_now_add=True)
 

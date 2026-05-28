@@ -74,22 +74,22 @@ def last_years_income_comparison(store, date_from, date_to):
 
     return last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals
 
-def calculate_next_charge(start_date, frequency):
-    '''Calculation of next charge for fixed expenses.
-    The user will enter the start date and the amount, and this function will calculate
-    the next charge.
-    Returns the next charge date as a date object
-    '''
-    if frequency == 'ANNUAL':
-        next_charge = start_date + relativedelta(years=1)
-    elif frequency == 'MONTHLY':
-        next_charge = start_date + relativedelta(months=1)
-    elif frequency == 'WEEKLY':
-        next_charge = start_date + timedelta(weeks=1)
-    elif frequency == 'DAILY':
-        next_charge = start_date + timedelta(days=1)
+# def calculate_next_charge(start_date, frequency):
+#     '''Calculation of next charge for fixed expenses.
+#     The user will enter the start date and the amount, and this function will calculate
+#     the next charge.
+#     Returns the next charge date as a date object
+#     '''
+#     if frequency == 'ANNUAL':
+#         next_charge = start_date + relativedelta(years=1)
+#     elif frequency == 'MONTHLY':
+#         next_charge = start_date + relativedelta(months=1)
+#     elif frequency == 'WEEKLY':
+#         next_charge = start_date + timedelta(weeks=1)
+#     elif frequency == 'DAILY':
+#         next_charge = start_date + timedelta(days=1)
     
-    return next_charge
+#     return next_charge
 
 
 # Create your views here.
@@ -239,10 +239,14 @@ def fixed_expenses(request):
     if request.method == 'POST':
         form = FixedExpenseForm(request.POST)
         if form.is_valid():
+            
             fixed_expense = form.save(commit=False)
-            fixed_expense.next_charge_date = calculate_next_charge(
-                fixed_expense.start_date, fixed_expense.frequency
-            )
+            # fixed_expense.next_charge_date = calculate_next_charge(
+            #     fixed_expense.start_date, fixed_expense.frequency
+            # )
+            print(f'{fixed_expense.start_date=}')
+            print(date.today())
+            print(date.today().strftime('%d-%m-%Y'))
             fixed_expense.save()
             return redirect('income_expenses:fixed_expenses')
 
