@@ -50,7 +50,7 @@ def generate_fixed_expenses():
                 day = expense_day,
                 amount = data.amount,
                 category = 'Autocreated from Fixed Expenses',
-                comments = data.name + data.frequency
+                comments = data.name + ' ' + data.frequency
             ).exists()
             print(f"Expense exists: {expense_exists}")
             if not expense_exists:
@@ -60,9 +60,10 @@ def generate_fixed_expenses():
                     day = expense_day,
                     amount = data.amount,
                     category = 'Autocreated from Fixed Expenses',
-                    comments = data.name + data.frequency
+                    comments = data.name + ' ' + data.frequency
                 )
-        data.next_charge_date = calculate_next_charge(create_expense.day, data.frequency)
+            expense_day = calculate_next_charge(expense_day, data.frequency)
+            print(f"Updated expense_day to: {expense_day}")
                 
         data.save()
 

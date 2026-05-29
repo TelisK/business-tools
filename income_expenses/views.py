@@ -257,10 +257,9 @@ def fixed_expenses(request):
 
 @login_required
 def delete_fixed_expense(request, id):
-    store = get_object_or_404(FixedExpenses, id=id, store__user=request.user)
+    fixed_expense = get_object_or_404(FixedExpenses, id=id, store__user=request.user)
     if request.method == 'POST':
-        expense = FixedExpenses.objects.filter(store=store)
-        expense.delete()
+        fixed_expense.delete()
         return redirect('income_expenses:fixed_expenses')
     else:
         return render(request,'income_expenses/delete_fixed_expense.html')
