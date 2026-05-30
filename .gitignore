@@ -6,3 +6,4 @@ db.sqlite3
 nginx.conf
 db_data/
 docker-compose.local.yml
+"static/admin/" 
