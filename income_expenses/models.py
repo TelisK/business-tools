@@ -59,17 +59,17 @@ class FixedExpenses(models.Model):
         return f'{self.store.name} - {self.name} : {self.amount} - {self.frequency}'
     
     FIXED_EXPENSES_CHOICES = [
-        ('DAILY','Daily'),
-        ('WEEKLY','Weekly'),
-        ('MONTHLY','Monthly'),
-        ('ANNUAL','Annual')
+        ('DAILY','Καθημερινή'),
+        ('WEEKLY','Εβδομαδιαία'),
+        ('MONTHLY','Μηνιαία'),
+        ('ANNUAL','Ετήσια')
     ]
 
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, null=False)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    frequency = models.CharField(choices=FIXED_EXPENSES_CHOICES, default='MONTHLY')
-    start_date = models.DateField()
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, verbose_name='Κατάστημα')
+    name = models.CharField(max_length=100, null=False, verbose_name='Όνομα')
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Ποσό')
+    frequency = models.CharField(choices=FIXED_EXPENSES_CHOICES, default='MONTHLY', verbose_name='Συχνότητα')
+    start_date = models.DateField(verbose_name='Ημερομηνία εκκίνησης')
     next_charge_date = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateField(auto_now_add=True)

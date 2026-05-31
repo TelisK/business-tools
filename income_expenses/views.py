@@ -104,9 +104,12 @@ def index(request):
         request.session['selected_store'] = store_id  # save to session
 
 
-    store = get_object_or_404(Store, id=store_id, user=request.user) if store_id else Store.objects.filter(user=request.user).first()
+    store = get_object_or_404(Store, id=store_id, user=request.user) \
+          if store_id else Store.objects.filter(user=request.user).first()
 
-    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals = get_totals(store,date_from,date_to)
+    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals = \
+        get_totals(store,date_from,date_to)
+    
     net_result = sum_income_result - sum_expenses_result
 
     income_list = Income.objects.filter(store=store).order_by('-day')
@@ -120,7 +123,8 @@ def index(request):
     income_obj = paginator_income.get_page(income_page)
     expense_obj = paginator_expense.get_page(expense_page)
 
-    last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = last_years_income_comparison(store,date_from,date_to)
+    last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = \
+        last_years_income_comparison(store,date_from,date_to)
 
     if last_year_sum_income_result != 0:
         diff_by_percentage = float(f'{((sum_income_result * 100) / last_year_sum_income_result)-100:.2f}')
@@ -164,12 +168,27 @@ def expenses_detail(request,id):
 
 # needs completion
 @login_required
-def totals_by_date(request, date):
-    store = Store.objects.filter(user=request.user).first()
-    incomes = Income.objects.filter(day=date, store=store)
-    expenses = Expenses.objects.filter(day=date, store=store)
-    totals = incomes + expenses
-    context_to_html = {'totals': totals}
+def analytics(request):
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    store = Store.objects.filter(user=request.user)
+
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    
+    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals = get_totals(
+        store=store, start_date, end_date
+    )
+    totals = sum_income_result - sum_expenses_result
+    context_to_html = {
+        'sum_income_result':sum_income_result,
+        'sum_expenses_result':sum_expenses_result,
+        'income_totals':income_totals,
+        'totals': totals,
+        'YTD_result': YTD_result,
+        'YTD_totals': YTD_totals,
+    }
     return render(request, 'income_expenses/totals_by_date.html', context=context_to_html)
 
 @login_required
@@ -234,7 +253,7 @@ def fixed_expenses(request):
     else:
         form = FixedExpenseForm()
         form.fields['store'].queryset = Store.objects.filter(user=request.user)
-        
+
     context_to_html = {'fixed_expenses_list':fixed_expenses_list, 'form':form}
     return render(request, 'income_expenses/fixed_expenses.html', context=context_to_html)
 
@@ -335,7 +354,7 @@ def update_store(request, id):
             #store_to_upd.user.add(request.user)
             return redirect('income_expenses:stores')
         else:
-            return redirect('income_expenses/update_store.html')  # Needs fix because when user gives same store name as another it returns error
+            return redirect('income_expenses/update_store.html')
     else:
         form = StoreForm(instance=store_to_upd)
         context_to_html = {'form':form}
@@ -355,13 +374,15 @@ def delete_store(request, id):
         return render(request, 'income_expenses/delete_store.html')
 
 @login_required
-def load_old_data(request): # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
+# With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
+def load_old_data(request): 
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 file = request.FILES['file']
-                df = pd.read_excel(file, parse_dates=['day'], sheet_name='Έσοδα') # convert the 'day' column from Excel to Python datetime
+                # convert the 'day' column from Excel to Python datetime
+                df = pd.read_excel(file, parse_dates=['day'], sheet_name='Έσοδα')
                 df = df.dropna(subset=['day']) # Drops data if day is missing
 
                 numeric_cols = ['income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other']
@@ -397,7 +418,8 @@ def load_old_data(request): # With pandas and a predefined excel file, that user
                         except Exception as e:
                             # Informing the user the line of the error
                             messages.error(request, f'Σφάλμα. Ελέγξε τη γραμμή στο φύλλο Έσοδα: {index + 2}: {str(e)}')
-                            raise # If there is an error on first loop, it stops here. We don't want to go to the second for loop.                       
+                            raise # If there is an error on first loop, it stops here. 
+                                    # We don't want to go to the second for loop.                       
 
                         try:
 
@@ -466,7 +488,9 @@ def export_data(request):
 def income_expenses_analysis(request): # Analysis with matplotlib?
     pass
 
-def prediction_with_ai(request): # with gemini api analyse the old data and based on geopolitics, bookings, how many people except to come etc.
+def prediction_with_ai(request): 
+    '''with gemini api analyse the old data and based on geopolitics, 
+    bookings, how many people except to come etc.'''
     pass
 
 @login_required
@@ -474,7 +498,9 @@ def prediction_with_ml(request):
     store_id = request.session.get('selected_store', None)
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
-    income_data = Income.objects.filter(store=store).values('day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other',)
+    income_data = Income.objects.filter(store=store).values(
+        'day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other',
+    )
     if not income_data:
         messages.error(request, 'There are no data to make predictions!')
         return redirect('income_expenses:index')

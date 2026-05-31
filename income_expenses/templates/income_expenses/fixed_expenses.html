@@ -23,9 +23,11 @@
                     <a href="{% url 'income_expenses:delete_fixed_expense' fixed_expense.id %}" class="btn btn-danger">Διαγραφή</a>
 {% endfor %}
 {% else %}
-<p>You have no expenses</p>
+<p>Δέν έχει καταχωρημένα πάγια έξοδα</p>
 {% endif %}
 </ul>
+<br>
+<p>Τα καταχωρημένα πάγια έξοδα ενημερώνουν το σύστημα καθημερινά στις 01:00</p>
 
 </div>
 

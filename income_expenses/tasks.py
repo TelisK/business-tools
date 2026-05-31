@@ -96,7 +96,7 @@ def store_predicted_income():
                 print(e)
                 continue
 
-
+# Add logger instead of print
         
 
 
