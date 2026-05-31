@@ -191,4 +191,8 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'income_expenses.tasks.generate_fixed_expenses',
         'schedule': crontab(hour=1, minute=0),  # Run daily at 1 AM
     },
+    'store-prediction-on-database': {
+        'task': 'income_expenses.tasks.store_predicted_income',
+        'schedule': crontab(hour=2, minute=0), # Run daily at 2 AM
+    },
 }

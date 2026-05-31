@@ -1,8 +1,10 @@
 from celery import shared_task
 from datetime import date, timedelta
-from .models import FixedExpenses, Expenses, Store
+from .models import FixedExpenses, Expenses, Store, Income
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
+import pandas as pd
+from .ml import prediction_model
 
 def calculate_next_charge(start_date, frequency):
     '''Calculation of next charge for fixed expenses.
@@ -27,13 +29,7 @@ def generate_fixed_expenses():
     when the user selects (daily, weekly, monthly or yearly)'''
 
     fixed_expenses = FixedExpenses.objects.all()
-    print(f"Found {fixed_expenses.count()} fixed expenses")
     for data in fixed_expenses:
-        print(f"Processing: {data.name}")
-        print(f"start_date: {data.start_date}")
-        print(f"next_charge_date: {data.next_charge_date}")
-        print(f"is_active: {data.is_active}")
-
         today = date.today()
 
         # Using the expense_day function, gives the user the ability to add expense on the past.
@@ -41,10 +37,8 @@ def generate_fixed_expenses():
             expense_day = data.next_charge_date
         else:
             expense_day = data.start_date
-        print(f"expense_day: {expense_day}, today: {today}")
 
         while expense_day <= today: # Charges only until today.
-            print(f"Entering while loop: {expense_day} <= {today}")
             expense_exists = Expenses.objects.filter(
                 store = data.store,
                 day = expense_day,
@@ -52,9 +46,8 @@ def generate_fixed_expenses():
                 category = 'Autocreated from Fixed Expenses',
                 comments = data.name + ' ' + data.frequency
             ).exists()
-            print(f"Expense exists: {expense_exists}")
+
             if not expense_exists:
-                print(f"Creating expense for {expense_day}")
                 create_expense = Expenses.objects.create(
                     store = data.store,            
                     day = expense_day,
@@ -63,8 +56,47 @@ def generate_fixed_expenses():
                     comments = data.name + ' ' + data.frequency
                 )
             expense_day = calculate_next_charge(expense_day, data.frequency)
-            print(f"Updated expense_day to: {expense_day}")
+
                 
         data.save()
+
+
+@shared_task
+def store_predicted_income():
+    '''Adds every day the prediction of machine learning model
+    to the database. This way we can train our model with the prediction
+    error and make it better.'''
+
+    stores = Store.objects.all()
+
+    for store in stores:
+        income_data = Income.objects.filter(store=store).values(
+            'day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other',
+        )
+        if not income_data.exists():
+            continue
+
+        else:
+            try:
+                df = pd.DataFrame.from_records(income_data)
+                tomorrows_prediction = prediction_model(df, days_prediction=1)
+
+                add_prediction = Income.objects.create(
+                    store = store,
+                    day = tomorrows_prediction[0]['day'],
+                    income_cash=0,
+                    income_pos=0,
+                    income_deposit=0,
+                    income_check=0,
+                    income_other=0,
+                    predicted_income = tomorrows_prediction[0]['predicted_income']
+                )
+            
+            except Exception as e:
+                print(e)
+                continue
+
+
+        
 
 
