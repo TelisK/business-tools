@@ -173,14 +173,17 @@ def analytics(request):
     yesterday = today - timedelta(days=1)
 
     store = Store.objects.filter(user=request.user)
+    print(f'ΚΑΤΑΣΤΗΜΑΤΑ {store}')
+    store_id = request.session.get('selected_store')
 
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
     
     sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals = get_totals(
-        store=store, start_date, end_date
+        store_id, start_date, end_date
     )
     totals = sum_income_result - sum_expenses_result
+    print(f' ΣΥΝΟΛΑ :{totals}')
     context_to_html = {
         'sum_income_result':sum_income_result,
         'sum_expenses_result':sum_expenses_result,
@@ -189,7 +192,7 @@ def analytics(request):
         'YTD_result': YTD_result,
         'YTD_totals': YTD_totals,
     }
-    return render(request, 'income_expenses/totals_by_date.html', context=context_to_html)
+    return render(request, 'income_expenses/analytics.html', context=context_to_html)
 
 @login_required
 def submit_income(request):

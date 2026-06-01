@@ -1,5 +1,15 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
+<form method="GET" action="{% url 'income_expenses:analytics' %}">
+    <input type="date" name="start_date" value="{{ start_date }}">
+    <input type="date" name="end_date" value="{{ end_date }}">
+    <button type="submit">Εφαρμογη</button>
+</form>
+
+<div>
+    <p>Income</p>
+    {{ sum_income_result }}
+</div>
 
 {% endblock %}
