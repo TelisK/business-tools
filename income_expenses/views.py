@@ -118,7 +118,7 @@ def index(request):
     store = get_object_or_404(Store, id=store_id, user=request.user) \
           if store_id else Store.objects.filter(user=request.user).first()
 
-    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals = \
+    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, income_df, expenses_df = \
         get_totals(store,date_from,date_to)
     
     net_result = sum_income_result - sum_expenses_result
@@ -199,26 +199,87 @@ def analytics(request):
     )
     
     net_result = sum_income_result - sum_expenses_result
+    
+    if income_df.empty: # if we have no expenses, it creates the dataframe empty.
+        income_df = pd.DataFrame(columns=['day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'])
 
     income_df['total_income'] = income_df[[
         'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
     ]].sum(axis=1)
 
-    fig = px.line(income_df, x='day', y='total_income', title=f'Εισοδήματα απο {start_date} έως {end_date}')
+    income_df = income_df.rename(columns={
+    'total_income':'Συνολικό_Εισόδημα',
+    'income_cash': 'Μετρητά',
+    'income_pos': 'POS',
+    'income_deposit': 'Κατάθεση',
+    'income_check': 'Επιταγή',
+    'income_other': 'Άλλο'
+})
+    
+    fig = px.line(
+        income_df, 
+        x='day', 
+        y='Συνολικό_Εισόδημα', 
+        title=f'Εισοδήματα απο {start_date} έως {end_date}',
+        labels={'day':'Ημερομηνία', 'Συνολικό_Εισόδημα':'Εισόδημα σε €'}
+    )
 
-    # last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = \
-    # last_years_income_comparison(store, start_date, end_date)
+    chart = fig.to_html(include_plotlyjs='cdn')
 
-    # if last_year_sum_income_result != 0:
-    #     diff_by_percentage = float(f'{((sum_income_result * 100) / last_year_sum_income_result)-100:.2f}')
-    # else:
-    #     diff_by_percentage = '-'
-    # if last_year_YTD_result !=0:
-    #     diff_by_percentage_YTD = float(f'{((YTD_result * 100) / last_year_YTD_result)-100:.2f}')
-    # else:
-    #     diff_by_percentage_YTD = '-'
 
-    print(f' ΣΥΝΟΛΑ :{net_result}')
+    
+    fig2 = px.line(
+        income_df,
+        x='day',
+        y=['Μετρητά', 'POS', 'Κατάθεση', 'Επιταγή', 'Άλλο'],
+        title=f'Αναλυτικά απο {start_date} έως {end_date}',
+        labels={'day':'Ημερομηνία', 'value':'Εισόδημα σε €'}
+    )
+
+    chart2 = fig2.to_html(include_plotlyjs='cdn')
+
+    if expenses_df.empty: # if we have no expenses, it creates the dataframe empty.
+        expenses_df = pd.DataFrame(columns=['day', 'Συνολικά_Έξοδα'])
+    else:
+        expenses_df = expenses_df.groupby('day')['amount'].sum().reset_index() # adds same day's expenses in one.
+        expenses_df.rename(columns={'amount': 'Συνολικά_Έξοδα'}, inplace=True)
+
+    df = income_df.merge(expenses_df, on='day', how='outer').fillna(0) # outer shows all days (if expense or income not exists)
+
+    fig3 = px.line(
+        df,
+        x='day',
+        y=['Συνολικό_Εισόδημα', 'Συνολικά_Έξοδα'],
+        title=f'Έσοδα - Έξοδα απο {start_date} έως {end_date}',
+        labels={'day':'Ημερομηνία', 'value':'Έσοδα - Έξοδα σε €'}
+    )
+
+    chart3 = fig3.to_html(include_plotlyjs='cdn')
+    print(f"Type of income_df: {type(income_df)}")
+    print(f"Has empty attr: {hasattr(income_df, 'empty')}")
+    print(f"Value of empty: {income_df.empty}")
+    if not income_df.empty:
+
+        income_sum_for_pie = {
+            'Μετρητά':income_df['Μετρητά'].sum(),
+            'POS':income_df['POS'].sum(),
+            'Κατάθεση':income_df['Κατάθεση'].sum(),
+            'Επιταγή':income_df['Επιταγή'].sum(),
+            'Άλλο':income_df['Άλλο'].sum(),
+        }
+
+        # Removes values when they are zeros. So on the pie will not be visible ways of payment with 0 income
+        income_sum_for_pie = {key: value for key, value in income_sum_for_pie.items() if value > 0}
+
+        fig4 = px.pie(names=list(income_sum_for_pie.keys()),
+                    values=list(income_sum_for_pie.values()),
+                    title=f'Ποσοστό χρήσης τρόπων πληρωμής απο {start_date} έως {end_date}')
+
+        chart4 = fig4.to_html(include_plotlyjs='cdn')
+
+    else:
+        chart4 = None
+
     context_to_html = {
         'sum_income_result' : sum_income_result,
         'sum_expenses_result' : sum_expenses_result,
@@ -226,12 +287,10 @@ def analytics(request):
         'net_result' : net_result,
         'YTD_result' : YTD_result,
         'YTD_totals' : YTD_totals,
-        # 'last_year_sum_income_result' : last_year_sum_income_result,
-        # 'last_year_income_totals' : last_year_income_totals,
-        # 'last_year_YTD_result' : last_year_YTD_result,
-        # 'last_year_YTD_totals' : last_year_YTD_totals,
-        # 'diff_by_percentage' : diff_by_percentage,
-        # 'diff_by_percentage_YTD' : diff_by_percentage_YTD,
+        'chart' : chart,
+        'chart2' : chart2,
+        'chart3' : chart3,
+        'chart4' : chart4,
     }
     return render(request, 'income_expenses/analytics.html', context=context_to_html)
 

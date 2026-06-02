@@ -38,6 +38,27 @@
         <p>POS</p>
         {{ income_totals.total_other }}
     </div>
+
     
+</div>
+<div>
+    <p>Συνολικό Εισόδημα</p>
+    {{ chart | safe }}
+</div>
+<div>
+    <p>Αναλυση ανα ημέρα τρόπου πληρωμής</p>
+    {{ chart2 | safe }}
+</div>
+<div>
+    <p>Έσοδα - Έξοδα</p>
+    {{ chart3 | safe }}
+</div>
+<div>
+    {% if chart4 %}
+    <p>Ποσοστό χρήσης τρόπων πληρωμής</p>
+    {{ chart4 | safe }}
+    {% else %}
+    <p>Δέν υπάρχουν δεδομένα</p>
+    {% endif %}
 </div>
 {% endblock %}
