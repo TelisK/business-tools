@@ -12,9 +12,12 @@ from django.http import HttpResponse
 import io
 from .ml import prediction_model
 from django.db import transaction
+import plotly.express as px
+
 
 
 def income_totals_calculation(data): # Calculates the data for filtering
+    # totals will become a dictionary
     totals = data.aggregate(
         total_cash = Sum('income_cash'),
         total_pos = Sum('income_pos'),
@@ -37,6 +40,13 @@ def get_totals(store,date_from,date_to):
     income_result = Income.objects.filter(store=store, day__range=[date_from, date_to])
     expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to])
 
+    income_df = pd.DataFrame.from_records(income_result.values(
+        'day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
+    ))
+    expenses_df = pd.DataFrame.from_records(expenses_result.values(
+        'day', 'amount'
+    ))
+
     income_totals, sum_income_result = income_totals_calculation(income_result)
 
     sum_expenses_result = expenses_result.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0  
@@ -47,7 +57,8 @@ def get_totals(store,date_from,date_to):
     YTD_income_result = Income.objects.filter(store=store, day__range=[first_day_of_year, date_to])
     YTD_totals, YTD_result = income_totals_calculation(YTD_income_result)
 
-    return sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals
+    return sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
+    income_df, expenses_df
 
 def last_years_income_comparison(store, date_from, date_to):
     if isinstance(date_from, str):
@@ -169,28 +180,58 @@ def expenses_detail(request,id):
 # needs completion
 @login_required
 def analytics(request):
+    '''
+    The user will choose the dates he wants, and the application will return the income and expenses data.
+    Also will have some graphs and comparison with different time. 
+    '''
     today = date.today()
     yesterday = today - timedelta(days=1)
 
     store = Store.objects.filter(user=request.user)
-    print(f'ΚΑΤΑΣΤΗΜΑΤΑ {store}')
     store_id = request.session.get('selected_store')
 
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
+    start_date = request.GET.get('start_date', yesterday)
+    end_date = request.GET.get('end_date', today)
     
-    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals = get_totals(
+    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
+         income_df, expenses_df = get_totals(
         store_id, start_date, end_date
     )
-    totals = sum_income_result - sum_expenses_result
-    print(f' ΣΥΝΟΛΑ :{totals}')
+    
+    net_result = sum_income_result - sum_expenses_result
+
+    income_df['total_income'] = income_df[[
+        'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
+    ]].sum(axis=1)
+
+    fig = px.line(income_df, x='day', y='total_income', title=f'Εισοδήματα απο {start_date} έως {end_date}')
+
+    # last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = \
+    # last_years_income_comparison(store, start_date, end_date)
+
+    # if last_year_sum_income_result != 0:
+    #     diff_by_percentage = float(f'{((sum_income_result * 100) / last_year_sum_income_result)-100:.2f}')
+    # else:
+    #     diff_by_percentage = '-'
+    # if last_year_YTD_result !=0:
+    #     diff_by_percentage_YTD = float(f'{((YTD_result * 100) / last_year_YTD_result)-100:.2f}')
+    # else:
+    #     diff_by_percentage_YTD = '-'
+
+    print(f' ΣΥΝΟΛΑ :{net_result}')
     context_to_html = {
-        'sum_income_result':sum_income_result,
-        'sum_expenses_result':sum_expenses_result,
+        'sum_income_result' : sum_income_result,
+        'sum_expenses_result' : sum_expenses_result,
         'income_totals':income_totals,
-        'totals': totals,
-        'YTD_result': YTD_result,
-        'YTD_totals': YTD_totals,
+        'net_result' : net_result,
+        'YTD_result' : YTD_result,
+        'YTD_totals' : YTD_totals,
+        # 'last_year_sum_income_result' : last_year_sum_income_result,
+        # 'last_year_income_totals' : last_year_income_totals,
+        # 'last_year_YTD_result' : last_year_YTD_result,
+        # 'last_year_YTD_totals' : last_year_YTD_totals,
+        # 'diff_by_percentage' : diff_by_percentage,
+        # 'diff_by_percentage_YTD' : diff_by_percentage_YTD,
     }
     return render(request, 'income_expenses/analytics.html', context=context_to_html)
 

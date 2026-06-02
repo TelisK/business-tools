@@ -8,8 +8,36 @@
 </form>
 
 <div>
-    <p>Income</p>
+    <p>Έσοδα</p>
     {{ sum_income_result }}
-</div>
+    <p>Έξοδα</p>
+    {{ sum_expenses_result }}
+    <p>Καθαρό Αποτέλεσμα</p>
+    {{ net_result }}
 
+</div>
+<div>
+    <p>Έσοδα Αναλυτικά</p>
+    <div>
+        <p>Μετρητά</p>
+        {{ income_totals.total_cash }}
+    </div>
+    <div>
+        <p>POS</p>
+        {{ income_totals.total_pos }}
+    </div>
+        <div>
+        <p>POS</p>
+        {{ income_totals.total_deposit }}
+    </div>
+        <div>
+        <p>POS</p>
+        {{ income_totals.total_check }}
+    </div>
+        <div>
+        <p>POS</p>
+        {{ income_totals.total_other }}
+    </div>
+    
+</div>
 {% endblock %}
