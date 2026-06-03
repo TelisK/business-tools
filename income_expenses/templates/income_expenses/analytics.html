@@ -1,96 +1,341 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<form method="GET" action="{% url 'income_expenses:analytics' %}">
-    <input type="date" name="start_date" value="{{ start_date }}">
-    <input type="date" name="end_date" value="{{ end_date }}">
-    <button type="submit">Εφαρμογη</button>
-</form>
-
-<div>
-    <p>Έσοδα</p>
-    {{ sum_income_result }}
-    <p>Έξοδα</p>
-    {{ sum_expenses_result }}
-    <p>Καθαρό Αποτέλεσμα</p>
-    {{ net_result }}
-
-</div>
-<div>
-    <p>Έσοδα Αναλυτικά</p>
-    <div>
-        <p>Μετρητά</p>
-        {{ income_totals.total_cash }}
-    </div>
-    <div>
-        <p>POS</p>
-        {{ income_totals.total_pos }}
-    </div>
-        <div>
-        <p>POS</p>
-        {{ income_totals.total_deposit }}
-    </div>
-        <div>
-        <p>POS</p>
-        {{ income_totals.total_check }}
-    </div>
-        <div>
-        <p>POS</p>
-        {{ income_totals.total_other }}
+<div class="analytics-wrapper">
+    <!-- Filter Section -->
+    <div class="filter-card">
+        <h2>Επιλογή Περιόδου</h2>
+        <form method="GET" action="{% url 'income_expenses:analytics' %}" class="filter-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Ημερομηνία Έναρξης</label>
+                    <input type="date" name="start_date" value="{{ start_date }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Ημερομηνία Λήξης</label>
+                    <input type="date" name="end_date" value="{{ end_date }}" class="form-control">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Εφαρμογή</button>
+        </form>
     </div>
 
-    
-</div>
-<div>
-    <p>Συνολικό Εισόδημα</p>
-    {{ chart | safe }}
-</div>
-<div>
-    <p>Αναλυση ανα ημέρα τρόπου πληρωμής</p>
-    {{ chart2 | safe }}
-</div>
-<div>
-    <p>Έσοδα - Έξοδα</p>
-    {{ chart3 | safe }}
-</div>
-<div>
-    {% if chart4 %}
-    <p>Ποσοστό χρήσης τρόπων πληρωμής</p>
-    {{ chart4 | safe }}
-    {% else %}
-    <p>Δέν υπάρχουν δεδομένα</p>
-    {% endif %}
-</div>
-<div>
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="card card-income">
+            <h3>Σύνολο Εσόδων</h3>
+            <p class="amount">{{ sum_income_result }} €</p>
+        </div>
+        <div class="card card-expense">
+            <h3>Σύνολο Εξόδων</h3>
+            <p class="amount">{{ sum_expenses_result }} €</p>
+        </div>
+        <div class="card card-net">
+            <h3>Καθαρό Αποτέλεσμα</h3>
+            <p class="amount {% if net_result >= 0 %}positive{% else %}negative{% endif %}">{{ net_result }} €</p>
+        </div>
+    </div>
+
+    <!-- Income Breakdown -->
+    <div class="card card-breakdown">
+        <h2>Ανάλυση Εσόδων</h2>
+        <div class="breakdown-grid">
+            <div class="breakdown-item">
+                <span>Μετρητά</span>
+                <strong>{{ income_totals.total_cash }} €</strong>
+            </div>
+            <div class="breakdown-item">
+                <span>POS</span>
+                <strong>{{ income_totals.total_pos }} €</strong>
+            </div>
+            <div class="breakdown-item">
+                <span>Κατάθεση</span>
+                <strong>{{ income_totals.total_deposit }} €</strong>
+            </div>
+            <div class="breakdown-item">
+                <span>Επιταγή</span>
+                <strong>{{ income_totals.total_check }} €</strong>
+            </div>
+            <div class="breakdown-item">
+                <span>Άλλο</span>
+                <strong>{{ income_totals.total_other }} €</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Συνολικό Εισόδημα</h3>
+            {{ chart | safe }}
+        </div>
+        <div class="chart-card">
+            <h3>Ανάλυση ανά Ημέρα</h3>
+            {{ chart2 | safe }}
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Έσοδα - Έξοδα</h3>
+            {{ chart3 | safe }}
+        </div>
+        <div class="chart-card">
+            <h3>Τρόποι Πληρωμής</h3>
+            {% if chart4 %}
+                {{ chart4 | safe }}
+            {% else %}
+                <p class="no-data">Δέν υπάρχουν δεδομένα</p>
+            {% endif %}
+        </div>
+    </div>
+
     {% if chart5 %}
-    <p>Ποσοστό Εισπράξεων ανα ημέρα</p>
-    {{ chart5 | safe }}
-    {% else %}
-    <p>Δέν υπάρχουν δεδομένα</p>
+    <div class="chart-card full-width">
+        <h3>Ποσοστό Εισπράξεων ανά Ημέρα</h3>
+        {{ chart5 | safe }}
+    </div>
     {% endif %}
+
+    <!-- Data Table -->
+    <div class="card card-table">
+        <h2>Λεπτομέρειες</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ημερομηνία</th>
+                        <th>Μετρητά</th>
+                        <th>POS</th>
+                        <th>Κατάθεση</th>
+                        <th>Επιταγή</th>
+                        <th>Άλλο</th>
+                        <th>Σύνολο</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for income in income_result %}
+                    <tr>
+                        <td>{{ income.day }}</td>
+                        <td>{{ income.income_cash }}</td>
+                        <td>{{ income.income_pos }}</td>
+                        <td>{{ income.income_deposit }}</td>
+                        <td>{{ income.income_check }}</td>
+                        <td>{{ income.income_other }}</td>
+                        <td><strong>{{ income.income_sum }}</strong></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Δέν υπάρχουν δεδομένα</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ημερομηνία</th>
+                        <th>Έξοδα</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses_result %}
+                    <tr>
+                        <td>{{ expense.day }}</td>
+                        <td><strong>{{ expense.amount }}</strong></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Δέν υπάρχουν δεδομένα</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<!-- <div>
-    <p>Εμφάνιση Αναλυτικά</p>
-    {{ income_df_html | safe }}
-</div> -->
-<table class="table">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Cash</th>
-            <th>POS</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for income in income_result %}
-        <tr>
-            <td>{{ income.day }}</td>
-            <td>{{ income.income_cash }}</td>
-            <td>{{ income.income_pos }}</td>
-            <td>{{ income.income_sum }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+<style>
+.analytics-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.filter-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-form {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.filter-form .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    flex: 1;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card h2,
+.card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.card-income .amount {
+    color: #27ae60;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.card-expense .amount {
+    color: #e74c3c;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.card-net .amount {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.card-net .amount.positive {
+    color: #27ae60;
+}
+
+.card-net .amount.negative {
+    color: #e74c3c;
+}
+
+.card-breakdown {
+    margin-bottom: 30px;
+}
+
+.breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.breakdown-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.breakdown-item span {
+    display: block;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.breakdown-item strong {
+    display: block;
+    color: #333;
+    font-size: 18px;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chart-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.card-table {
+    margin-top: 30px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background: #f8f9fa;
+}
+
+.table th {
+    padding: 12px;
+    text-align: left;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.no-data {
+    color: #999;
+    text-align: center;
+    padding: 40px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-form {
+        flex-direction: column;
+    }
+    
+    .filter-form .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
 {% endblock %}
