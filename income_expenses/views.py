@@ -58,7 +58,7 @@ def get_totals(store,date_from,date_to):
     YTD_totals, YTD_result = income_totals_calculation(YTD_income_result)
 
     return sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
-    income_df, expenses_df
+    income_df, expenses_df, income_result, expenses_result
 
 def last_years_income_comparison(store, date_from, date_to):
     if isinstance(date_from, str):
@@ -118,7 +118,8 @@ def index(request):
     store = get_object_or_404(Store, id=store_id, user=request.user) \
           if store_id else Store.objects.filter(user=request.user).first()
 
-    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, income_df, expenses_df = \
+    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
+        income_df, expenses_df, income_result, expenses_result= \
         get_totals(store,date_from,date_to)
     
     net_result = sum_income_result - sum_expenses_result
@@ -185,16 +186,16 @@ def analytics(request):
     Also will have some graphs and comparison with different time. 
     '''
     today = date.today()
-    yesterday = today - timedelta(days=1)
+    first_day_of_the_year = today.replace(day=1, month=1)
 
     store = Store.objects.filter(user=request.user)
     store_id = request.session.get('selected_store')
 
-    start_date = request.GET.get('start_date', yesterday)
+    start_date = request.GET.get('start_date', first_day_of_the_year)
     end_date = request.GET.get('end_date', today)
     
     sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
-         income_df, expenses_df = get_totals(
+         income_df, expenses_df, income_result, expenses_result = get_totals(
         store_id, start_date, end_date
     )
     
@@ -255,9 +256,7 @@ def analytics(request):
     )
 
     chart3 = fig3.to_html(include_plotlyjs='cdn')
-    print(f"Type of income_df: {type(income_df)}")
-    print(f"Has empty attr: {hasattr(income_df, 'empty')}")
-    print(f"Value of empty: {income_df.empty}")
+
     if not income_df.empty:
 
         income_sum_for_pie = {
@@ -280,6 +279,33 @@ def analytics(request):
     else:
         chart4 = None
 
+    if not income_df.empty:
+        days_dict = {0:'Κυριακή',1:'Δευτέρα', 2:'Τρίτη',3:'Τετάρτη',4:'Πέμπτη',5:'Παρασκευή',6:'Σάββατο'}
+        days_list = []
+        for income_date in income_df['day']:
+            real_day = income_date.weekday()
+            days_list.append(days_dict[real_day])
+
+        income_df['day_name'] = days_list # cannot add values on df inside the loop! 
+
+
+        income_day_for_pie = income_df.groupby('day_name')['Συνολικό_Εισόδημα'].sum().to_dict()
+
+        fig5 = px.pie(names = list(income_day_for_pie.keys()),
+                      values = list(income_day_for_pie.values()),
+                      title=f'Ποσοστό εισπράξεων ανα ημέρα απο {start_date} έως {end_date}')
+        
+
+        chart5 = fig5.to_html(include_plotlyjs='cdn')
+    else:
+        chart5 = None
+
+    # Display the dataframe on the html
+    # income_df_html = income_df.to_html(classes='table table-striped')
+
+
+    
+
     context_to_html = {
         'sum_income_result' : sum_income_result,
         'sum_expenses_result' : sum_expenses_result,
@@ -291,6 +317,10 @@ def analytics(request):
         'chart2' : chart2,
         'chart3' : chart3,
         'chart4' : chart4,
+        'chart5' : chart5,
+        #'income_df_html' : income_df_html,
+        'income_result' : income_result,
+        'expenses_result' : expenses_result,
     }
     return render(request, 'income_expenses/analytics.html', context=context_to_html)
 

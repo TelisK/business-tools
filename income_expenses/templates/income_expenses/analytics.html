@@ -61,4 +61,36 @@
     <p>Δέν υπάρχουν δεδομένα</p>
     {% endif %}
 </div>
+<div>
+    {% if chart5 %}
+    <p>Ποσοστό Εισπράξεων ανα ημέρα</p>
+    {{ chart5 | safe }}
+    {% else %}
+    <p>Δέν υπάρχουν δεδομένα</p>
+    {% endif %}
+</div>
+<!-- <div>
+    <p>Εμφάνιση Αναλυτικά</p>
+    {{ income_df_html | safe }}
+</div> -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Cash</th>
+            <th>POS</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for income in income_result %}
+        <tr>
+            <td>{{ income.day }}</td>
+            <td>{{ income.income_cash }}</td>
+            <td>{{ income.income_pos }}</td>
+            <td>{{ income.income_sum }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
