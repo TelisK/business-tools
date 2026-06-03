@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [x for x in allowed_hosts.split(',') if x]  # changed because it
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'income_expenses.apps.IncomeExpensesConfig',
+    'invoices.apps.InvoicesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
