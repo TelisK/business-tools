@@ -21,6 +21,7 @@
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.invoice }}
+    <!-- <input type="file" name="files" multiple accept=".jpg,.jpeg,.png"> -->
     <button type="submit">Upload Invoice</button>
 </form>
 <br>

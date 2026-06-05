@@ -38,6 +38,4 @@ class FixedExpenseForm(forms.ModelForm):
 
 class UploadIncoiceForm(forms.Form):
     invoice = forms.FileField(
-        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
-        widget=forms.ClearableFileInput(attrs={'multiple': True}) # allows multiple files
-    )
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])])
