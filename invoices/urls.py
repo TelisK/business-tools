@@ -22,5 +22,5 @@ app_name = 'invoices'
 
 urlpatterns = [
     path('/', views.invoice_reader, name='invoice_reader'),
-    path('<int:id>/invoice_details/', views.invoice_details, name='invoice_details'),
+    #path('<int:id>/invoice_details/', views.invoice_details, name='invoice_details'),
 ]

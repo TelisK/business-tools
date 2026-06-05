@@ -1,5 +1,7 @@
 from django import forms
 from .models import Income, Expenses, Store, FixedExpenses
+from django.core.validators import FileExtensionValidator
+
 
 class IncomeForm(forms.ModelForm):
     class Meta:
@@ -33,3 +35,8 @@ class FixedExpenseForm(forms.ModelForm):
         widgets = {
             'start_date': forms.DateInput(attrs={'type':'date'}, format='%Y-%m-%d' ),
         }
+
+class UploadIncoiceForm(forms.Form):
+    invoice = forms.FileField(
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])]
+    )
