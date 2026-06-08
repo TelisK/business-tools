@@ -25,6 +25,7 @@ class Products(models.Model):
     invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='products')
     product_code = models.CharField(max_length=50, null=False)
     name = models.CharField(max_length=100)
+    unit = models.CharField(max_length=20)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.FloatField()
 

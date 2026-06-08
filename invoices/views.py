@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from income_expenses import forms
 from django.contrib import messages
 from PIL import Image
 import pdfplumber
 from .genai import Invoice_Analyse
+from invoices.models import Invoice, Products, Store
+from income_expenses.models import Expenses
+from datetime import datetime
 
 
 def PDF_invoice(files):
@@ -43,8 +46,12 @@ def IMAGE_invoice(files):
 
 # Create your views here.
 def invoice_reader(request):
-    
+
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
     if request.method == 'POST':
+        
         form = forms.UploadIncoiceForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -61,20 +68,61 @@ def invoice_reader(request):
 
                 if file.content_type == 'application/pdf':
                     to_genai = PDF_invoice(file)
-                    Invoice_Analyse(to_genai)
+                    data_to_db = Invoice_Analyse(to_genai)
 
                 elif file.content_type in ['image/jpeg', 'image/png']:
 
                     print('Read image file. Now goes to the function')
-
                     files_to_analyse.append(file)
 
                 else:
                     messages.error(request, 'The uploaded file is not valid')
 
-            to_genai = IMAGE_invoice(files_to_analyse)
-            print('Function finished. Now goes to genai')
-            Invoice_Analyse(to_genai)
+            if files_to_analyse:
+                to_genai = IMAGE_invoice(files_to_analyse)
+                print('Function finished. Now goes to genai')
+                data_to_db = Invoice_Analyse(to_genai)
+
+            if not data_to_db:
+                messages.error('Η ανάλυση τιμολογίου απέτυχε.')
+                return redirect('invoices:invoice_reader')
+
+
+            date_str = data_to_db["Ημερομηνία"]
+            date_to_db = datetime.strptime(date_str, '%Y-%m-%d').date()
+
+            invoice = Invoice.objects.create(
+                store = store,
+                invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                afm = data_to_db["ΑΦΜ προμηθευτή"],
+                supplier = data_to_db["Προμηθευτής"],
+                date = date_to_db,
+                amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
+                fpa = data_to_db["Ποσά"]["ΦΠΑ"],
+                total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+            )
+
+            Expenses.objects.create(
+                store = store,
+                day = date_to_db,
+                amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
+                category = 'Τιμολόγια',
+                comments = 'Αυτόματη Καταχώρηση μέσω AI.'
+            )
+
+            for inv_products in data_to_db["Προϊόντα"]:
+                Products.objects.create(
+                    invoice = invoice,
+                    product_code = inv_products["Κωδικός προϊόντος"],
+                    name = inv_products["Όνομα προϊόντος"],
+                    unit = inv_products["Μονάδα μέτρησης"],
+                    price = inv_products["Τιμή προϊόντος"],
+                    quantity = inv_products["Ποσότητα"]
+                )
+
+
+
+            messages.success(request, 'Data Uploaded Successfully')
 
             return redirect('invoices:invoice_list')
             
