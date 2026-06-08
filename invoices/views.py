@@ -43,30 +43,38 @@ def IMAGE_invoice(files):
 
 # Create your views here.
 def invoice_reader(request):
-    print(f"Request method: {request.method}")  # Debug 1
+    
     if request.method == 'POST':
         form = forms.UploadIncoiceForm(request.POST, request.FILES)
-        print(f"Form valid: {form.is_valid()}")  # Debug 2
-        print(f"Form errors: {form.errors}")  # Debug 3
+
         if form.is_valid():
             files = request.FILES.getlist('invoice')  # Get all files (multiple files suitable for multipage invoice uploaded as images)
             #file = request.FILES['invoice']
-            print(f"Files count: {len(files)}")  # Debug 4
-            print(f"Files: {files}")  # Debug 5
+            
+            print(f"Files count: {len(files)}")  # Debug multiple files
+            print(f"Files: {files}")  # Debug multiple files
+
+            files_to_analyse = []
             for file in files:
-                print(f"Processing: {file.name}, Type: {file.content_type}")  # Debug 6
+            
+                print(f"Processing: {file.name}, Type: {file.content_type}")
+
                 if file.content_type == 'application/pdf':
                     to_genai = PDF_invoice(file)
                     Invoice_Analyse(to_genai)
 
                 elif file.content_type in ['image/jpeg', 'image/png']:
-                    print('read image file. now goes to the function')
-                    to_genai = IMAGE_invoice(file)
-                    print('function finished. now goes to genai')
-                    Invoice_Analyse(to_genai)
+
+                    print('Read image file. Now goes to the function')
+
+                    files_to_analyse.append(file)
 
                 else:
                     messages.error(request, 'The uploaded file is not valid')
+
+            to_genai = IMAGE_invoice(files_to_analyse)
+            print('Function finished. Now goes to genai')
+            Invoice_Analyse(to_genai)
 
             return redirect('invoices:invoice_list')
             

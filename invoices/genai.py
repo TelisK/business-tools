@@ -4,11 +4,21 @@ import os
 from dotenv import load_dotenv
 import json
 
-load_dotenv()
 
 def Invoice_Analyse(invoice):
     print('started THE ANALYSIS .......')
-    client = genai.Client(api_key=os.getenv('gemini_api'))
+
+    api_key_str = os.getenv("gemini_api")
+
+
+    if not api_key_str:
+        print("❌ ΣΦΑΛΜΑ: Το αρχείο .env δεν διαβάστηκε σωστά ή λείπει το API")
+    else:
+        print(f"✅ Το κλειδί βρέθηκε και ξεκινάει με: {api_key_str[:7]}...")  # I've got None...
+
+
+    client = genai.Client(api_key=api_key_str)
+    #client = genai.Client(api_key=os.getenv("gemini_api"))
 
     prompt = """Ανέλυσε το παρακάτω τιμολόγιο και παρουσίασε μου τα στοιχεία σε μορφή JSON.
     Η δομή του JSON θα πρέπει να είναι ακριβώς η εξής:

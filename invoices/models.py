@@ -13,6 +13,7 @@ class Invoice(models.Model):
     fpa = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     file = models.FileField(upload_to='invoices/', null=True, blank=True)
+    paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
