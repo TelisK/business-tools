@@ -6,23 +6,16 @@ from dotenv import load_dotenv
 import json
 import time
 
+load_dotenv()
 
-def Invoice_Analyse(invoice, retries=3):
-    print('started THE ANALYSIS .......')
+def Invoice_Analyse(invoice, retries=1):
 
-    api_key_str = os.getenv("gemini_api")
-
-
-    if not api_key_str:
-        print("❌ ΣΦΑΛΜΑ: Το αρχείο .env δεν διαβάστηκε σωστά ή λείπει το API")
-    else:
-        print(f"✅ Το κλειδί βρέθηκε και ξεκινάει με: {api_key_str[:7]}...")  # I've got None...
+    api_key_str = os.getenv("GEMINI_API_KEY")
 
     i = 0
-    while i <= retries:
+    while i < retries:
         try:
             client = genai.Client(api_key=api_key_str)
-            #client = genai.Client(api_key=os.getenv("gemini_api"))
 
             prompt = """Ανέλυσε το παρακάτω τιμολόγιο και παρουσίασε μου τα στοιχεία σε μορφή JSON.
             Η δομή του JSON θα πρέπει να είναι ακριβώς η εξής:
@@ -61,12 +54,23 @@ def Invoice_Analyse(invoice, retries=3):
 
             json_output_str = response.text
 
-            print(json_output_str)
-            break
+            try:
+                response_dict = json.loads(json_output_str)
+                return response_dict
+            except json.JSONDecodeError as e:
+                print(e)
+
+        
         except APIError as e:
-            print(f'Σφάλμα! - {e}')
-            print(f'Αυτόματη επανάληψη σε 5 δευτερόλεπτα. Προσπάθεια {i} απο {retries}')
-            time.sleep(5)
+            print(f'Σφάλμα!! - {e}')
             i += 1
+            # if i > retries:
+            #     print(f'Σφάλμα!! - {e}')
+            #     return {'status':'error' , 'message':f'Σφάλμα! - {str(e)}'}
+
+            # time.sleep(5)
+            # print(f'Αυτόματη επανάληψη σε 5 δευτερόλεπτα. Προσπάθεια {i} απο {retries}')
+           
+            
             
 

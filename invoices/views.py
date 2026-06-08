@@ -83,48 +83,52 @@ def invoice_reader(request):
                 print('Function finished. Now goes to genai')
                 data_to_db = Invoice_Analyse(to_genai)
 
+            # if data_to_db['status'] == 'error':  # error handling in case gemini is busy
+            #     messages.error(request, data_to_db['message'])
+
+            # elif not data_to_db:  # error handling in case gemini finds no data
             if not data_to_db:
-                messages.error('Η ανάλυση τιμολογίου απέτυχε.')
+                messages.error(request, 'Η ανάλυση τιμολογίου απέτυχε.')
                 return redirect('invoices:invoice_reader')
 
+            else:
+                date_str = data_to_db["Ημερομηνία"]
+                date_to_db = datetime.strptime(date_str, '%d/%m/%Y').date()
 
-            date_str = data_to_db["Ημερομηνία"]
-            date_to_db = datetime.strptime(date_str, '%Y-%m-%d').date()
-
-            invoice = Invoice.objects.create(
-                store = store,
-                invoice_number = data_to_db["Αριθμός Τιμολογίου"],
-                afm = data_to_db["ΑΦΜ προμηθευτή"],
-                supplier = data_to_db["Προμηθευτής"],
-                date = date_to_db,
-                amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
-                fpa = data_to_db["Ποσά"]["ΦΠΑ"],
-                total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
-            )
-
-            Expenses.objects.create(
-                store = store,
-                day = date_to_db,
-                amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
-                category = 'Τιμολόγια',
-                comments = 'Αυτόματη Καταχώρηση μέσω AI.'
-            )
-
-            for inv_products in data_to_db["Προϊόντα"]:
-                Products.objects.create(
-                    invoice = invoice,
-                    product_code = inv_products["Κωδικός προϊόντος"],
-                    name = inv_products["Όνομα προϊόντος"],
-                    unit = inv_products["Μονάδα μέτρησης"],
-                    price = inv_products["Τιμή προϊόντος"],
-                    quantity = inv_products["Ποσότητα"]
+                invoice = Invoice.objects.create(
+                    store = store,
+                    invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                    afm = data_to_db["ΑΦΜ προμηθευτή"],
+                    supplier = data_to_db["Προμηθευτής"],
+                    date = date_to_db,
+                    amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
+                    fpa = data_to_db["Ποσά"]["ΦΠΑ"],
+                    total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
                 )
 
+                Expenses.objects.create(
+                    store = store,
+                    day = date_to_db,
+                    amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
+                    category = 'Τιμολόγια',
+                    comments = 'Αυτόματη Καταχώρηση μέσω AI.'
+                )
+
+                for inv_products in data_to_db["Προϊόντα"]:
+                    Products.objects.create(
+                        invoice_id = invoice,
+                        product_code = inv_products["Κωδικός προϊόντος"],
+                        name = inv_products["Όνομα προϊόντος"],
+                        unit = inv_products["Μονάδα μέτρησης"],
+                        price = inv_products["Τιμή προϊόντος"],
+                        quantity = inv_products["Ποσότητα"]
+                    )
 
 
-            messages.success(request, 'Data Uploaded Successfully')
 
-            return redirect('invoices:invoice_list')
+                messages.success(request, 'Data Uploaded Successfully')
+
+                return redirect('invoices:invoice_list')
             
         else:
             messages.error(request, 'Invalid Form')
