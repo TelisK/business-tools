@@ -9,6 +9,11 @@ import time
 load_dotenv()
 
 def Invoice_Analyse(invoice, retries=1):
+    '''
+    Use of gemini to analyse the pdf or image file of an invoice.
+    Gemini gives a json based on our instructions.
+    Returns a dictionary.
+    '''
 
     api_key_str = os.getenv("GEMINI_API_KEY")
 
@@ -55,7 +60,7 @@ def Invoice_Analyse(invoice, retries=1):
             json_output_str = response.text
 
             try:
-                response_dict = json.loads(json_output_str)
+                response_dict = json.loads(json_output_str) # Creates a dictionary from json.
                 return response_dict
             except json.JSONDecodeError as e:
                 print(e)

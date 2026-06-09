@@ -1,0 +1,23 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<p>This is invoice details</p>
+
+<p>{{invoice_detail.supplier}}</p>
+<p>{{ invoice_detail.date }}</p>
+
+{% for product in products %}
+<table>
+    <tr>
+        <td>Όνομα προιόντος : {{ product.name }}</td>
+        <td>Κωδικός Προιόντος : {{ product.product_code }}</td>
+        <td>Μονάδα Μέτρησης Προιδόντος : {{ product.unit }}</td>
+        <td>Τιμή Προιδόντος : {{ product.price }}</td>
+        <td>Ποσότητα Προιδόντος : {{ product.quantity }}</td>
+
+    </tr>
+   
+</table>
+{% endfor %}
+
+{% endblock %}

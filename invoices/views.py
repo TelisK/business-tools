@@ -173,5 +173,11 @@ def invoice_list(request):
     return render(request, 'invoices/invoice_list.html', context=context_to_html)
 
 def invoice_details(request, id):
-    # invoice_detail = get_object_or_404()
-    pass
+    invoice_detail = get_object_or_404(Invoice, id=id)
+    products = invoice_detail.products.all()
+
+    context_to_html = {
+        'invoice_detail':invoice_detail,
+        'products':products
+    }
+    return render(request, 'invoices/invoice_details.html', context=context_to_html)

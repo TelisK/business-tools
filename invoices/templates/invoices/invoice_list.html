@@ -4,7 +4,11 @@
 <p>This is the list with the invoices</p>
 {% for invoice in invoices %}
 <ul>
-<li>{{ invoice }}</li>
+    <div>
+        <li>{{ invoice.date }} - {{ invoice.supplier }} : {{invoice.total}} </li>
+        <a href="{% url 'invoices:invoice_details' invoice.id %}" class="btn btn-edit">Λεπτομέρειες τιμολογίου</a>
+    </div>
+
 </ul>
 {% endfor %}
 {% endblock %}
