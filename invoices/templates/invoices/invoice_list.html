@@ -2,4 +2,9 @@
 {% block body %}
 
 <p>This is the list with the invoices</p>
+{% for invoice in invoices %}
+<ul>
+<li>{{ invoice }}</li>
+</ul>
+{% endfor %}
 {% endblock %}

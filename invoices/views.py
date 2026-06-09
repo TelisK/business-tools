@@ -44,6 +44,11 @@ def PDF_invoice(pdf_file):
 
 
 def IMAGE_invoice(files):
+    '''
+    Reads the images with Pillow, and returns to analyse
+    with gemini.
+    Works with multiple image files.
+    '''
     files_to_analyse = []
     for file in files:
         file.seek(0) # gets pointer at the beggining
@@ -158,5 +163,15 @@ def invoice_reader(request):
         form = forms.UploadIncoiceForm()
     return render(request, 'invoices/invoice_reader.html', {'form': form})
 
+
 def invoice_list(request):
-    return render(request, 'invoices/invoice_list.html')
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    invoices = Invoice.objects.filter(store=store)
+    context_to_html = {'invoices':invoices}
+    return render(request, 'invoices/invoice_list.html', context=context_to_html)
+
+def invoice_details(request, id):
+    # invoice_detail = get_object_or_404()
+    pass
