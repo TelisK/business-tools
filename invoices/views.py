@@ -95,9 +95,22 @@ def invoice_reader(request):
             #     messages.error(request, data_to_db['message'])
 
             # elif not data_to_db:  # error handling in case gemini finds no data
+
+
             if not data_to_db:
                 messages.error(request, 'Η ανάλυση τιμολογίου απέτυχε.')
                 return redirect('invoices:invoice_reader')
+            
+            elif data_to_db:
+                check_if_exists = Invoice.objects.filter(
+                    invoice_number__iexact=data_to_db["Αριθμός Τιμολογίου"],
+                    afm__iexact=data_to_db["ΑΦΜ προμηθευτή"],
+                    total__exact = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+                    ).exists()
+                
+                if check_if_exists == True:
+                    messages.error(request, 'Το τιμολόγιο είναι ήδη καταχωρημένο')
+                    return redirect('invoices:invoice_list')
 
             else:
                 date_str = data_to_db["Ημερομηνία"]
