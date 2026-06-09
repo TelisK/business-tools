@@ -9,24 +9,32 @@ from income_expenses.models import Expenses
 from datetime import datetime
 
 
-def PDF_invoice(files):
-    invoice_content = []
-    for file in files:
-        text = ''
-        with pdfplumber.open(file) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + '\n'
+def PDF_invoice(pdf_file):
+    '''
+    Reads the pdf file to analyse it later with gemini.
+    If the pdf is not a picture, I am using pdfplumber to
+    export the text.
+    If the pdf is from a picture, I am using Pillow to export
+    the image file.
+    '''
 
-        invoice_content.append(text)
+    invoice_content = []
+    text = ''
+    pdf_file.seek(0)
+    with pdfplumber.open(pdf_file) as pdf:
+        for page in pdf.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + '\n'
+
+            invoice_content.append(text)
 
     if invoice_content:
         return invoice_content
 
     elif not invoice_content:
         files_to_analyse = []
-        with pdfplumber.open(file) as pdf:
+        with pdfplumber.open(pdf_file) as pdf:
             for page in pdf:
                 image = page.to_image()
                 files_to_analyse.append(image)
