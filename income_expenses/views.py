@@ -37,8 +37,8 @@ def get_totals(store,date_from,date_to):
     else:
         d_from = date_from
 
-    income_result = Income.objects.filter(store=store, day__range=[date_from, date_to])
-    expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to])
+    income_result = Income.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
+    expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
 
     income_df = pd.DataFrame.from_records(income_result.values(
         'day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
@@ -535,7 +535,7 @@ def load_old_data(request):
                         
                         try:
                             for index, row in df.iterrows():
-                                store, created = Store.objects.get_or_create(name=row['store'], defaults={'user':request.user})
+                                store, created = Store.objects.get_or_create(name=row['store'], user=request.user)
 
                                 Income.objects.create(
                                     store = store,
