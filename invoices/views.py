@@ -106,55 +106,61 @@ def invoice_reader(request):
                 messages.error(request, 'Η ανάλυση τιμολογίου απέτυχε.')
                 return redirect('invoices:invoice_reader')
             
-            elif data_to_db:
-                check_if_exists = Invoice.objects.filter(
-                    invoice_number__iexact=data_to_db["Αριθμός Τιμολογίου"],
-                    afm__iexact=data_to_db["ΑΦΜ προμηθευτή"],
-                    total__exact = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
-                    ).exists()
-                
-                if check_if_exists == True:
-                    messages.error(request, 'Το τιμολόγιο είναι ήδη καταχωρημένο')
-                    return redirect('invoices:invoice_list')
+            elif 'error' in data_to_db:
+                messages.error(request, f'Σφάλμα! {data_to_db['error']}')
+                return redirect('invoices:invoice_reader')
+            
+            else: # No errors
 
-            else:
-                date_str = data_to_db["Ημερομηνία"]
-                date_to_db = datetime.strptime(date_str, '%d/%m/%Y').date()
+                if data_to_db: # check if the invoice exists already in the database.
+                    check_if_exists = Invoice.objects.filter(
+                        invoice_number__iexact=data_to_db["Αριθμός Τιμολογίου"],
+                        afm__iexact=data_to_db["ΑΦΜ προμηθευτή"],
+                        total__exact = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+                        ).exists()
+                    
+                    if check_if_exists == True:
+                        messages.error(request, 'Το τιμολόγιο είναι ήδη καταχωρημένο')
+                        return redirect('invoices:invoice_list')
 
-                invoice = Invoice.objects.create(
-                    store = store,
-                    invoice_number = data_to_db["Αριθμός Τιμολογίου"],
-                    afm = data_to_db["ΑΦΜ προμηθευτή"],
-                    supplier = data_to_db["Προμηθευτής"],
-                    date = date_to_db,
-                    amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
-                    fpa = data_to_db["Ποσά"]["ΦΠΑ"],
-                    total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
-                )
+                else:
+                    date_str = data_to_db["Ημερομηνία"]
+                    date_to_db = datetime.strptime(date_str, '%d/%m/%Y').date()
 
-                Expenses.objects.create(
-                    store = store,
-                    day = date_to_db,
-                    amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
-                    category = 'Τιμολόγια',
-                    comments = 'Αυτόματη Καταχώρηση μέσω AI.'
-                )
-
-                for inv_products in data_to_db["Προϊόντα"]:
-                    Products.objects.create(
-                        invoice_id = invoice,
-                        product_code = inv_products["Κωδικός προϊόντος"],
-                        name = inv_products["Όνομα προϊόντος"],
-                        unit = inv_products["Μονάδα μέτρησης"],
-                        price = inv_products["Τιμή προϊόντος"],
-                        quantity = inv_products["Ποσότητα"]
+                    invoice = Invoice.objects.create(
+                        store = store,
+                        invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                        afm = data_to_db["ΑΦΜ προμηθευτή"],
+                        supplier = data_to_db["Προμηθευτής"],
+                        date = date_to_db,
+                        amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
+                        fpa = data_to_db["Ποσά"]["ΦΠΑ"],
+                        total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
                     )
 
+                    Expenses.objects.create(
+                        store = store,
+                        day = date_to_db,
+                        amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
+                        category = 'Τιμολόγια',
+                        comments = 'Αυτόματη Καταχώρηση μέσω AI.'
+                    )
+
+                    for inv_products in data_to_db["Προϊόντα"]:
+                        Products.objects.create(
+                            invoice_id = invoice,
+                            product_code = inv_products["Κωδικός προϊόντος"],
+                            name = inv_products["Όνομα προϊόντος"],
+                            unit = inv_products["Μονάδα μέτρησης"],
+                            price = inv_products["Τιμή προϊόντος"],
+                            quantity = inv_products["Ποσότητα"]
+                        )
 
 
-                messages.success(request, 'Data Uploaded Successfully')
 
-                return redirect('invoices:invoice_list')
+                    messages.success(request, 'Data Uploaded Successfully')
+
+                    return redirect('invoices:invoice_list')
             
         else:
             messages.error(request, 'Invalid Form')
