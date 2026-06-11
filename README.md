@@ -10,29 +10,41 @@ This is my first real-life project. I've built several apps, but this is the fir
 
 ## Features
 
+- Financial Tracking: management of daily income and business expenses.
+- Simple web interface
 - User authentication (register, login, password reset)
 - Multi-store management
-- Income and expense tracking
 - Excel import/export
-- Machine learning predictions (scikit-learn RandomForestRegressor)
-- Simple web interface
+- Machine learning income predictions (scikit-learn RandomForestRegressor)
+- Fixed expenses automation with Celery
+- AI invoice analysis with Gemini
+- Interactive Data Analytics: Full income and expense analysis
+- Automated testing suite (Models, Views, Forms)
+
 
 ## Future Features
 
-- Automated AI model for tracking and saving to the database data from Invoices of the Business. (https://github.com/TelisK/invoice_reader_AI)
 - API's for future mobile app
-- Card with fixed expenses with options for the user
 - Add more data for ML analysis (example: Cruise ships, day's weather, etc)
 - Analyse more efficiently the income with economical values
 - Registration with Gmail, Confirmation email
 - And More...
 
+## Celery Tasks
+- **generate_fixed_expenses:** daily at 1 AM
+- **store_predicted_income:** daily at 2 AM
+
+## AI Invoice Features
+- Automatic invoice text extraction
+- Data parsing to database
+
 ## Tech Stack
 
 - **Backend:** Django 6.0
 - **Database:** PostgreSQL
-- **Frontend:** HTML, CSS, Django Templates
-- **ML:** scikit-learn, pandas
+- **Frontend:** HTML, CSS, Django Templates, Plotly
+- **Task Queue & Automation:** Celery, Redis
+- **AI & Machine Learning:** Google Gemini API, scikit-learn, pandas
 - **Server:** Ubuntu, Nginx + Gunicorn
 - **Deployment:** Docker Compose, Cloudflare Tunnel
 
@@ -85,6 +97,14 @@ python manage.py test income_expenses.tests.test_views
 python manage.py test income_expenses.tests.test_forms
 ```
 
+Docker:
+```bash
+docker compose exec web python manage.py test
+docker compose exec web python manage.py test income_expenses.tests.test_models
+docker compose exec web python manage.py test income_expenses.tests.test_views
+docker compose exec web python manage.py test income_expenses.tests.test_forms
+```
+
 ### Test Coverage
 
 - **Models:** Income, Store
@@ -103,5 +123,5 @@ Or register your own account to test full functionality.
 
 ## Author
 
-Tilemahos Koutsogiannakis  
+Tilemachos Koutsogiannakis  
 GitHub: [@TelisK](https://github.com/TelisK)
