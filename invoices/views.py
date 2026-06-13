@@ -7,6 +7,7 @@ from .genai import Invoice_Analyse
 from invoices.models import Invoice, Products, Store
 from income_expenses.models import Expenses
 from datetime import datetime
+import io
 
 
 def PDF_invoice(pdf_file):
@@ -53,7 +54,23 @@ def IMAGE_invoice(files):
     for file in files:
         file.seek(0) # gets pointer at the beggining
         image = Image.open(file)
-        files_to_analyse.append(image)
+
+        # resize image, less tokens
+        max_width = 1200
+        width, height = image.size
+        if width > max_width:
+            wpercent = (max_width / float(width))
+            hsize = int((float(height) * float(wpercent)))
+            image = image.resize((max_width, hsize), Image.Resampling.LANCZOS)
+
+            temp_buffer = io.BytesIO()
+            image.save(temp_buffer, format="JPEG", quality=75)
+            temp_buffer.seek(0)
+            
+            compressed_image = Image.open(temp_buffer)
+
+            files_to_analyse.append(compressed_image)
+
     return files_to_analyse
 
 
@@ -69,15 +86,10 @@ def invoice_reader(request):
 
         if form.is_valid():
             files = request.FILES.getlist('invoice')  # Get all files (multiple files suitable for multipage invoice uploaded as images)
-            #file = request.FILES['invoice']
-            
-            print(f"Files count: {len(files)}")  # Debug multiple files
-            print(f"Files: {files}")  # Debug multiple files
+          
 
             files_to_analyse = []
             for file in files:
-            
-                print(f"Processing: {file.name}, Type: {file.content_type}")
 
                 if file.content_type == 'application/pdf':
                     to_genai = PDF_invoice(file)
@@ -144,7 +156,7 @@ def invoice_reader(request):
                             day = date_to_db,
                             amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
                             category = 'Τιμολόγια',
-                            comments = 'Αυτόματη Καταχώρηση μέσω AI.'
+                            comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
                         )
 
                         for inv_products in data_to_db["Προϊόντα"]:
