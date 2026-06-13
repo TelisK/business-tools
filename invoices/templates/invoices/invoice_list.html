@@ -5,10 +5,12 @@
 {% for invoice in invoices %}
 <ul>
     <div>
-        <li>{{ invoice.date }} - {{ invoice.supplier }} : {{invoice.total}} </li>
+        <li><div>{{ invoice.date }} - {{ invoice.supplier }} : {{invoice.total}}</div></li>
         <a href="{% url 'invoices:invoice_details' invoice.id %}" class="btn btn-edit">Λεπτομέρειες τιμολογίου</a>
     </div>
 
 </ul>
 {% endfor %}
+<br>
+<a href="{% url 'invoices:invoice_reader' %}" class="btn btn-secondary">Πίσω</a>
 {% endblock %}

@@ -21,6 +21,10 @@ class Invoice(models.Model):
         return f'{self.supplier}  --  {self.date} : {self.total}'
 
 class Products(models.Model):
+    class Meta:
+        verbose_name_plural = 'products'
+        verbose_name = 'product'
+
     # with related_name i can do invoice.products.all() instead of Product.objects.filter(invoice=invoice)
     invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='products')
     product_code = models.CharField(max_length=50, null=False)

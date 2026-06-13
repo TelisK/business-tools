@@ -5,7 +5,7 @@
 
 <p>{{invoice_detail.supplier}}</p>
 <p>{{ invoice_detail.date }}</p>
-
+<br>
 {% for product in products %}
 <table>
     <tr>
@@ -19,5 +19,7 @@
    
 </table>
 {% endfor %}
+
+<a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Πίσω</a>
 
 {% endblock %}
