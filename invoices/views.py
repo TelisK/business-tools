@@ -65,11 +65,13 @@ def IMAGE_invoice(files):
 
             temp_buffer = io.BytesIO()
             image.save(temp_buffer, format="JPEG", quality=75)
-            temp_buffer.seek(0)
+            temp_buffer.seek(0) # pointer here
             
             compressed_image = Image.open(temp_buffer)
 
             files_to_analyse.append(compressed_image)
+        else:
+            files_to_analyse.append(image)
 
     return files_to_analyse
 
