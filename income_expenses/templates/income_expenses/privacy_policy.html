@@ -1,0 +1,86 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<div class="privacy-policy">
+    <h1>Πολιτική Απορρήτου</h1>
+
+    <div class="section">
+        <h2>Τι συλλέγουμε</h2>
+        <ul>
+            <li>Στοιχεία λογαριασμού (email, username)</li>
+            <li>Οικονομικά δεδομένα που εισάγετε (έσοδα, έξοδα)</li>
+            <li>Στοιχεία από τιμολόγια που ανεβάζετε</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Πώς τα χρησιμοποιούμε</h2>
+        <ul>
+            <li>Αποκλειστικά για τη λειτουργία της εφαρμογής</li>
+            <li>Δεν μοιραζόμαστε δεδομένα με τρίτους</li>
+            <li>Δεν χρησιμοποιούμε δεδομένα για διαφήμιση</li>
+            <li>Δεν έχουμε πρόσβαση στα δεδομένα σας</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Τα δικαιώματά σας (GDPR)</h2>
+        <ul>
+            <li>Δικαίωμα πρόσβασης στα δεδομένα σας</li>
+            <li>Δικαίωμα διαγραφής λογαριασμού</li>
+            <li>Δικαίωμα εξαγωγής δεδομένων</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Ασφάλεια</h2>
+        <ul>
+            <li>Τα δεδομένα αποθηκεύονται σε κρυπτογραφημένη σύνδεση (HTTPS)</li>
+            <li>Κάθε χρήστης βλέπει μόνο τα δικά του δεδομένα</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Επικοινωνία</h2>
+        <p>Email: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a></p>
+    </div>
+</div>
+
+<style>
+.privacy-policy {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.privacy-policy h1 {
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.section h2 {
+    color: #444;
+    margin-top: 0;
+}
+
+.section ul {
+    padding-left: 20px;
+}
+
+.section ul li {
+    margin-bottom: 8px;
+    color: #555;
+}
+</style>
+
+{% endblock %}

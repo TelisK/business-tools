@@ -197,3 +197,5 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(hour=2, minute=0), # Run daily at 2 AM
     },
 }
+
+CONTACT_EMAIL=os.getenv('CONTACT_EMAIL', '')

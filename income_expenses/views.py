@@ -13,6 +13,7 @@ import io
 from .ml import prediction_model
 from django.db import transaction
 import plotly.express as px
+from django.conf import settings
 
 
 
@@ -644,4 +645,4 @@ def prediction_with_ml(request):
 
 
 def privacy_policy(request):
-    return render(request, 'income_expenses/privacy_policy.html')
+    return render(request, 'income_expenses/privacy_policy.html', {'contact_email': settings.CONTACT_EMAIL})
