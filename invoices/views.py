@@ -204,7 +204,17 @@ def invoice_details(request, id):
     return render(request, 'invoices/invoice_details.html', context=context_to_html)
 
 def delete_invoice(request, id):
-    pass
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    invoice = get_object_or_404(Invoice, store=store, id=id)
+    expense = get_object_or_404(Expenses, store=store, id=id)
+    if request.method == 'POST':
+        invoice.delete()
+        expense.delete()
+        return redirect('invoices:invoice_list')
+    else:
+        return render (request, 'invoices/invoice_list.html')
 
 def invoice_summary(request):
     pass

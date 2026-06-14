@@ -463,6 +463,10 @@
 <div class="container">
     {% block body %}{% endblock %}
 </div>
-
+<footer>
+    <a href="{% url 'income_expenses:privacy_policy' %}">Πολιτική Απορρήτου</a>
+    <br>
+    <a href="{% url 'accounts:delete_account' %}">Διαγραφή λογαριασμού</a>
+</footer>
 </body>
 </html>

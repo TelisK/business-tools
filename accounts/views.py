@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterForm
-from django.contrib import messages
+from django.contrib import messages, logout
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from income_expenses.models import Store
 
 # Create your views here.
 def register(request):
@@ -18,3 +20,14 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form':form}) 
+
+@login_required
+def delete_account(request):
+    user = request.user
+    if request.method == 'POST':
+        logout(request)
+        user.delete()
+        messages.success(request, 'Ο λογαριασμός διαγράφηκε οριστικά!')
+        return redirect('accounts:register')
+    else:
+        return render(request, 'accounts/delete_account.html')

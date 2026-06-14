@@ -643,4 +643,5 @@ def prediction_with_ml(request):
     return render(request, 'income_expenses/prediction_with_ml.html', context={'result': result})
 
 
-
+def privacy_policy(request):
+    return render(request, 'income_expenses/privacy_policy.html')
