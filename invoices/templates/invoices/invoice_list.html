@@ -7,6 +7,7 @@
     <div>
         <li><div>{{ invoice.date }} - {{ invoice.supplier }} : {{invoice.total}}</div></li>
         <a href="{% url 'invoices:invoice_details' invoice.id %}" class="btn btn-edit">Λεπτομέρειες τιμολογίου</a>
+        <a href="{% url 'invoices:invoice_delete' invoice.id %}" class="btn btn-danger">Διαγραφή</a>
     </div>
 
 </ul>

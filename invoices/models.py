@@ -1,10 +1,11 @@
 from django.db import models
-from income_expenses.models import Store
+from income_expenses.models import Store, Expenses
 
 # Create your models here.
 
 class Invoice(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    expense = models.OneToOneField(Expenses, on_delete=models.CASCADE, blank=True, null=True)
     invoice_number = models.CharField(null=False, max_length=50)
     afm = models.CharField(max_length=9)
     supplier = models.CharField(max_length=200)

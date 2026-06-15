@@ -19,7 +19,9 @@
    
 </table>
 {% endfor %}
-
+<a href="{% url 'invoices:invoice_delete' invoice.id %}" class="btn btn-danger">Διαγραφή</a>
+<br>
 <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Πίσω</a>
+
 
 {% endblock %}

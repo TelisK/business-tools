@@ -142,8 +142,17 @@ def invoice_reader(request):
                         date_str = data_to_db["Ημερομηνία"]
                         date_to_db = datetime.strptime(date_str, '%d/%m/%Y').date()
 
+                        expense = Expenses.objects.create(
+                            store = store,
+                            day = date_to_db,
+                            amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
+                            category = 'Τιμολόγια',
+                            comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
+                        )
+
                         invoice = Invoice.objects.create(
                             store = store,
+                            expense = expense,
                             invoice_number = data_to_db["Αριθμός Τιμολογίου"],
                             afm = data_to_db["ΑΦΜ προμηθευτή"],
                             supplier = data_to_db["Προμηθευτής"],
@@ -151,14 +160,6 @@ def invoice_reader(request):
                             amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
                             fpa = data_to_db["Ποσά"]["ΦΠΑ"],
                             total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
-                        )
-
-                        Expenses.objects.create(
-                            store = store,
-                            day = date_to_db,
-                            amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
-                            category = 'Τιμολόγια',
-                            comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
                         )
 
                         for inv_products in data_to_db["Προϊόντα"]:
@@ -208,13 +209,14 @@ def delete_invoice(request, id):
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
     invoice = get_object_or_404(Invoice, store=store, id=id)
-    expense = get_object_or_404(Expenses, store=store, id=id)
     if request.method == 'POST':
+        if invoice.expense:
+            invoice.expense.delete()
+            
         invoice.delete()
-        expense.delete()
         return redirect('invoices:invoice_list')
     else:
-        return render (request, 'invoices/invoice_list.html')
+        return render (request, 'invoices/invoice_delete.html')
 
 def invoice_summary(request):
     pass

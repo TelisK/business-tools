@@ -126,6 +126,7 @@ def index(request):
     net_result = sum_income_result - sum_expenses_result
 
     income_list = Income.objects.filter(store=store).order_by('-day')
+    #print(income_list[:10])
     expense_list = Expenses.objects.filter(store=store).order_by('-day')
     stores_list = Store.objects.filter(user=request.user)
 

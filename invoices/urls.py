@@ -23,5 +23,6 @@ app_name = 'invoices'
 urlpatterns = [
     path('', views.invoice_reader, name='invoice_reader'),
     path('<int:id>/invoice_details/', views.invoice_details, name='invoice_details'),
-    path('invoice_list/', views.invoice_list, name='invoice_list')
+    path('invoice_list/', views.invoice_list, name='invoice_list'),
+    path('invoice_delete/<int:id>/', views.delete_invoice, name='invoice_delete'),
 ]

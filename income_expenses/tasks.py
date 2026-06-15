@@ -80,10 +80,11 @@ def store_predicted_income():
             try:
                 df = pd.DataFrame.from_records(income_data)
                 tomorrows_prediction = prediction_model(df, days_prediction=1)
+                prediction_day = date.strftime(tomorrows_prediction[0]['day'], '%d/%m/%Y').date()
 
                 add_prediction = Income.objects.create(
                     store = store,
-                    day = tomorrows_prediction[0]['day'],
+                    day = prediction_day,
                     income_cash=0,
                     income_pos=0,
                     income_deposit=0,
