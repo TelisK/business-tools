@@ -17,15 +17,21 @@ from django.conf import settings
 
 
 
-def income_totals_calculation(data): # Calculates the data for filtering
+def income_totals_calculation(data):
+    """
+    Calculates the data for filtering.
+    Makes the addition and returns a dictionary."""
     # totals will become a dictionary
     totals = data.aggregate(
         total_cash = Sum('income_cash'),
         total_pos = Sum('income_pos'),
         total_deposit = Sum('income_deposit'),
         total_check = Sum('income_check'),
-        total_other = Sum('income_other')                 
+        total_other = Sum('income_other')
     )
+    # replace None with 0
+    totals = {key : (value or 0) for key, value in totals.items()}
+
     result = sum(v or 0 for v in totals.values())
     return totals, result
 
@@ -62,6 +68,10 @@ def get_totals(store,date_from,date_to):
     income_df, expenses_df, income_result, expenses_result
 
 def last_years_income_comparison(store, date_from, date_to):
+    """
+    Picks the dates and calculates the amount of last year, same dates.
+    We can compare last years income with todays income and give the user
+    a percentage of growing or decreasing."""
     if isinstance(date_from, str):
         d_from = datetime.strptime(date_from, '%Y-%m-%d').date()
     else:
@@ -130,12 +140,14 @@ def index(request):
     expense_list = Expenses.objects.filter(store=store).order_by('-day')
     stores_list = Store.objects.filter(user=request.user)
 
-    paginator_income = Paginator(income_list, 15)
-    paginator_expense = Paginator(expense_list, 15)
-    income_page = request.GET.get('income_page', 1)
-    expense_page = request.GET.get('expense_page', 1)
-    income_obj = paginator_income.get_page(income_page)
-    expense_obj = paginator_expense.get_page(expense_page)
+    # paginator_income = Paginator(income_list, 15)
+    # paginator_expense = Paginator(expense_list, 15)
+    # income_page = request.GET.get('income_page', 1)
+    # expense_page = request.GET.get('expense_page', 1)
+    # income_obj = paginator_income.get_page(income_page)
+    # expense_obj = paginator_expense.get_page(expense_page)
+    income_obj = income_list[:10]
+    expense_obj = expense_list[:10]
 
     last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = \
         last_years_income_comparison(store,date_from,date_to)

@@ -10,9 +10,9 @@
 </select>
     <form method="get" action="{% url 'income_expenses:index' %}">
         <span style="font-size:0.8rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">Περίοδος</span>
-        <input type="date" name="date_from" value="{{ date_from }}" style="font-size:0.875rem;">
+        <input type="date" name="date_from" value="{{ date_from|date:"d/m/Y"  }}" style="font-size:0.875rem;">
         <span style="color:var(--text-muted); font-size:0.875rem;">—</span>
-        <input type="date" name="date_to" value="{{ date_to }}" style="font-size:0.875rem;">
+        <input type="date" name="date_to" value="{{ date_to|date:"d/m/Y" }}" style="font-size:0.875rem;">
         <button type="submit" class="btn btn-primary btn-sm">Εφαρμογή</button>
 
     </form>
@@ -87,7 +87,7 @@
     <!-- INCOME -->
     <div class="card">
         <div class="card-header">
-            <span class="card-title">↑ Έσοδα</span>
+            <span class="card-title">↑ Έσοδα (Τελευταίες 10 καταχωρήσεις)</span>
             <a href="{% url 'income_expenses:submit_income' %}" class="btn btn-income btn-sm">+ Νέο</a>
         </div>
         <ul class="entry-list">
@@ -129,7 +129,7 @@
     <!-- EXPENSES -->
     <div class="card">
         <div class="card-header">
-            <span class="card-title">↓ Έξοδα</span>
+            <span class="card-title">↓ Έξοδα (Τελευταίες 10 καταχωρήσεις)</span>
             <a href="{% url 'income_expenses:submit_expense' %}" class="btn btn-expense btn-sm">+ Νέο</a>
         </div>
         <ul class="entry-list">
