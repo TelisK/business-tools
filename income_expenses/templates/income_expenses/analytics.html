@@ -123,6 +123,8 @@
                         <td>{{ income.income_check }}</td>
                         <td>{{ income.income_other }}</td>
                         <td><strong>{{ income.income_sum }}</strong></td>
+                        <td><a href="{% url 'income_expenses:income_update' income.id %}" class="btn btn-edit">Επεξ.</a></td>
+                        <td><a href="{% url 'income_expenses:income_delete' income.id %}" class="btn btn-danger">Διαγρ.</a></td>
                     </tr>
                     {% empty %}
                     <tr>
