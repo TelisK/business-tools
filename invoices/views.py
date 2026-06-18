@@ -146,7 +146,7 @@ def invoice_reader(request):
                             store = store,
                             day = date_to_db,
                             amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
-                            category = 'Τιμολόγια',
+                            category = 'WITH_FPA_TAX',
                             comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
                         )
 
@@ -212,7 +212,7 @@ def delete_invoice(request, id):
     if request.method == 'POST':
         if invoice.expense:
             invoice.expense.delete()
-            
+
         invoice.delete()
         return redirect('invoices:invoice_list')
     else:

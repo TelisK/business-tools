@@ -31,7 +31,7 @@ class UploadFileForm(forms.Form):
 class FixedExpenseForm(forms.ModelForm):
     class Meta:
         model = FixedExpenses
-        fields = ['store', 'name', 'amount', 'frequency', 'start_date']
+        fields = ['store', 'name', 'amount', 'category', 'frequency', 'start_date']
         widgets = {
             'start_date': forms.DateInput(attrs={'type':'date'}, format='%Y-%m-%d' ),
         }

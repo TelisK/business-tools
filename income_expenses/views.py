@@ -47,6 +47,11 @@ def get_totals(store,date_from,date_to):
 
     income_result = Income.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
     expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
+    expenses_fpa = Expenses.objects.filter(
+        store=store, day__range=[date_from, date_to], category='WITH_FPA_TAX'
+    ).order_by('day')
+    
+    expenses_fpa = expenses_fpa.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0
 
     income_df = pd.DataFrame.from_records(income_result.values(
         'day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
@@ -65,7 +70,7 @@ def get_totals(store,date_from,date_to):
     YTD_income_result = Income.objects.filter(store=store, day__range=[first_day_of_year, date_to])
     YTD_totals, YTD_result = income_totals_calculation(YTD_income_result)
 
-    return sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
+    return sum_income_result, sum_expenses_result, expenses_fpa, income_totals, YTD_result, YTD_totals, \
     income_df, expenses_df, income_result, expenses_result
 
 def last_years_income_comparison(store, date_from, date_to):
@@ -130,7 +135,7 @@ def index(request):
     store = get_object_or_404(Store, id=store_id, user=request.user) \
           if store_id else Store.objects.filter(user=request.user).first()
 
-    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
+    sum_income_result, sum_expenses_result, expenses_fpa, income_totals, YTD_result, YTD_totals, \
         income_df, expenses_df, income_result, expenses_result= \
         get_totals(store,date_from,date_to)
     
@@ -210,15 +215,20 @@ def analytics(request):
     start_date = request.GET.get('start_date', first_day_of_the_year)
     end_date = request.GET.get('end_date', today)
     
-    sum_income_result, sum_expenses_result, income_totals, YTD_result, YTD_totals, \
+    sum_income_result, sum_expenses_result, expenses_fpa, income_totals, YTD_result, YTD_totals, \
          income_df, expenses_df, income_result, expenses_result = get_totals(
         store_id, start_date, end_date
     )
     # tax removal to calculate net result
     net_income = sum_income_result/Decimal(1.24)
     fpa_income_tax = sum_income_result - net_income
-    net_expenses = sum_expenses_result/Decimal(1.24)
-    fpa_expenses_tax = sum_expenses_result - net_expenses
+    net_expenses = expenses_fpa/Decimal(1.24)
+    fpa_expenses_tax = expenses_fpa - net_expenses
+
+    # I am changing the value of net expenses. I added all the expenses, including with fpa tax and no fpa tax, and I
+    # substracted the expenses with fpa tax.
+    net_expenses += sum_expenses_result - expenses_fpa
+
     net_result = net_income - net_expenses
     
     if income_df.empty: # if we have no expenses, it creates the dataframe empty.

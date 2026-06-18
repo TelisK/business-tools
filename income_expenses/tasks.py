@@ -43,8 +43,8 @@ def generate_fixed_expenses():
                 store = data.store,
                 day = expense_day,
                 amount = data.amount,
-                category = 'Autocreated from Fixed Expenses',
-                comments = data.name + ' ' + data.frequency
+                category = data.category,
+                comments = data.name + ' ' + data.frequency + ': Autocreated from Fixed Expenses'
             ).exists()
 
             if not expense_exists:
@@ -52,8 +52,8 @@ def generate_fixed_expenses():
                     store = data.store,            
                     day = expense_day,
                     amount = data.amount,
-                    category = 'Autocreated from Fixed Expenses',
-                    comments = data.name + ' ' + data.frequency
+                    category = data.category,
+                    comments = data.name + ' ' + data.frequency + ': Autocreated from Fixed Expenses'
                 )
             expense_day = calculate_next_charge(expense_day, data.frequency)
 
