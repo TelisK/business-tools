@@ -26,15 +26,34 @@
             <h3>Σύνολο Εσόδων</h3>
             <p class="amount">{{ sum_income_result }} €</p>
         </div>
+        <div class="card card-income">
+            <h3>ΦΠΑ Εσόδων</h3>
+            <p class="amount">{{ fpa_income_tax|floatformat:2 }} €</p>
+        </div>
         <div class="card card-expense">
             <h3>Σύνολο Εξόδων</h3>
             <p class="amount">{{ sum_expenses_result }} €</p>
         </div>
+        <div class="card card-expense">
+            <h3>ΦΠΑ Εξόδων</h3>
+            <p class="amount">{{ fpa_expenses_tax|floatformat:2 }} €</p>
+        </div>
         <div class="card card-net">
             <h3>Καθαρό Αποτέλεσμα</h3>
-            <p class="amount {% if net_result >= 0 %}positive{% else %}negative{% endif %}">{{ net_result }} €</p>
+            <p class="amount {% if net_result >= 0 %}positive{% else %}negative{% endif %}">{{ net_result|floatformat:2 }} €</p>
         </div>
     </div>
+    <div class="summary-cards">
+        <div class="card card-net">
+            <h3>Μέγιστο ποσό είσπραξης</h3>
+            <p class="amount">{{ income_max|floatformat:2 }} €</p>
+        </div>
+        <div class="card card-net">
+            <h3>Μέσος όρος ημέρας</h3>
+            <p class="amount">{{ income_average|floatformat:2 }} €</p>
+        </div>
+    </div>
+</div>
 
     <!-- Income Breakdown -->
     <div class="card card-breakdown">

@@ -14,6 +14,7 @@ from .ml import prediction_model
 from django.db import transaction
 import plotly.express as px
 from django.conf import settings
+from decimal import Decimal
 
 
 
@@ -197,7 +198,8 @@ def expenses_detail(request,id):
 def analytics(request):
     '''
     The user will choose the dates he wants, and the application will return the income and expenses data.
-    Also will have some graphs and comparison with different time. 
+    Also will have some graphs and comparison with different time.
+    The default dates are from 1st of January until today.
     '''
     today = date.today()
     first_day_of_the_year = today.replace(day=1, month=1)
@@ -212,8 +214,12 @@ def analytics(request):
          income_df, expenses_df, income_result, expenses_result = get_totals(
         store_id, start_date, end_date
     )
-    
-    net_result = sum_income_result - sum_expenses_result
+    # tax removal to calculate net result
+    net_income = sum_income_result/Decimal(1.24)
+    fpa_income_tax = sum_income_result - net_income
+    net_expenses = sum_expenses_result/Decimal(1.24)
+    fpa_expenses_tax = sum_expenses_result - net_expenses
+    net_result = net_income - net_expenses
     
     if income_df.empty: # if we have no expenses, it creates the dataframe empty.
         income_df = pd.DataFrame(columns=['day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'])
@@ -222,21 +228,29 @@ def analytics(request):
         'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
     ]].sum(axis=1)
 
+    income_max = income_df['total_income'].max()
+    income_average = income_df['total_income'].mean()
+
+    income_df['net_income'] = income_df['total_income'].div(Decimal(1.24))
+    income_df['fpa_tax'] = income_df['total_income'] - income_df['net_income']
+
     income_df = income_df.rename(columns={
     'total_income':'Συνολικό_Εισόδημα',
     'income_cash': 'Μετρητά',
     'income_pos': 'POS',
     'income_deposit': 'Κατάθεση',
     'income_check': 'Επιταγή',
-    'income_other': 'Άλλο'
+    'income_other': 'Άλλο',
+    'net_income': 'Καθαρό Εισόδημα',
+    'fpa_tax': 'ΦΠΑ'
 })
     
     fig = px.line(
         income_df, 
         x='day', 
-        y='Συνολικό_Εισόδημα', 
+        y='Καθαρό Εισόδημα', 
         title=f'Εισοδήματα απο {start_date} έως {end_date}',
-        labels={'day':'Ημερομηνία', 'Συνολικό_Εισόδημα':'Εισόδημα σε €'}
+        labels={'day':'Ημερομηνία', 'Καθαρό Εισόδημα':'Καθαρό Εισόδημα πρό φόρων σε €'}
     )
 
     chart = fig.to_html(include_plotlyjs='cdn')
@@ -248,7 +262,7 @@ def analytics(request):
         x='day',
         y=['Μετρητά', 'POS', 'Κατάθεση', 'Επιταγή', 'Άλλο'],
         title=f'Αναλυτικά απο {start_date} έως {end_date}',
-        labels={'day':'Ημερομηνία', 'value':'Εισόδημα σε €'}
+        labels={'day':'Ημερομηνία', 'value':'Τζίρος σε €'}
     )
 
     chart2 = fig2.to_html(include_plotlyjs='cdn')
@@ -265,7 +279,7 @@ def analytics(request):
         df,
         x='day',
         y=['Συνολικό_Εισόδημα', 'Συνολικά_Έξοδα'],
-        title=f'Έσοδα - Έξοδα απο {start_date} έως {end_date}',
+        title=f'Έσοδα - Έξοδα απο {start_date} έως {end_date} συμπεριλαμβάνουν ΦΠΑ',
         labels={'day':'Ημερομηνία', 'value':'Έσοδα - Έξοδα σε €'}
     )
 
@@ -335,6 +349,10 @@ def analytics(request):
         #'income_df_html' : income_df_html,
         'income_result' : income_result,
         'expenses_result' : expenses_result,
+        'income_max' : income_max,
+        'income_average' : income_average,
+        'fpa_income_tax' : fpa_income_tax,
+        'fpa_expenses_tax' : fpa_expenses_tax,        
     }
     return render(request, 'income_expenses/analytics.html', context=context_to_html)
 
