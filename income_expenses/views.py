@@ -50,7 +50,7 @@ def get_totals(store,date_from,date_to):
     expenses_fpa = Expenses.objects.filter(
         store=store, day__range=[date_from, date_to], category='WITH_FPA_TAX'
     ).order_by('day')
-    
+
     expenses_fpa = expenses_fpa.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0
 
     income_df = pd.DataFrame.from_records(income_result.values(
@@ -225,11 +225,23 @@ def analytics(request):
     net_expenses = expenses_fpa/Decimal(1.24)
     fpa_expenses_tax = expenses_fpa - net_expenses
 
+    if net_income != 0:
+        gross_profit_margin = ((net_income - net_expenses)/net_income)*100 # Περιθώριο Μικτού Κέρδους
+    else:
+        gross_profit_margin = 0
+    # break_even_point =     # (νεκρό σημείο) have to calculate the fixed expenses
+
+
     # I am changing the value of net expenses. I added all the expenses, including with fpa tax and no fpa tax, and I
     # substracted the expenses with fpa tax.
     net_expenses += sum_expenses_result - expenses_fpa
 
     net_result = net_income - net_expenses
+
+    if net_income != 0:
+        net_profit_margin = (net_result / net_income)*100 # Περιθώριο Καθαρού Κέρδους
+    else:
+        net_profit_margin = 0
     
     if income_df.empty: # if we have no expenses, it creates the dataframe empty.
         income_df = pd.DataFrame(columns=['day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'])
@@ -362,7 +374,9 @@ def analytics(request):
         'income_max' : income_max,
         'income_average' : income_average,
         'fpa_income_tax' : fpa_income_tax,
-        'fpa_expenses_tax' : fpa_expenses_tax,        
+        'fpa_expenses_tax' : fpa_expenses_tax,
+        'gross_profit_margin' : gross_profit_margin,
+        'net_profit_margin' : net_profit_margin,
     }
     return render(request, 'income_expenses/analytics.html', context=context_to_html)
 
@@ -537,6 +551,7 @@ def update_store(request, id):
 
 @login_required
 def delete_store(request, id):
+    """User cannot delete the last store. This is for data protection."""
     if request.method == 'POST':
         store_to_del = get_object_or_404(Store, id=id, user=request.user)
         stores = Store.objects.filter(user=request.user)
@@ -551,6 +566,12 @@ def delete_store(request, id):
 @login_required
 # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
 def load_old_data(request): 
+    """
+    User can download the excel file, fill the dates with the data, and upload it
+    to the program.
+    User must keep the columns name as they are, because pandas reads and categorize 
+    the data on the database.
+    """
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -633,6 +654,10 @@ def load_old_data(request):
 
 
 def export_data(request):
+    """
+    Gets income and expenses data from the database and creates an excel file
+    with two sheets, one for income, and one for expenses.
+    """
     store_id = request.session.get('selected_store', None)
     store_to_export = get_object_or_404(Store, id=store_id, user=request.user)
     income_list = Income.objects.filter(store=store_to_export)
@@ -657,12 +682,6 @@ def export_data(request):
     return response
 
 
-
-
-
-def income_expenses_analysis(request): # Analysis with matplotlib?
-    pass
-
 def prediction_with_ai(request): 
     '''with gemini api analyse the old data and based on geopolitics, 
     bookings, how many people except to come etc.'''
@@ -670,6 +689,10 @@ def prediction_with_ai(request):
 
 @login_required
 def prediction_with_ml(request):
+    """
+    Gets all income data from the database, feeds the prediction model and
+    takes a 15 days prediction, with the income sum of each day.
+    """
     store_id = request.session.get('selected_store', None)
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
