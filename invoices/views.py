@@ -8,6 +8,7 @@ from invoices.models import Invoice, Products, Store
 from income_expenses.models import Expenses
 from datetime import datetime
 import io
+from django.db.models import Sum
 
 
 def PDF_invoice(pdf_file):
@@ -229,17 +230,29 @@ def invoice_supplier_summary(request):
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
+    if request.method == 'POST':
+        selected_supplier = request.POST.get('supplier_select')
+        print(selected_supplier)
+        result = Invoice.objects.filter(store=store, supplier=selected_supplier) # TEST THIS
+        products = Products.objects.filter(invoice_id__in=result).values('name', 'price', 'unit')\
+        .annotate(Sum('quantity'))
+# TEST THIS
+
+        context_to_html = {'products':products}
+
+        return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
+
     try:
         # flat=True returns a list. Without it returns a list with one tupple for each value.
         supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True)
-        print(f'SUPPLIER {supplier}')
         supplier = set(supplier)
-        print(f'SET {supplier}')
+
         context_to_html = {'supplier':supplier,}
-        print(supplier)
+
+
     except Exception as e:
         messages.error(request, e)
-    
+
     return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
 
 

@@ -23,10 +23,20 @@
     <button type="submit">Επιλογή</button>
 
 </form>
+
 {% else %}
     <tr>
         <td>Δέν υπάρχουν καταχωρημένα τιμολόγια</td>
     </tr>
 {% endif %}
+
+<table>
+    <tr>
+        {% for p in products %}
+        <td>{{ p.name }} - {{ p.unit }}</td>
+        <br>
+        {% endfor %}
+    </tr>
+</table>
 
 {% endblock %}
