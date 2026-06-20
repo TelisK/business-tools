@@ -1,17 +1,159 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<p>This is the list with the invoices</p>
-{% for invoice in invoices %}
-<ul>
-    <div>
-        <li><div>{{ invoice.date }} - {{ invoice.supplier }} : {{invoice.total}}</div></li>
-        <a href="{% url 'invoices:invoice_details' invoice.id %}" class="btn btn-edit">Λεπτομέρειες τιμολογίου</a>
-        <a href="{% url 'invoices:invoice_delete' invoice.id %}" class="btn btn-danger">Διαγραφή</a>
+<div class="invoice-list-wrapper">
+    <div class="page-header">
+        <h2>Τιμολόγια</h2>
+        <a href="{% url 'invoices:invoice_reader' %}" class="btn btn-primary">+ Νέο Τιμολόγιο</a>
     </div>
 
-</ul>
-{% endfor %}
-<br>
-<a href="{% url 'invoices:invoice_reader' %}" class="btn btn-secondary">Πίσω</a>
+    {% if invoices %}
+    <div class="invoice-cards">
+        {% for invoice in invoices %}
+        <div class="invoice-card">
+            <div class="invoice-card-main">
+                <div class="invoice-card-info">
+                    <span class="invoice-supplier">{{ invoice.supplier }}</span>
+                    <span class="invoice-date">{{ invoice.date }}</span>
+                </div>
+                <div class="invoice-card-amount">
+                    {{ invoice.total }} €
+                </div>
+            </div>
+            
+            <div class="invoice-card-actions">
+                <a href="{% url 'invoices:invoice_details' invoice.id %}" class="btn btn-sm btn-edit">Λεπτομέρειες</a>
+                <a href="{% url 'invoices:invoice_delete' invoice.id %}" class="btn btn-sm btn-danger">Διαγραφή</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>Δεν υπάρχουν καταχωρημένα τιμολόγια</p>
+        <a href="{% url 'invoices:invoice_reader' %}" class="btn btn-primary">Προσθήκη Πρώτου Τιμολογίου</a>
+    </div>
+    {% endif %}
+
+    <div class="back-link">
+        <a href="{% url 'invoices:invoice_reader' %}" class="btn btn-secondary">← Πίσω</a>
+    </div>
+</div>
+
+<style>
+.invoice-list-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.page-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.invoice-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.invoice-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s;
+}
+
+.invoice-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.invoice-card-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.invoice-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.invoice-supplier {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.invoice-date {
+    color: #666;
+    font-size: 14px;
+}
+
+.invoice-card-amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.invoice-card-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 14px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.empty-state p {
+    color: #999;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.back-link {
+    margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+    .page-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .invoice-card-main {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .invoice-card-actions {
+        flex-wrap: wrap;
+    }
+}
+</style>
+
 {% endblock %}
