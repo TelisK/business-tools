@@ -2,7 +2,7 @@
 {% block body %}
 
 <p>This is invoice details</p>
-
+<br>
 <p>{{invoice_detail.supplier}}</p>
 <p>{{ invoice_detail.date }}</p>
 <br>
@@ -19,7 +19,7 @@
    
 </table>
 {% endfor %}
-<a href="{% url 'invoices:invoice_delete' invoice.id %}" class="btn btn-danger">Διαγραφή</a>
+<a href="{% url 'invoices:invoice_delete' invoice_detail.id %}" class="btn btn-danger">Διαγραφή</a>
 <br>
 <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Πίσω</a>
 

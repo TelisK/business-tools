@@ -66,6 +66,7 @@ def IMAGE_invoice(files):
             temp_buffer = io.BytesIO()
             image.save(temp_buffer, format="JPEG", quality=75)
             temp_buffer.seek(0) # pointer here
+            print(f'Η εικόνα είναι {image.size}')
             
             compressed_image = Image.open(temp_buffer)
 
@@ -127,20 +128,25 @@ def invoice_reader(request):
             else: # No errors
 
                 if data_to_db: # check if the invoice exists already in the database.
+                    date_str = data_to_db["Ημερομηνία"]
+                    date_to_db = datetime.strptime(date_str, '%d/%m/%Y').date() 
+
+
                     check_if_exists = Invoice.objects.filter(
                         store=store,
-                        invoice_number__iexact=data_to_db["Αριθμός Τιμολογίου"],
+                        invoice_number__icontains=data_to_db["Αριθμός Τιμολογίου"],
                         afm__iexact=data_to_db["ΑΦΜ προμηθευτή"],
-                        total__exact = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+                        total__exact=data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
+                        date=date_to_db
                         ).exists()
+                    print(f'Υπάρχει?? {check_if_exists}')
+
                     
-                    if check_if_exists == True:
+                    if check_if_exists:
                         messages.error(request, 'Το τιμολόγιο είναι ήδη καταχωρημένο')
                         return redirect('invoices:invoice_list')
 
                     else:
-                        date_str = data_to_db["Ημερομηνία"]
-                        date_to_db = datetime.strptime(date_str, '%d/%m/%Y').date()
 
                         expense = Expenses.objects.create(
                             store = store,

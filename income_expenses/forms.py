@@ -38,4 +38,7 @@ class FixedExpenseForm(forms.ModelForm):
 
 class UploadIncoiceForm(forms.Form):
     invoice = forms.FileField(
-        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])])
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+        widget=forms.ClearableFileInput(attrs={
+            'capture': 'environment',  # This lets the user to upload straight from his cellphone camera
+            'accept': 'image/*,.pdf',}))
