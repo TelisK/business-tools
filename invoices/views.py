@@ -225,10 +225,22 @@ def delete_invoice(request, id):
         return render (request, 'invoices/invoice_delete.html')
 
 def invoice_supplier_summary(request):
-    pass
-    # store_id = request.session.get('selected_store')
-    # store = get_object_or_404(Store, id=store_id, user=request.user)
+    # pass
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
 
-    # supplier = Invoice.objects.get()
+    try:
+        # flat=True returns a list. Without it returns a list with one tupple for each value.
+        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True)
+        print(f'SUPPLIER {supplier}')
+        supplier = set(supplier)
+        print(f'SET {supplier}')
+        context_to_html = {'supplier':supplier,}
+        print(supplier)
+    except Exception as e:
+        messages.error(request, e)
+    
+    return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
 
-    # supplier_invoices = Invoice.objects.filter(supplier=)
+
+    #supplier_invoices = Invoice.objects.filter(supplier=)
