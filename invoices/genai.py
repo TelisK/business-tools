@@ -76,6 +76,7 @@ def Invoice_Analyse(invoice, retries=1):
         
         except APIError as e:
             print(f'Σφάλμα!! - {e}')
+            return json
             i += 1
             # if i > retries:
             #     print(f'Σφάλμα!! - {e}')

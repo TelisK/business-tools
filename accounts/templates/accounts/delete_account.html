@@ -4,6 +4,7 @@
 <form method="POST">
     {% csrf_token %}
     <h2>O Λογαριασμός σας θα διαγραφεί οριστικά και θα διαγραφουν όλα τα δεδομένα. Είστε σίγουρος; </h2>
+    <a href="{% url 'income_expenses:index' %}">Επιστροφή στη Αρχική σελίδα</a>
     <button type="submit">Διαγραφή</button>
 </form>
 

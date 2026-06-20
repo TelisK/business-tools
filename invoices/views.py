@@ -224,5 +224,11 @@ def delete_invoice(request, id):
     else:
         return render (request, 'invoices/invoice_delete.html')
 
-def invoice_summary(request):
+def invoice_supplier_summary(request):
     pass
+    # store_id = request.session.get('selected_store')
+    # store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    # supplier = Invoice.objects.get()
+
+    # supplier_invoices = Invoice.objects.filter(supplier=)

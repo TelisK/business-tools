@@ -3,6 +3,12 @@ from sklearn.ensemble import RandomForestRegressor
 from datetime import date
 
 def prediction_model(df, days_prediction=15):
+    '''
+    Based on the previous income, on the database, it makes a prediction
+    for the next 15 days income.
+    For now uses only the days and the amounts. Later will combine the
+    weather conditions, if there is a cruise and more.
+    '''
 
     df = df.dropna()
     df['day'] = pd.to_datetime(df['day'])
