@@ -460,11 +460,15 @@ def delete_fixed_expense(request, id):
 def update_income(request, id):
     stores = Store.objects.filter(user=request.user)
     income_update = get_object_or_404(Income, id=id, store__user=request.user)
+    
+    next_url = request.GET.get('next') or request.POST.get('next')
     if request.method == 'POST':
         form = IncomeForm(request.POST, instance=income_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
+            if next_url:
+                return redirect(next_url)
             return redirect('income_expenses:detail', id=id)
         else:
             messages.error(request, 'Ελέγξε τη φόρμα')
@@ -479,11 +483,15 @@ def update_income(request, id):
 def update_expense(request, id):
     stores = Store.objects.filter(user=request.user)
     expense_update = get_object_or_404(Expenses, id=id, store__user=request.user)
+    # redirects to the page the user entered on the update. We check below if next_url ...
+    next_url = request.GET.get('next') or request.POST.get('next')
     if request.method == 'POST':
         form = ExpenseForm(request.POST, instance=expense_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
+            if next_url:
+                return redirect(next_url)
             return redirect('income_expenses:expenses_detail', id=id)
         else:
             messages.error(request, 'Έλεγξε τη φόρμα')
