@@ -86,4 +86,11 @@ class FixedExpenses(models.Model):
     created_at = models.DateField(auto_now_add=True)
 
 
+class AIUsageLimit(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    monthly_limit = models.IntegerField(default=10)
+    usage = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.store} : {self.monthly_limit}'
 
