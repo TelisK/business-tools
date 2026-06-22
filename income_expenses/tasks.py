@@ -1,7 +1,7 @@
 from celery import shared_task
 from datetime import date, timedelta
 from .models import FixedExpenses, Expenses, Store, Income
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 from .ml import prediction_model
@@ -80,7 +80,7 @@ def store_predicted_income():
             try:
                 df = pd.DataFrame.from_records(income_data)
                 tomorrows_prediction = prediction_model(df, days_prediction=1)
-                prediction_day = date.strftime(tomorrows_prediction[0]['day'], '%d/%m/%Y').date()
+                prediction_day = datetime.strptime(tomorrows_prediction[0]['day'], '%d/%m/%Y').date()
 
                 add_prediction = Income.objects.create(
                     store = store,
