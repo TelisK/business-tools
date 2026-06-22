@@ -10,6 +10,7 @@ from datetime import datetime
 import io
 from django.db.models import Sum, Count
 from django.db.models.functions import Lower
+from django.contrib.auth.decorators import login_required
 
 
 def PDF_invoice(pdf_file):
@@ -80,6 +81,7 @@ def IMAGE_invoice(files):
 
 
 # Create your views here.
+@login_required
 def invoice_reader(request):
 
     store_id = request.session.get('selected_store')
@@ -193,7 +195,7 @@ def invoice_reader(request):
         form = forms.UploadIncoiceForm()
     return render(request, 'invoices/invoice_reader.html', {'form': form})
 
-
+@login_required
 def invoice_list(request):
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
@@ -202,6 +204,7 @@ def invoice_list(request):
     context_to_html = {'invoices':invoices}
     return render(request, 'invoices/invoice_list.html', context=context_to_html)
 
+@login_required
 def invoice_details(request, id):
     invoice_detail = get_object_or_404(Invoice, id=id)
     products = invoice_detail.products.all()
@@ -212,6 +215,7 @@ def invoice_details(request, id):
     }
     return render(request, 'invoices/invoice_details.html', context=context_to_html)
 
+@login_required
 def delete_invoice(request, id):
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
@@ -226,8 +230,8 @@ def delete_invoice(request, id):
     else:
         return render (request, 'invoices/invoice_delete.html')
 
+@login_required
 def invoice_supplier_summary(request):
-    # pass
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
@@ -238,24 +242,31 @@ def invoice_supplier_summary(request):
         products = Products.objects.filter(invoice_id__in=result).annotate(name_cleaned=Lower('name'))\
             .values('name_cleaned', 'price', 'unit')\
             .annotate(total_quantity=Sum('quantity'))
+        print(f'ΠΡΟΙΟΝΤΑ {products}')
 
+        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True)
+        supplier = set(supplier)
 
-        context_to_html = {'products':products}
+        total_amount = Invoice.objects.filter(store=store, supplier=selected_supplier).aggregate(Sum('total'))
+
+        context_to_html = {
+            'products':products,
+            'supplier':supplier,
+            'selected_supplier':selected_supplier,
+            'total_amount':total_amount,
+        }
 
         return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
 
     try:
         # flat=True returns a list. Without it returns a list with one tupple for each value.
-        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True).distinct
-        # with distinct gives me the name one time. Replaced the set() I did
+        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True).annotate(total_amount=Count('total'))
+        supplier = set(supplier)
 
-        context_to_html = {'supplier':supplier}  ## TEST THIS
+        context_to_html = {'supplier':supplier,}
 
 
     except Exception as e:
         messages.error(request, e)
 
     return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
-
-
-    #supplier_invoices = Invoice.objects.filter(supplier=)

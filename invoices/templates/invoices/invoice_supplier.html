@@ -11,7 +11,7 @@
     <label for="supplier_select">Επιλογή προμηθευτή</label>
     <select name="supplier_select" id="supplier_select">
         {% for s in supplier %}
-        <option value="{{ s }} -- {{ s.total_ammount }} €">{{ s }}</option>
+        <option value="{{ s }}" {% if s == selected_supplier %}selected{% endif %}>{{ s }}</option>
         {% endfor %}
     </select>
     <button type="submit">Επιλογή</button>
@@ -26,8 +26,11 @@
 
 <table>
     <ul>
+        <br>
+        <p>Προμηθευτής: {{ selected_supplier }} - Συνολικές Αγορές: {{ total_amount.total__sum }} €</p>
+        <br>
         {% for p in products %}
-        <li>{{ p.name_cleaned|capfirst }} - {{ p.unit }} - {{ p.price }} - {{ p.total_quantity }}</li>
+        <li>{{ p.name_cleaned|title }} - {{ p.price }} € - {{ p.total_quantity }} {{ p.unit }}</li>
         <br>
         {% endfor %}
     </ul>
