@@ -4,20 +4,14 @@
 <p>This is the supplier's page</p>
 
 {% if supplier %}
-<!-- {% for s in supplier %}
-<table>
-    <tr>
-    <td>{{ s }}</td>
-</tr>
-</table>
-{% endfor %} -->
+
 <form method="POST" action="{% url 'invoices:invoice_supplier' %}">
     {% csrf_token %}
     
     <label for="supplier_select">Επιλογή προμηθευτή</label>
     <select name="supplier_select" id="supplier_select">
         {% for s in supplier %}
-        <option value="{{ s }}">{{ s }}</option>
+        <option value="{{ s }} -- {{ s.total_ammount }} €">{{ s }}</option>
         {% endfor %}
     </select>
     <button type="submit">Επιλογή</button>
@@ -31,12 +25,12 @@
 {% endif %}
 
 <table>
-    <tr>
+    <ul>
         {% for p in products %}
-        <td>{{ p.name }} - {{ p.unit }}</td>
+        <li>{{ p.name_cleaned|capfirst }} - {{ p.unit }} - {{ p.price }} - {{ p.total_quantity }}</li>
         <br>
         {% endfor %}
-    </tr>
+    </ul>
 </table>
 
 {% endblock %}

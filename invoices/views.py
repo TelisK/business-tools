@@ -8,7 +8,8 @@ from invoices.models import Invoice, Products, Store
 from income_expenses.models import Expenses
 from datetime import datetime
 import io
-from django.db.models import Sum
+from django.db.models import Sum, Count
+from django.db.models.functions import Lower
 
 
 def PDF_invoice(pdf_file):
@@ -233,10 +234,11 @@ def invoice_supplier_summary(request):
     if request.method == 'POST':
         selected_supplier = request.POST.get('supplier_select')
         print(selected_supplier)
-        result = Invoice.objects.filter(store=store, supplier=selected_supplier) # TEST THIS
-        products = Products.objects.filter(invoice_id__in=result).values('name', 'price', 'unit')\
-        .annotate(Sum('quantity'))
-# TEST THIS
+        result = Invoice.objects.filter(store=store, supplier=selected_supplier)
+        products = Products.objects.filter(invoice_id__in=result).annotate(name_cleaned=Lower('name'))\
+            .values('name_cleaned', 'price', 'unit')\
+            .annotate(total_quantity=Sum('quantity'))
+
 
         context_to_html = {'products':products}
 
@@ -244,10 +246,10 @@ def invoice_supplier_summary(request):
 
     try:
         # flat=True returns a list. Without it returns a list with one tupple for each value.
-        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True)
-        supplier = set(supplier)
+        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True).distinct
+        # with distinct gives me the name one time. Replaced the set() I did
 
-        context_to_html = {'supplier':supplier,}
+        context_to_html = {'supplier':supplier}  ## TEST THIS
 
 
     except Exception as e:

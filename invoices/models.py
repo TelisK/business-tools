@@ -35,4 +35,4 @@ class Products(models.Model):
     quantity = models.FloatField()
 
     def __str__(self):
-        return f'{self.invoice_id.supplier} : {self.name} -- {self.price} -- {self.price}'
+        return f'{self.invoice_id.supplier} : {self.name} -- {self.price} -- {self.quantity}'
