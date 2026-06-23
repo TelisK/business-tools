@@ -4,6 +4,9 @@ from .models import Store, AI_Usage, AI_Limit
 from django.contrib import messages
 
 def monthly_count(store):
+    '''
+    Counts the monthly usage of AI and returns how many times user used these features.
+    '''
     start_of_month = datetime.now().replace(day=1)
     result = AI_Usage.objects.filter(store=store, usage__gte=start_of_month).count()
 
@@ -11,6 +14,9 @@ def monthly_count(store):
 
 
 def AI_limit(func):
+    '''
+    Decorator for calculating and limitate the usage of AI features.
+    '''
     def wrapper(request, *args, **kwargs):
         store_id = request.session.get('selected_store')
         print(f'STORE ID = {store_id}')
@@ -27,7 +33,7 @@ def AI_limit(func):
 
         if used_AI >= ai_limit_object.monthly_limit:
             messages.error(request, 'Έχετε φτάσει το μηνιαίο όριο χρήσης του ΑΙ.')
-            return redirect('invoices:invoice_reader')
+            return redirect('invoices:invoice_list')
 
         return func(request, *args, **kwargs)
     return wrapper
