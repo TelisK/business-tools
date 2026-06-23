@@ -1,27 +1,35 @@
 from datetime import datetime, timedelta
 from django.shortcuts import render, redirect ,get_object_or_404
-from models import Store, AIUsageLimit
+from .models import Store, AI_Usage, AI_Limit
 from django.contrib import messages
 
 def monthly_count(store):
     start_of_month = datetime.now().replace(day=1)
-    result = AIUsageLimit.objects.filter(store=store, usage__gte=start_of_month).count()
+    result = AI_Usage.objects.filter(store=store, usage__gte=start_of_month).count()
 
     return result
 
 
 def AI_limit(func):
-    def wrapper(request):
-        store_id = request.GET.get('selected_store')
+    def wrapper(request, *args, **kwargs):
+        store_id = request.session.get('selected_store')
+        print(f'STORE ID = {store_id}')
         store = get_object_or_404(Store, id=store_id, user=request.user)
-        AI_usage = get_object_or_404(AIUsageLimit, store=store, user=request.user)
-
+        print(f'STORE = {store}')
         used_AI = monthly_count(store)
 
-        if AI_usage.monthly_limit > used_AI:
+
+
+        ai_limit_object, created = AI_Limit.objects.get_or_create(
+            store=store,
+            defaults={'monthly_limit': 10} # Used only when creating new limit
+        )
+
+        if used_AI >= ai_limit_object.monthly_limit:
             messages.error(request, 'Έχετε φτάσει το μηνιαίο όριο χρήσης του ΑΙ.')
             return redirect('invoices:invoice_reader')
-        
+
+        return func(request, *args, **kwargs)
     return wrapper
 
 

@@ -84,13 +84,20 @@ class FixedExpenses(models.Model):
     next_charge_date = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateField(auto_now_add=True)
-
-
-class AIUsageLimit(models.Model):
+    
+class AI_Limit(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     monthly_limit = models.IntegerField(default=10)
-    usage = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.store} : {self.monthly_limit}'
+
+class AI_Usage(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    usage = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.store} : {self.usage}'
+
+
 

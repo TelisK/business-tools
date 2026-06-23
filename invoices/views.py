@@ -5,12 +5,13 @@ from PIL import Image
 import pdfplumber
 from .genai import Invoice_Analyse
 from invoices.models import Invoice, Products, Store
-from income_expenses.models import Expenses
+from income_expenses.models import Expenses, AI_Usage
 from datetime import datetime
 import io
 from django.db.models import Sum, Count
 from django.db.models.functions import Lower
 from django.contrib.auth.decorators import login_required
+from income_expenses.decorators import AI_limit
 
 
 def PDF_invoice(pdf_file):
@@ -81,6 +82,7 @@ def IMAGE_invoice(files):
 
 
 # Create your views here.
+@AI_limit
 @login_required
 def invoice_reader(request):
 
@@ -151,6 +153,8 @@ def invoice_reader(request):
                         return redirect('invoices:invoice_list')
 
                     else:
+
+                        AI_Usage.objects.create(store=store) # usage is autocreated inside the db.
 
                         expense = Expenses.objects.create(
                             store = store,
