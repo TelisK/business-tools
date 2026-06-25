@@ -266,12 +266,19 @@ def analytics(request):
     'net_income': 'Καθαρό Εισόδημα',
     'fpa_tax': 'ΦΠΑ'
 })
-    
+
+    # making all dates to datetime.date
+    if isinstance(start_date, str):
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+
+    if isinstance(end_date, str):
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
     fig = px.line(
         income_df, 
         x='day', 
         y='Καθαρό Εισόδημα', 
-        title=f'Εισοδήματα απο {start_date} έως {end_date}',
+        title=f'Εισοδήματα απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}',
         labels={'day':'Ημερομηνία', 'Καθαρό Εισόδημα':'Καθαρό Εισόδημα πρό φόρων σε €'}
     )
 
@@ -283,7 +290,7 @@ def analytics(request):
         income_df,
         x='day',
         y=['Μετρητά', 'POS', 'Κατάθεση', 'Επιταγή', 'Άλλο'],
-        title=f'Αναλυτικά απο {start_date} έως {end_date}',
+        title=f'Αναλυτικά απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}',
         labels={'day':'Ημερομηνία', 'value':'Τζίρος σε €'}
     )
 
@@ -301,7 +308,7 @@ def analytics(request):
         df,
         x='day',
         y=['Συνολικό_Εισόδημα', 'Συνολικά_Έξοδα'],
-        title=f'Έσοδα - Έξοδα απο {start_date} έως {end_date} συμπεριλαμβάνουν ΦΠΑ',
+        title=f'Έσοδα - Έξοδα απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')} συμπεριλαμβάνουν ΦΠΑ',
         labels={'day':'Ημερομηνία', 'value':'Έσοδα - Έξοδα σε €'}
     )
 
@@ -322,7 +329,7 @@ def analytics(request):
 
         fig4 = px.pie(names=list(income_sum_for_pie.keys()),
                     values=list(income_sum_for_pie.values()),
-                    title=f'Ποσοστό χρήσης τρόπων πληρωμής απο {start_date} έως {end_date}')
+                    title=f'Ποσοστό χρήσης τρόπων πληρωμής απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}')
 
         chart4 = fig4.to_html(include_plotlyjs='cdn')
 
@@ -343,7 +350,7 @@ def analytics(request):
 
         fig5 = px.pie(names = list(income_day_for_pie.keys()),
                       values = list(income_day_for_pie.values()),
-                      title=f'Ποσοστό εισπράξεων ανα ημέρα απο {start_date} έως {end_date}')
+                      title=f'Ποσοστό εισπράξεων ανα ημέρα απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}')
         
 
         chart5 = fig5.to_html(include_plotlyjs='cdn')
@@ -377,6 +384,8 @@ def analytics(request):
         'fpa_expenses_tax' : fpa_expenses_tax,
         'gross_profit_margin' : gross_profit_margin,
         'net_profit_margin' : net_profit_margin,
+        'start_date': start_date,
+        'end_date': end_date,
     }
     return render(request, 'income_expenses/analytics.html', context=context_to_html)
 
