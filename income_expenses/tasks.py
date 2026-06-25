@@ -1,6 +1,6 @@
 from celery import shared_task
 from datetime import date, timedelta
-from .models import FixedExpenses, Expenses, Store, Income
+from .models import FixedExpenses, Expenses, Store, Income, IncomePrediction
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 import pandas as pd
@@ -82,17 +82,12 @@ def store_predicted_income():
                 tomorrows_prediction = prediction_model(df, days_prediction=1)
                 prediction_day = datetime.strptime(tomorrows_prediction[0]['day'], '%d/%m/%Y').date()
 
-                add_prediction = Income.objects.create(
+                add_prediction = IncomePrediction.objects.create(
                     store = store,
                     day = prediction_day,
-                    income_cash=0,
-                    income_pos=0,
-                    income_deposit=0,
-                    income_check=0,
-                    income_other=0,
                     predicted_income = tomorrows_prediction[0]['predicted_income']
                 )
-            
+
             except Exception as e:
                 print(e)
                 continue

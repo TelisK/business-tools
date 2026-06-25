@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Income, Expenses, Store, FixedExpenses, AI_Usage, AI_Limit
+from .models import Income, Expenses, Store, FixedExpenses, AI_Usage, AI_Limit, IncomePrediction
 
 # Register your models here.
 admin.site.register(Store)
@@ -8,3 +8,4 @@ admin.site.register(Store)
 #admin.site.register(FixedExpenses)
 admin.site.register(AI_Limit)
 admin.site.register(AI_Usage)
+admin.site.register(IncomePrediction)
