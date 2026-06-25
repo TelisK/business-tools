@@ -10,7 +10,10 @@ def prediction_model(df, days_prediction=15):
     weather conditions, if there is a cruise and more.
     '''
 
-    df = df.dropna()
+    # Keep out from dropna the 'predicted_income' because it contains empty cell in the past dates.
+    df = df.dropna(subset=[
+        'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
+    ])
     df['day'] = pd.to_datetime(df['day'])
     df = df.sort_values('day')
     df = df.reset_index()

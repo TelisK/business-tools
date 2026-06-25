@@ -77,8 +77,13 @@ def store_predicted_income():
             continue
 
         else:
+            # merge real data with predicted data based on the day. That way we will have better predictions.
+            predicted_data = IncomePrediction.objects.filter(store=store).values('day','predicted_income')
+            real_df = pd.DataFrame.from_records(income_data)
+            predicted_df = pd.DataFrame.from_records(predicted_data)
+            df = pd.merge(real_df, predicted_df, on='day', how='left')
+
             try:
-                df = pd.DataFrame.from_records(income_data)
                 tomorrows_prediction = prediction_model(df, days_prediction=1)
                 prediction_day = datetime.strptime(tomorrows_prediction[0]['day'], '%d/%m/%Y').date()
 

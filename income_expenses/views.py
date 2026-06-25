@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect ,get_object_or_404
-from income_expenses.models import Income, Expenses, Store, FixedExpenses
+from income_expenses.models import Income, Expenses, Store, FixedExpenses, IncomePrediction
 from .forms import IncomeForm, ExpenseForm, StoreForm, UploadFileForm, FixedExpenseForm
 import pandas as pd
 from django.contrib import messages  # informs user with a pop up
@@ -707,7 +707,8 @@ def prediction_with_ai(request):
 @login_required
 def prediction_with_ml(request):
     """
-    Gets all income data from the database, feeds the prediction model and
+    Gets all income data from the database, and the predicted data,
+    merges them, feeds the prediction model and
     takes a 15 days prediction, with the income sum of each day.
     """
     store_id = request.session.get('selected_store', None)
@@ -719,8 +720,17 @@ def prediction_with_ml(request):
     if not income_data:
         messages.error(request, 'There are no data to make predictions!')
         return redirect('income_expenses:index')
-    # expense_data = Expenses.objects.filter(store=store).values('day', 'amount')
-    df = pd.DataFrame.from_records(income_data)
+
+    predicted_data = IncomePrediction.objects.filter(store=store).values('day','predicted_income')
+    print(f'ΠΡΟΒΛΕΨΗ  ==  {predicted_data}')
+    real_df = pd.DataFrame.from_records(income_data)
+    print(f'REAL DATA == {real_df}')
+    predicted_df = pd.DataFrame.from_records(predicted_data)
+    if predicted_df.empty:
+        predicted_df = pd.DataFrame(columns=['day', 'predicted_income'])
+    print(f'ΠΡΟΒΛΕΨΗ DF  ==  {predicted_df}')
+    df = pd.merge(real_df, predicted_df, on='day', how='left')
+
     result = prediction_model(df, days_prediction=15)
     return render(request, 'income_expenses/prediction_with_ml.html', context={'result': result})
 
