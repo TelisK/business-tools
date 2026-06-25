@@ -84,14 +84,15 @@ def store_predicted_income():
             df = pd.merge(real_df, predicted_df, on='day', how='left')
 
             try:
-                tomorrows_prediction = prediction_model(df, days_prediction=1)
-                prediction_day = datetime.strptime(tomorrows_prediction[0]['day'], '%d/%m/%Y').date()
-
-                add_prediction = IncomePrediction.objects.create(
-                    store = store,
-                    day = prediction_day,
-                    predicted_income = tomorrows_prediction[0]['predicted_income']
-                )
+                ten_days_prediction = prediction_model(df, days_prediction=10)
+                
+                for p in ten_days_prediction:
+                    prediction_day = datetime.strptime(p[0]['day'], '%d/%m/%Y').date()
+                    add_prediction = IncomePrediction.objects.update_or_create(
+                        store = store,
+                        day = prediction_day,
+                        predicted_income = p[0]['predicted_income']
+                    )
 
             except Exception as e:
                 print(e)
