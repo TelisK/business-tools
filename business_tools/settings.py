@@ -199,3 +199,41 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 CONTACT_EMAIL=os.getenv('CONTACT_EMAIL', '')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {module}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler', # RotatingFileHandler splits files in 5mb each.
+            'filename': os.path.join(BASE_DIR, 'django_errors.log'),
+            'maxBytes': 1024 * 1024 * 5,   # 5 MB per file
+            'backupCount': 5,              # keeps up to 5 files
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}

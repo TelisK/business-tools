@@ -12,7 +12,9 @@ from django.db.models import Sum, Count
 from django.db.models.functions import Lower
 from django.contrib.auth.decorators import login_required
 from income_expenses.decorators import AI_limit
+import logging
 
+logger = logging.getLogger(__name__)
 
 def PDF_invoice(pdf_file):
     '''
@@ -130,10 +132,12 @@ def invoice_reader(request):
 
 
             if not data_to_db:
+                logging.error(f"Invoice analysis failed.", exc_info=True)
                 messages.error(request, 'Η ανάλυση τιμολογίου απέτυχε.')
                 return redirect('invoices:invoice_reader')
             
             elif 'error' in data_to_db:
+                logging.error(f"Invoice analysis failed: {data_to_db['error']}", exc_info=True)
                 messages.error(request, f'Σφάλμα! {data_to_db['error']}')
                 return redirect('invoices:invoice_reader')
             
@@ -151,7 +155,6 @@ def invoice_reader(request):
                         total__exact=data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
                         date=date_to_db
                         ).exists()
-                    print(f'Υπάρχει?? {check_if_exists}')
 
                     
                     if check_if_exists:
@@ -277,6 +280,7 @@ def invoice_supplier_summary(request):
 
 
     except Exception as e:
+        logging.exception(f"Invoice supplier summary failed: {e}")
         messages.error(request, e)
 
     return render(request, 'invoices/invoice_supplier.html', context=context_to_html)

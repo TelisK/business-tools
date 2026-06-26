@@ -5,6 +5,10 @@ import os
 from dotenv import load_dotenv
 import json
 import time
+import logging
+from django.contrib import messages
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -71,20 +75,15 @@ def Invoice_Analyse(invoice, retries=1):
                 response_dict = json.loads(json_output_str) # Creates a dictionary from json.
                 return response_dict
             except json.JSONDecodeError as e:
-                print(e)
+                logger.error(f'The creation of dict from json on invoice analysis failed. {e}')
+                messages.error(e)
 
         
         except APIError as e:
-            print(f'Σφάλμα!! - {e}')
+            logger.error(f'Failure! {e}')
+            messages.error(e)
             return json
-            i += 1
-            # if i > retries:
-            #     print(f'Σφάλμα!! - {e}')
-            #     return {'status':'error' , 'message':f'Σφάλμα! - {str(e)}'}
 
-            # time.sleep(5)
-            # print(f'Αυτόματη επανάληψη σε 5 δευτερόλεπτα. Προσπάθεια {i} απο {retries}')
-           
             
             
 

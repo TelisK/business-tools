@@ -15,6 +15,9 @@ from django.db import transaction
 import plotly.express as px
 from django.conf import settings
 from decimal import Decimal
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -142,7 +145,6 @@ def index(request):
     net_result = sum_income_result - sum_expenses_result
 
     income_list = Income.objects.filter(store=store).order_by('-day')
-    #print(income_list[:10])
     expense_list = Expenses.objects.filter(store=store).order_by('-day')
     stores_list = Store.objects.filter(user=request.user)
 
@@ -232,7 +234,7 @@ def analytics(request):
     # break_even_point =     # (νεκρό σημείο) have to calculate the fixed expenses
 
 
-    # I am changing the value of net expenses. I added all the expenses, including with fpa tax and no fpa tax, and I
+    # Changing the value of net expenses. I added all the expenses, including with fpa tax and no fpa tax, and I
     # substracted the expenses with fpa tax.
     net_expenses += sum_expenses_result - expenses_fpa
 

@@ -5,6 +5,9 @@ from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 from .ml import prediction_model
+import logging
+
+logger = logging.getLogger(__name__)
 
 def calculate_next_charge(start_date, frequency):
     '''Calculation of next charge for fixed expenses.
@@ -59,6 +62,7 @@ def generate_fixed_expenses():
 
                 
         data.save()
+        logger.info('Fixed expenses data are updated.')
 
 
 @shared_task
@@ -93,12 +97,12 @@ def store_predicted_income():
                         day = prediction_day,
                         predicted_income = p[0]['predicted_income']
                     )
+                    logger.info('Prediction model data are updated')
 
             except Exception as e:
-                print(e)
+                logger.error(f'Prediction model failed to complete calculations. {e}')
                 continue
 
-# Add logger instead of print
         
 
 
