@@ -7,3 +7,4 @@ nginx.conf
 db_data/
 docker-compose.local.yml
 "static/admin/" 
+django_errors.log

@@ -235,5 +235,9 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+        '': {    # This empty string and these lines of code works with my files?
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
+    },
     },
 }

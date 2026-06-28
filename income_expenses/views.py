@@ -517,6 +517,10 @@ def update_expense(request, id):
 def delete_income(request, id):
     income_to_del = get_object_or_404(Income, id=id, store__user=request.user)
     if request.method == 'POST':
+
+        logger.warning(f'user {request.user} deleted the income of {income_to_del.day} '
+        f'for store {income_to_del.store}'
+        )
         income_to_del.delete()
         return redirect('income_expenses:index')
     else:
@@ -526,6 +530,11 @@ def delete_income(request, id):
 def delete_expense(request, id):
     expense_to_del = get_object_or_404(Expenses, id=id, store__user=request.user)
     if request.method == 'POST':
+
+        logger.warning(f'user {request.user} deleted the expense of {expense_to_del.day} '
+        f'for store {expense_to_del.store}'
+        )
+
         expense_to_del.delete()
         return redirect('income_expenses:index')
     else:
@@ -577,6 +586,7 @@ def delete_store(request, id):
         if stores.count() == 1: # If there is one store, it cannot be deleted.
             return redirect('income_expenses:stores')
         
+        logger.warning(f'User {request.user} deleted the store: {store_to_del.name}')
         store_to_del.delete()
         return redirect('income_expenses:stores')
     else:
@@ -632,6 +642,7 @@ def load_old_data(request):
 
                         except Exception as e:
                             # Informing the user the line of the error
+                            logger.exception('Error with income sheet')
                             messages.error(request, f'Σφάλμα. Ελέγξε τη γραμμή στο φύλλο Έσοδα: {index + 2}: {str(e)}')
                             raise # If there is an error on first loop, it stops here. 
                                     # We don't want to go to the second for loop.                       
@@ -648,22 +659,26 @@ def load_old_data(request):
                                     category = row['category'],
                                     comments = row['comments']
                                 )
-
+                            logger.info('Data loading was successful')
                             messages.success(request, 'Data Uploaded Successfully')
 
                             return redirect('income_expenses:index')
 
                         except Exception as e:
                             # Informing the user the line of the error
+                            logger.exception('Error with expenses sheet')
                             messages.error(request, f'Σφάλμα. Ελέγξε τη γραμμή στο φύλλο Έξοδα: {index + 2}: {str(e)}')
                             raise # If the error is in the second loop, it stops here. We don't want to see more erros!
 
                 except Exception as e:
+                    logger.error(f'Error: {e}')
                     messages.error(request, f'Error: {str(e)}')
             except Exception as e:
-                    messages.error(request, f'Error: {str(e)}')
+                logger.error(f'Error: {e}')    
+                messages.error(request, f'Error: {str(e)}')
             
         else:
+            logger.error(f'Errors form: {form.errors}')
             messages.error(request, f'Errors form: {form.errors}')
         
     else:
@@ -698,6 +713,7 @@ def export_data(request):
 
     response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=export.xlsx'
+    logger.info(f'Data exporting for store {store_to_export} was successful')
     return response
 
 
@@ -724,13 +740,12 @@ def prediction_with_ml(request):
         return redirect('income_expenses:index')
 
     predicted_data = IncomePrediction.objects.filter(store=store).values('day','predicted_income')
-    print(f'ΠΡΟΒΛΕΨΗ  ==  {predicted_data}')
     real_df = pd.DataFrame.from_records(income_data)
-    print(f'REAL DATA == {real_df}')
     predicted_df = pd.DataFrame.from_records(predicted_data)
+
     if predicted_df.empty:
         predicted_df = pd.DataFrame(columns=['day', 'predicted_income'])
-    print(f'ΠΡΟΒΛΕΨΗ DF  ==  {predicted_df}')
+
     df = pd.merge(real_df, predicted_df, on='day', how='left')
 
     result = prediction_model(df, days_prediction=15)
