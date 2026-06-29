@@ -84,19 +84,26 @@ def store_predicted_income():
             # merge real data with predicted data based on the day. That way we will have better predictions.
             predicted_data = IncomePrediction.objects.filter(store=store).values('day','predicted_income')
             real_df = pd.DataFrame.from_records(income_data)
-            predicted_df = pd.DataFrame.from_records(predicted_data)
-            df = pd.merge(real_df, predicted_df, on='day', how='left')
+
+            if predicted_data.exists():
+                predicted_df = pd.DataFrame.from_records(predicted_data)
+                df = pd.merge(real_df, predicted_df, on='day', how='left')
+
+            else:
+                df = real_df
 
             try:
                 ten_days_prediction = prediction_model(df, days_prediction=10)
-                
+
                 for p in ten_days_prediction:
-                    prediction_day = datetime.strptime(p[0]['day'], '%d/%m/%Y').date()
+                    prediction_day = datetime.strptime(p['day'], '%d/%m/%Y').date()
+
                     add_prediction = IncomePrediction.objects.update_or_create(
                         store = store,
                         day = prediction_day,
-                        predicted_income = p[0]['predicted_income']
+                        predicted_income = p['predicted_income']
                     )
+
                     logger.info('Prediction model data are updated')
 
             except Exception as e:
