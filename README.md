@@ -36,7 +36,9 @@ This is my first real-life project. I've built several apps, but this is the fir
 
 ## AI Invoice Features
 - Automatic invoice text extraction
-- Data parsing to database
+- Automatic data extraction to the database
+- Duplicate detection
+- Monthly usage limits per store (customizable)
 
 ## Tech Stack
 
@@ -120,6 +122,11 @@ https://tkoutsogiannakis.site/biztools/
 **Demo account:** username: `demo` | password: `Demo2026!`
 
 Or register your own account to test full functionality.
+
+## Privacy & Security
+- Data isolation (users only see their own data)
+- Privacy policy at /privacy-policy/
+- Sensitive financial data excluded from admin panel
 
 ## Author
 
