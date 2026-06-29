@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from datetime import date
+import numpy as np
 
 def prediction_model(df, days_prediction=15):
     '''
@@ -34,11 +35,20 @@ def prediction_model(df, days_prediction=15):
     df['Day_of_year'] = df['day'].dt.dayofyear
     df['Weekend'] = (df['Day_of_week'] >= 5).astype(int)
 
+    df['predicted_income'] = df['predicted_income'].fillna(0)
+    df['real_diff_predict'] = df['total'] - df['predicted_income']
+    print(f'THE REAS DIFF PREDICT IS {df['real_diff_predict']}')
+    df['success_percentage'] = 100 * (df['real_diff_predict'] / df['total']).abs()
+    # Division by zero returns inf (infinity) for positive numbers, -inf for negative numbers, 
+    # or NaN if you divide zero by zero.
+    print(f'THE SUCCESS PERCENTAGE REAL IS {df['success_percentage']}')
+    df['success_percentage'] = df['success_percentage'].replace([np.inf, -np.inf], np.nan)
+
     X = df[['Year', 'Month', 'Day', 'Day_of_week', 'Day_of_year', 'Weekend']]
     y = df['total']
 
-
-    model = RandomForestRegressor(n_estimators=100, random_state=42) # Use all the data to train
+    # We use all the data to train
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(X, y)
 
     today = date.today()
@@ -56,6 +66,9 @@ def prediction_model(df, days_prediction=15):
 
     X_future = future_df[['Year', 'Month', 'Day', 'Day_of_week', 'Day_of_year', 'Weekend']]
     predictions = model.predict(X_future)
+
+    ml_success_rate = df['success_percentage'].mean()
+    print(f'ML SUCCESS RATE {ml_success_rate}')
 
     result = pd.DataFrame({
         'day': future_dates.strftime('%d/%m/%Y'),
