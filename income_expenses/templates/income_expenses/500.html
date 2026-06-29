@@ -1,0 +1,10 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+<div>
+    <h1>Error 500</h1>
+    <p>Κάτι πήγε στραβά. Παρακαλώ προσπαθήστε αργότερα.</p>
+    <a href="{% url 'income_expenses:index' %}" class="btn btn-primary">Αρχική σελίδα</a>
+</div>
+
+{% endblock %}

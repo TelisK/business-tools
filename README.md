@@ -28,6 +28,7 @@ This is my first real-life project. I've built several apps, but this is the fir
 - Add more data for ML analysis (example: Cruise ships, day's weather, etc)
 - Analyse more efficiently the income with economical values
 - Registration with Gmail, Confirmation email
+- UI Redesign
 - And More...
 
 ## Celery Tasks
