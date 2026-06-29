@@ -123,12 +123,13 @@ def invoice_reader(request):
             if files_to_analyse:
                 to_genai = IMAGE_invoice(files_to_analyse)
                 print('Function finished. Now goes to genai')
-                data_to_db = Invoice_Analyse(to_genai)
-
-            # if data_to_db['status'] == 'error':  # error handling in case gemini is busy
-            #     messages.error(request, data_to_db['message'])
-
-            # elif not data_to_db:  # error handling in case gemini finds no data
+                try:
+                    data_to_db = Invoice_Analyse(to_genai)
+                except Exception as e:
+                    logger.error(f'Gemini analyse error {e}')
+                    messages.error(request,'Η ανάλυση του τιμολογίου αργεί περισσότερο απο ότι θα έπρεπε.'
+                    'Δοκιμάστε ξανά αργότερα.')
+                    return redirect('invoices:invoice_reader')
 
 
             if not data_to_db:
