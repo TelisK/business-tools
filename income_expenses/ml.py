@@ -35,14 +35,33 @@ def prediction_model(df, days_prediction=15):
     df['Day_of_year'] = df['day'].dt.dayofyear
     df['Weekend'] = (df['Day_of_week'] >= 5).astype(int)
 
-    df['predicted_income'] = df['predicted_income'].fillna(0)
-    df['real_diff_predict'] = df['total'] - df['predicted_income']
-    print(f'THE REAS DIFF PREDICT IS {df['real_diff_predict']}')
-    df['success_percentage'] = 100 * (df['real_diff_predict'] / df['total']).abs()
-    # Division by zero returns inf (infinity) for positive numbers, -inf for negative numbers, 
-    # or NaN if you divide zero by zero.
-    print(f'THE SUCCESS PERCENTAGE REAL IS {df['success_percentage']}')
-    df['success_percentage'] = df['success_percentage'].replace([np.inf, -np.inf], np.nan)
+    # make values real numbers
+    df['total'] = pd.to_numeric(df['total'], errors='coerce')
+    df['predicted_income'] = pd.to_numeric(df['predicted_income'], errors='coerce')
+
+    # df['real_diff_predict'] = df['total'] - df['predicted_income']
+    #print(f'THE REAS DIFF PREDICT IS {df['real_diff_predict']}')
+   
+    # df['success_percentage'] = np.where(
+    #         df['total'] == 0, 
+    #         np.nan, 
+    #         100 * (df['real_diff_predict'] / df['total']).abs()
+    #     )
+    #print(f'THE SUCCESS PERCENTAGE REAL IS {df['success_percentage']}')
+
+    df_days_with_prediction = df[df['predicted_income'].notna()].copy()
+
+    # Only keeps the days that have a prediction.
+    if not df_days_with_prediction.empty:
+        df_days_with_prediction['real_diff_predict'] = df_days_with_prediction['total'] - df_days_with_prediction['predicted_income']
+        # Handles nan cells, division with 0
+        df_days_with_prediction['success_percentage'] = np.where(
+        df_days_with_prediction['total'] == 0,
+        np.nan,
+        100 * (df_days_with_prediction['real_diff_predict'] / df_days_with_prediction['total']).abs()
+    )
+
+    ml_success_rate = df_days_with_prediction['success_percentage'].mean()
 
     X = df[['Year', 'Month', 'Day', 'Day_of_week', 'Day_of_year', 'Weekend']]
     y = df['total']
@@ -67,7 +86,6 @@ def prediction_model(df, days_prediction=15):
     X_future = future_df[['Year', 'Month', 'Day', 'Day_of_week', 'Day_of_year', 'Weekend']]
     predictions = model.predict(X_future)
 
-    ml_success_rate = df['success_percentage'].mean()
     print(f'ML SUCCESS RATE {ml_success_rate}')
 
     result = pd.DataFrame({
