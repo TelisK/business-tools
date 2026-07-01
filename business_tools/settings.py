@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'income_expenses.apps.IncomeExpensesConfig',
     'invoices.apps.InvoicesConfig',
+    'ai_assistant.apps.AiAssistantConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
