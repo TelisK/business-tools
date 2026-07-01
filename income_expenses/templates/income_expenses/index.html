@@ -81,7 +81,13 @@
 
     </div>
 </div>
-<div><p>Πρόβλεψη για τη σημερινή είσπραξη: {{ next_day_prediction }} €</p></div>
+<div>
+    {% if next_day_prediction %}
+    <p>Πρόβλεψη για τη σημερινή είσπραξη: {{ next_day_prediction }} €</p>
+    {% else %}
+    <p>Πρόβλεψη για τη σημερινή είσπραξη: Δέν υπάρχουν δεδομένα</p>
+    {% endif %}
+</div>
 
 <!-- LISTS SECTION -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
