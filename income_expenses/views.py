@@ -173,7 +173,12 @@ def index(request):
     else:
         diff_by_percentage_YTD = '-'
 
-    next_day_prediction = IncomePrediction.objects.get(store=store, day=today)
+    try:
+        next_day_prediction = IncomePrediction.objects.get(store=store, day=today)
+        next_day_prediction = next_day_prediction.predicted_income
+    except Exception as e:
+        next_day_prediction = None
+        logger.warning(f'No prediction found for store {store} on {today}. Error {e}')
 
     context_to_html = {
         'store':store,
@@ -189,7 +194,7 @@ def index(request):
         'YTD_result':YTD_result,
         'diff_by_percentage':diff_by_percentage,
         'diff_by_percentage_YTD':diff_by_percentage_YTD,
-        'next_day_prediction':next_day_prediction.predicted_income,
+        'next_day_prediction':next_day_prediction,
     }
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
