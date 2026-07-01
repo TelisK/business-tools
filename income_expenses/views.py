@@ -173,6 +173,8 @@ def index(request):
     else:
         diff_by_percentage_YTD = '-'
 
+    next_day_prediction = IncomePrediction.objects.get(store=store, day=today)
+
     context_to_html = {
         'store':store,
         'stores_list':stores_list,
@@ -186,8 +188,8 @@ def index(request):
         'expense_list':expense_obj,
         'YTD_result':YTD_result,
         'diff_by_percentage':diff_by_percentage,
-        'diff_by_percentage_YTD':diff_by_percentage_YTD
-
+        'diff_by_percentage_YTD':diff_by_percentage_YTD,
+        'next_day_prediction':next_day_prediction.predicted_income,
     }
     return render(request, 'income_expenses/index.html', context=context_to_html)
 
