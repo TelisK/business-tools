@@ -35,5 +35,11 @@
         {% endfor %}
     </ul>
 </table>
+    <div class="back-link">
+        <a href="{% url 'invoices:invoice_reader' %}" class="btn btn-secondary">← Πίσω</a>
+    </div>
+        <div class="back-link">
+        <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Λίστα Τιμολογίων</a>
+    </div>
 
 {% endblock %}

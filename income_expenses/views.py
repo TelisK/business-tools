@@ -106,9 +106,6 @@ def last_years_income_comparison(store, date_from, date_to):
     return last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals
 
 
-def fetch_predictions(store):
-    pass
-
 
 # Create your views here.
 @login_required
