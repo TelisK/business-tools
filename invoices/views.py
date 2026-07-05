@@ -73,14 +73,7 @@ def IMAGE_invoice(files):
             image.save(temp_buffer, format="JPEG", quality=75, optimize=True)
             temp_buffer.seek(0) # pointer here
             
-            # After resizing, the image was altered. With this technique we give raw image to gemini.
-            pure_image = temp_buffer.getvalue()
-            image_data = {
-                'mime_type': 'image/jpeg',
-                'data': pure_image
-            }
-            
-            compressed_image = Image.open(image_data)
+            compressed_image = Image.open(temp_buffer)
 
             files_to_analyse.append(compressed_image)
         else:
