@@ -34,14 +34,14 @@ def gemini_agent(store, question):
             name = f_call.name
             args = f_call.args
 
-        print(f"[DEBUG] Το Gemini αποφάσισε να καλέσει το εργαλείο: {name} με ορίσματα {args}")
-        if name == get_totals:
-            result = get_totals(store=store)
-        if name == last_years_income_comparison:
-            result = last_years_income_comparison(store=store)
-        if name == income_totals_calculation:
-            result = income_totals_calculation(store=store)
+            print(f"[DEBUG] Το Gemini αποφάσισε να καλέσει το εργαλείο: {name} με ορίσματα {args}")
+            if name == get_totals:
+                result = get_totals(store=store)
+            elif name == last_years_income_comparison:
+                result = last_years_income_comparison(store=store)
+            elif name == income_totals_calculation:
+                result = income_totals_calculation(store=store)
 
     # CONTINUE HERE
 
-    return final_result.text
+    #return final_result.text

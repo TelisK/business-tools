@@ -36,4 +36,5 @@ urlpatterns = [
         template_name='accounts/password_reset_complete.html'), name='password_reset_complete'),
     path('accounts/', include('accounts.urls')),
     path(f'{settings.APP_SUBPATH}/invoices/', include('invoices.urls')),
+    path(f'{settings.APP_SUBPATH}/ai_assistant/', include('ai_assistant.urls'))
 ]
