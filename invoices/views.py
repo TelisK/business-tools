@@ -29,9 +29,12 @@ def PDF_invoice(pdf_file):
     text = ''
     pdf_file.seek(0)
     with pdfplumber.open(pdf_file) as pdf:
+
         for page in pdf.pages:
             page_text = page.extract_text()
-            if page_text:
+            if page_text == '': # If it's empty, we don't need a list with empty strings.
+                continue
+            elif page_text:
                 text += page_text + '\n'
 
             invoice_content.append(text)
@@ -42,9 +45,12 @@ def PDF_invoice(pdf_file):
     elif not invoice_content:
         files_to_analyse = []
         with pdfplumber.open(pdf_file) as pdf:
-            for page in pdf:
+            for page in pdf.pages:
                 image = page.to_image()
-                files_to_analyse.append(image)
+                pil_image = image.original
+                print(type(pil_image))
+    
+                files_to_analyse.append(pil_image)
 
         return files_to_analyse
 
