@@ -14,4 +14,4 @@ def AI_chat(request):
 
     ai_response = gemini_agent(user_store, user_prompt)
 
-    return JsonResponse('response': ai_response)
+    return JsonResponse({'response': ai_response})

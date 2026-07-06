@@ -39,7 +39,7 @@ def income_totals_calculation(data):
     result = sum(v or 0 for v in totals.values())
     return totals, result
 
-def get_totals(store,date_from,date_to):
+def get_totals(store: int,date_from: str,date_to: str):
 
     """ Fixing the bug with the dates on variable first_day_of_year.
     In variables income_result and expenses_result, Django accepts both types, str and date object"""
@@ -76,7 +76,7 @@ def get_totals(store,date_from,date_to):
     return sum_income_result, sum_expenses_result, expenses_fpa, income_totals, YTD_result, YTD_totals, \
     income_df, expenses_df, income_result, expenses_result
 
-def last_years_income_comparison(store, date_from, date_to):
+def last_years_income_comparison(store: int,date_from: str,date_to: str):
     """
     Picks the dates and calculates the amount of last year, same dates.
     We can compare last years income with todays income and give the user
