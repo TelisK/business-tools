@@ -18,7 +18,7 @@ api_key_str = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key_str)
 
 def gemini_agent(store, question):
-    tools = [ai_assist_totals, last_years_income_comparison]
+    tools = [ai_assist_totals]
 
     response = client.models.generate_content(
         model='gemini-2.5-flash',
@@ -29,17 +29,17 @@ def gemini_agent(store, question):
         ),
     )
 
-    if response.function_calls:
-        for f_call in response.function_calls:
-            # Gives the name of the tool and the arguments.
-            name = f_call.name
-            args = f_call.args
+    # if response.function_calls:
+    #     for f_call in response.function_calls:
+    #         # Gives the name of the tool and the arguments.
+    #         name = f_call.name
+    #         args = f_call.args
 
-            print(f"[DEBUG] Το Gemini αποφάσισε να καλέσει το εργαλείο: {name} με ορίσματα {args}")
-            if name == 'get_totals':
-                result = ai_assist_totals(store=store.id)
-            elif name == 'last_years_income_comparison':
-                result = last_years_income_comparison(store=store.id)
+            # print(f"[DEBUG] Το Gemini αποφάσισε να καλέσει το εργαλείο: {name} με ορίσματα {args}")
+            # if name == 'ai_assist_totals':
+            #     result = ai_assist_totals(store=store)
+            # elif name == 'last_years_income_comparison':
+            #     result = last_years_income_comparison(store=store)
             # elif name == 'income_totals_calculation':
             #     result = income_totals_calculation(store=store.id)
     return response.text

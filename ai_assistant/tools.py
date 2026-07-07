@@ -1,8 +1,9 @@
 from income_expenses.views import get_totals
 '''
-Fetches the economic summary. Income, Expenses, FPA Tax, Income analysis with cash, pos, etc.
+Fetches the economic summary. Use this tool when you need data which are:
+Income, Expenses, FPA Tax, Income analysis with cash, pos, deposit, check and other.
 YTD result and YTD total's analysis.
-for a specific store, a specific timeline. 
+This works with a specific store, a specific timeline. 
 
 Args:
     store: The unique ID (integer) of the store.
@@ -42,3 +43,5 @@ def ai_assist_totals(store: int, date_from: str, date_to: str):
             # 'expenses_result': float(expenses_result)
     }
     
+
+# make tool for invoices.

@@ -21,10 +21,5 @@ app_name = 'ai_assistant'
 
 
 urlpatterns = [
-    path('', views.AI_chat, name='ai_assistant')
-    # path('', views.invoice_reader, name='invoice_reader'),
-    # path('<int:id>/invoice_details/', views.invoice_details, name='invoice_details'),
-    # path('invoice_list/', views.invoice_list, name='invoice_list'),
-    # path('invoice_delete/<int:id>/', views.delete_invoice, name='invoice_delete'),
-    # path('invoice_supplier/', views.invoice_supplier_summary, name='invoice_supplier'),
+    path('', views.AI_chat, name='chat'),
 ]
