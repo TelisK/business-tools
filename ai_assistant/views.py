@@ -9,13 +9,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Create your views here.
-<<<<<<< Updated upstream
-@AI_limit
-@login_required
-=======
 @login_required
 @AI_limit
->>>>>>> Stashed changes
 def AI_chat(request):
     store_id = request.session.get('selected_store')
     user_store = get_object_or_404(Store, id=store_id, user=request.user)
