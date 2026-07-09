@@ -13,6 +13,7 @@ from django.db.models.functions import Lower
 from django.contrib.auth.decorators import login_required
 from income_expenses.decorators import AI_limit
 import logging
+from django.db import DatabaseError
 
 logger = logging.getLogger(__name__)
 
@@ -162,44 +163,49 @@ def invoice_reader(request):
                         return redirect('invoices:invoice_list')
 
                     else:
+                        try:
 
-                        AI_Usage.objects.create(store=store) # usage is autocreated inside the db.
+                            AI_Usage.objects.create(store=store) # usage is autocreated inside the db.
 
-                        expense = Expenses.objects.create(
-                            store = store,
-                            day = date_to_db,
-                            amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
-                            category = 'WITH_FPA_TAX',
-                            comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
-                        )
-
-                        invoice = Invoice.objects.create(
-                            store = store,
-                            expense = expense,
-                            invoice_number = data_to_db["Αριθμός Τιμολογίου"],
-                            afm = data_to_db["ΑΦΜ προμηθευτή"],
-                            supplier = data_to_db["Προμηθευτής"],
-                            date = date_to_db,
-                            amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
-                            fpa = data_to_db["Ποσά"]["ΦΠΑ"],
-                            total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
-                        )
-
-                        for inv_products in data_to_db["Προϊόντα"]:
-                            Products.objects.create(
-                                invoice_id = invoice,
-                                product_code = inv_products["Κωδικός προϊόντος"],
-                                name = inv_products["Όνομα προϊόντος"],
-                                unit = inv_products["Μονάδα μέτρησης"],
-                                price = inv_products["Τιμή προϊόντος"],
-                                quantity = inv_products["Ποσότητα"]
+                            expense = Expenses.objects.create(
+                                store = store,
+                                day = date_to_db,
+                                amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
+                                category = 'WITH_FPA_TAX',
+                                comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
                             )
 
+                            invoice = Invoice.objects.create(
+                                store = store,
+                                expense = expense,
+                                invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                                afm = data_to_db["ΑΦΜ προμηθευτή"],
+                                supplier = data_to_db["Προμηθευτής"],
+                                date = date_to_db,
+                                amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
+                                fpa = data_to_db["Ποσά"]["ΦΠΑ"],
+                                total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+                            )
+
+                            for inv_products in data_to_db["Προϊόντα"]:
+                                Products.objects.create(
+                                    invoice_id = invoice,
+                                    product_code = inv_products["Κωδικός προϊόντος"],
+                                    name = inv_products["Όνομα προϊόντος"],
+                                    unit = inv_products["Μονάδα μέτρησης"],
+                                    price = inv_products["Τιμή προϊόντος"],
+                                    quantity = inv_products["Ποσότητα"]
+                                )
 
 
-                        messages.success(request, 'Data Uploaded Successfully')
 
-                        return redirect('invoices:invoice_list')
+                            messages.success(request, 'Data Uploaded Successfully')
+
+                            return redirect('invoices:invoice_list')
+                        
+                        except DatabaseError as e:
+                            logger.error(f'Database Error {e}')
+                            messages.error('Κάτι πήγε στραβά. Δοκίμασε ξανά.')
             
         else:
             messages.error(request, 'Invalid Form')

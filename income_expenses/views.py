@@ -117,6 +117,12 @@ def index(request):
     # This way we have correct percentage.
     date_to = request.GET.get('date_to', yesterday)
 
+    # User can lookup for one day, with just use the one of the two date selections.
+    if not date_to:
+        date_to = date_from
+    if not date_from:
+        date_from = date_to
+
     user_store = Store.objects.filter(user=request.user)
     if not user_store.exists():
         messages.error(request, 'User has no stores')
@@ -224,6 +230,12 @@ def analytics(request):
 
     start_date = request.GET.get('start_date', first_day_of_the_year)
     end_date = request.GET.get('end_date', today)
+
+# User can lookup for one day, with just use the one of the two date selections.
+    if not end_date:
+        end_date = start_date
+    if not start_date:
+        start_date = end_date
     
     sum_income_result, sum_expenses_result, expenses_fpa, income_totals, YTD_result, YTD_totals, \
          income_df, expenses_df, income_result, expenses_result = get_totals(
