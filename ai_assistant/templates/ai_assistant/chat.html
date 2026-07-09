@@ -1,0 +1,40 @@
+{% extends 'income_expenses/base.html' %}
+{% block body %}
+
+
+<div class="container mt-5">
+    <div class="card col-md-8 mx-auto shadow">
+        <div class="card-header bg-dark text-white">
+            AI Οικονομικός Βοηθός - Κατάστημα: {{ store.name }}
+        </div>
+        <div class="card-body">
+            
+            <div class="border rounded p-3 mb-3 bg-white" style="height: 300px; overflow-y: auto;">
+                {% if prompt %}
+                    <div class="mb-3 text-end">
+                        <span class="badge bg-primary text-wrap p-2 text-start" style="max-width: 75%;">
+                            {{ prompt }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="p-2 bg-light rounded" style="max-width: 85%; white-space: pre-wrap;">
+                            {{ answer }}
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center mt-5">Κάντε μια ερώτηση για τα οικονομικά του καταστήματος.</p>
+                {% endif %}
+            </div>
+
+            <form method="POST" action="">
+                {% csrf_token %} <div class="input-group">
+                    <input type="text" name="prompt" class="form-control" placeholder="Ερώτηση..." required>
+                    <button type="submit" class="btn btn-dark">Αποστολή</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
