@@ -89,8 +89,8 @@ def IMAGE_invoice(files):
 
 
 # Create your views here.
-@AI_limit
 @login_required
+@AI_limit
 def invoice_reader(request):
 
     store_id = request.session.get('selected_store')
