@@ -113,7 +113,7 @@ def invoice_reader(request):
 
                 elif file.content_type in ['image/jpeg', 'image/png']:
 
-                    print('Read image file. Now goes to the function')
+                    logger.info('AI INVOICE - Read image file. Now goes to the function')
                     files_to_analyse.append(file)
 
                 else:
@@ -121,7 +121,7 @@ def invoice_reader(request):
 
             if files_to_analyse:
                 to_genai = IMAGE_invoice(files_to_analyse)
-                print('Function finished. Now goes to genai')
+                logger.info('AI INVOICE - Function finished. Now goes to genai')
                 try:
                     data_to_db = Invoice_Analyse(to_genai)
                 except Exception as e:

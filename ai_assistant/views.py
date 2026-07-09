@@ -3,7 +3,7 @@ from income_expenses.decorators import AI_limit
 from django.contrib.auth.decorators import login_required
 from .agent import gemini_agent
 from django.http import JsonResponse
-from income_expenses.models import Store
+from income_expenses.models import Store, AI_Usage
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,12 +18,13 @@ def AI_chat(request):
     if request.method == 'POST':
         try:
             user_prompt = request.POST.get('prompt')
-            print(f"[DEBUG] Η ερώτηση που πήραμε από τη φόρμα είναι: {user_prompt}")
+    
             if user_prompt:
                 # Bug was asking for the store id all the time. So I integrate with user prompt.
                 final_prompt = f'Για το κατάστημα με id {store_id}, {user_prompt}'
                 ai_response = gemini_agent(store_id, final_prompt)
-                print(f"[DEBUG] Η απάντηση του Gemini είναι: {ai_response}")
+                
+                AI_Usage.objects.create(store=user_store)
                 
                 context = {
                     'prompt': user_prompt,
