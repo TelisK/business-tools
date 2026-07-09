@@ -190,7 +190,7 @@ def invoice_reader(request):
                             for inv_products in data_to_db["Προϊόντα"]:
                                 Products.objects.create(
                                     invoice_id = invoice,
-                                    product_code = inv_products["Κωδικός προϊόντος"],
+                                    product_code = inv_products["Κωδικός προϊόντος"] or "N/A",
                                     name = inv_products["Όνομα προϊόντος"],
                                     unit = inv_products["Μονάδα μέτρησης"],
                                     price = inv_products["Τιμή προϊόντος"],
@@ -205,7 +205,6 @@ def invoice_reader(request):
                         
                         except DatabaseError as e:
                             logger.error(f'Database Error {e}')
-                            messages.error('Κάτι πήγε στραβά. Δοκίμασε ξανά.')
             
         else:
             messages.error(request, 'Invalid Form')
