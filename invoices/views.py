@@ -255,12 +255,11 @@ def invoice_supplier_summary(request):
 
     if request.method == 'POST':
         selected_supplier = request.POST.get('supplier_select')
-        print(selected_supplier)
+        
         result = Invoice.objects.filter(store=store, supplier=selected_supplier)
         products = Products.objects.filter(invoice_id__in=result).annotate(name_cleaned=Lower('name'))\
             .values('name_cleaned', 'price', 'unit')\
             .annotate(total_quantity=Sum('quantity'))
-        print(f'ΠΡΟΙΟΝΤΑ {products}')
 
         supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True)
         supplier = set(supplier)
