@@ -13,26 +13,30 @@ def monthly_count(store):
     return result
 
 
-def AI_limit(func):
+def AI_limit(redirect_url='invoices:invoice_list'):
     '''
     Decorator for calculating and limitate the usage of AI features.
+    Using default redirect url, and the ability to use a different url
+    on a different view.
     '''
-    def wrapper(request, *args, **kwargs):
-        store_id = request.session.get('selected_store')
-        store = get_object_or_404(Store, id=store_id, user=request.user)
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            store_id = request.session.get('selected_store')
+            store = get_object_or_404(Store, id=store_id, user=request.user)
 
-        used_AI = monthly_count(store)
+            used_AI = monthly_count(store)
 
-        ai_limit_object, created = AI_Limit.objects.get_or_create(
-            store=store,
-            defaults={'monthly_limit': 10} # Used only when creating new limit
-        )
+            ai_limit_object, created = AI_Limit.objects.get_or_create(
+                store=store,
+                defaults={'monthly_limit': 10} # Used only when creating new limit
+            )
 
-        if used_AI >= ai_limit_object.monthly_limit:
-            messages.error(request, 'Έχετε φτάσει το μηνιαίο όριο χρήσης του ΑΙ.')
-            return redirect('invoices:invoice_list')
+            if used_AI >= ai_limit_object.monthly_limit:
+                messages.error(request, 'Έχετε φτάσει το μηνιαίο όριο χρήσης του ΑΙ.')
+                return redirect(redirect_url)
 
-        return func(request, *args, **kwargs)
-    return wrapper
+            return func(request, *args, **kwargs)
+        return wrapper
+    return decorator
 
 

@@ -91,7 +91,7 @@ def IMAGE_invoice(files):
 
 # Create your views here.
 @login_required
-@AI_limit
+@AI_limit()  # Parenthesis are used because we use a default redirect url on decorator.
 def invoice_reader(request):
 
     store_id = request.session.get('selected_store')
