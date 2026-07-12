@@ -13,8 +13,7 @@ class Supplier(models.Model):
 class Invoice(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     # PROTECT because Supplier will be common with all users who have the same. We don't want to be deleted.
-    new_supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT, null=True, blank=True)
-    supplier = models.CharField(max_length=200)
+    supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
     expense = models.OneToOneField(Expenses, on_delete=models.CASCADE, blank=True, null=True)
     invoice_number = models.CharField(null=False, max_length=50)
     date = models.DateField()

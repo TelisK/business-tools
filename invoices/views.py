@@ -4,7 +4,7 @@ from django.contrib import messages
 from PIL import Image
 import pdfplumber
 from .genai import Invoice_Analyse
-from invoices.models import Invoice, Products, Store
+from invoices.models import Invoice, Products, Store, Supplier
 from income_expenses.models import Expenses, AI_Usage
 from datetime import datetime
 import io
@@ -152,7 +152,7 @@ def invoice_reader(request):
                     check_if_exists = Invoice.objects.filter(
                         store=store,
                         invoice_number__icontains=data_to_db["Αριθμός Τιμολογίου"],
-                        afm__iexact=data_to_db["ΑΦΜ προμηθευτή"],
+                        supplier__afm=data_to_db["ΑΦΜ προμηθευτή"],
                         total__exact=data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
                         date=date_to_db
                         ).exists()
@@ -175,17 +175,40 @@ def invoice_reader(request):
                                 comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
                             )
 
-                            invoice = Invoice.objects.create(
-                                store = store,
-                                expense = expense,
-                                invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                            supplier_exists = Supplier.objects.filter(
                                 afm = data_to_db["ΑΦΜ προμηθευτή"],
-                                supplier = data_to_db["Προμηθευτής"],
-                                date = date_to_db,
-                                amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
-                                fpa = data_to_db["Ποσά"]["ΦΠΑ"],
-                                total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
                             )
+                            if supplier_exists:
+                            
+                                invoice = Invoice.objects.create(
+                                    store = store,
+                                    expense = expense,
+                                    invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                                    supplier = supplier_exists.first(),
+                                    date = date_to_db,
+                                    amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
+                                    fpa = data_to_db["Ποσά"]["ΦΠΑ"],
+                                    total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+                                )
+
+                            if not supplier_exists:
+
+                                supplier_db = Supplier.objects.create(
+                                    afm = data_to_db["ΑΦΜ προμηθευτή"],
+                                    name = data_to_db["Προμηθευτής"],
+                                )
+
+                                invoice = Invoice.objects.create(
+                                    store = store,
+                                    expense = expense,
+                                    invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                                    supplier = supplier_db,
+                                    date = date_to_db,
+                                    amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
+                                    fpa = data_to_db["Ποσά"]["ΦΠΑ"],
+                                    total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+                                )
+
 
                             for inv_products in data_to_db["Προϊόντα"]:
                                 Products.objects.create(
