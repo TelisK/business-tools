@@ -175,40 +175,21 @@ def invoice_reader(request):
                                 comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
                             )
 
-                            supplier_exists = Supplier.objects.filter(
+                            supplier_db, created = Supplier.objects.get_or_create(
                                 afm = data_to_db["ΑΦΜ προμηθευτή"],
+                                defaults={'supplier' : data_to_db["Προμηθευτής"]}
                             )
-                            if supplier_exists:
-                            
-                                invoice = Invoice.objects.create(
-                                    store = store,
-                                    expense = expense,
-                                    invoice_number = data_to_db["Αριθμός Τιμολογίου"],
-                                    supplier = supplier_exists.first(),
-                                    date = date_to_db,
-                                    amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
-                                    fpa = data_to_db["Ποσά"]["ΦΠΑ"],
-                                    total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
-                                )
 
-                            if not supplier_exists:
-
-                                supplier_db = Supplier.objects.create(
-                                    afm = data_to_db["ΑΦΜ προμηθευτή"],
-                                    name = data_to_db["Προμηθευτής"],
-                                )
-
-                                invoice = Invoice.objects.create(
-                                    store = store,
-                                    expense = expense,
-                                    invoice_number = data_to_db["Αριθμός Τιμολογίου"],
-                                    supplier = supplier_db,
-                                    date = date_to_db,
-                                    amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
-                                    fpa = data_to_db["Ποσά"]["ΦΠΑ"],
-                                    total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
-                                )
-
+                            invoice = Invoice.objects.create(
+                                store = store,
+                                expense = expense,
+                                invoice_number = data_to_db["Αριθμός Τιμολογίου"],
+                                supplier = supplier_db,
+                                date = date_to_db,
+                                amount = data_to_db["Ποσά"]["ΚΑΘΑΡΗ ΑΞΙΑ"],
+                                fpa = data_to_db["Ποσά"]["ΦΠΑ"],
+                                total = data_to_db["Ποσά"]["Σύνολο πληρωτέο"]
+                            )
 
                             for inv_products in data_to_db["Προϊόντα"]:
                                 Products.objects.create(
@@ -284,8 +265,7 @@ def invoice_supplier_summary(request):
             .values('name_cleaned', 'price', 'unit')\
             .annotate(total_quantity=Sum('quantity'))
 
-        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True)
-        supplier = set(supplier)
+        supplier = Supplier.objects.filter(invoice__store=store).distinct 
 
         total_amount = Invoice.objects.filter(store=store, supplier=selected_supplier).aggregate(Sum('total'))
 
@@ -299,9 +279,8 @@ def invoice_supplier_summary(request):
         return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
 
     try:
-        # flat=True returns a list. Without it returns a list with one tupple for each value.
-        supplier = Invoice.objects.filter(store=store).values_list('supplier', flat=True).annotate(total_amount=Count('total'))
-        supplier = set(supplier)
+        # distinct returns unique values
+        supplier = Supplier.objects.filter(invoice__store=store).distinct 
 
         context_to_html = {'supplier':supplier,}
 

@@ -5,10 +5,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 class Supplier(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
     # db_index links with the other table and is faster.
     afm = models.CharField(max_length=9, unique=True, db_index=True)
     supplier = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f'{self.supplier} : {self.afm}'
 
 class Invoice(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
