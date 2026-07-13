@@ -1,10 +1,10 @@
 # BizTools
 
-A Django web application for managing store income and expenses with ML-powered predictions.
+A Django web application for managing store income and expenses with ML-powered predictions and AI features.
 
 ## About
 
-This is my first real-life project. I've built several apps, but this is the first one I'm actually using and deploying. I created it to help my family business track their income and expenses efficiently. I plan to add more features over time. It's currently running on a small server in my living room and has a lot of room for improvement, but it's a solid foundation to build on.
+This is my first real-life project. I've built several small apps, but this is the first one I'm actually using and deploying. I created it to help my family business track their income and expenses efficiently. I plan to add more features over time.
 
 **Note:** The application interface is in Greek, designed for Greek-speaking users.
 
@@ -18,7 +18,7 @@ This is my first real-life project. I've built several apps, but this is the fir
 - Machine learning income predictions (scikit-learn RandomForestRegressor)
 - Fixed expenses automation with Celery
 - AI invoice analysis with Gemini
-- AI assistant: Chat for income and expense analysis only
+- AI assistant: chat interface for income and expense analysis
 - Interactive Data Analytics: Full income and expense analysis
 - Automated testing suite (Models, Views, Forms)
 
@@ -83,6 +83,8 @@ docker compose exec web python manage.py migrate
 
 - `income_expenses/` - Main app for tracking
 - `accounts/` - User authentication
+- `invoices/` - invoice analysis with ΑΙ
+- `ai_assistant/` - AI chat assistant for income/expense
 - `business_tools/` - Project settings
 - `static/` - CSS, JS, images
 - `templates/` - HTML templates
@@ -134,3 +136,7 @@ Or register your own account to test full functionality.
 
 Tilemachos Koutsogiannakis  
 GitHub: [@TelisK](https://github.com/TelisK)
+
+## License
+
+MIT
