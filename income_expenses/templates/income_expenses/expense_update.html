@@ -5,7 +5,11 @@
     <div>
         <h1>Επεξεργασία Εξόδου</h1>
     </div>
+    {% if next %}
+    <a href="{{ next }}" class="btn btn-secondary">← Πίσω</a>
+    {% else %}
     <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
+    {% endif %}
 </div>
 
 <div class="form-card">

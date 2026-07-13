@@ -503,11 +503,17 @@ def update_income(request, id):
             return redirect('income_expenses:detail', id=id)
         else:
             messages.error(request, 'Ελέγξε τη φόρμα')
-            return render(request, 'income_expenses/income_update.html', {'form':form})
+            return render(request, 'income_expenses/income_update.html', {
+                'form':form,
+                'next':next_url,
+            })
     else:
         form = IncomeForm(instance=income_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
-        context_to_html = {'form':form}
+        context_to_html = {
+            'form':form,
+            'next':next_url,
+        }
         return render(request,'income_expenses/income_update.html', context=context_to_html)
 
 @login_required
@@ -526,11 +532,14 @@ def update_expense(request, id):
             return redirect('income_expenses:expenses_detail', id=id)
         else:
             messages.error(request, 'Έλεγξε τη φόρμα')
-            return render(request, 'income_expenses/expense_update.html', {'form':form})
+            return render(request, 'income_expenses/expense_update.html', {
+                'form':form,
+                'next':next_url,
+            })
     else:
         form = ExpenseForm(instance=expense_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
-        context_to_html = {'form':form}
+        context_to_html = {'form':form, 'next':next_url,}
         return render(request,'income_expenses/expense_update.html', context=context_to_html)
 
 @login_required
