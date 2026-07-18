@@ -257,27 +257,32 @@ def invoice_supplier_summary(request):
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
-    invoice_years = Invoice.objects.filter(store=store).dates('date','year')
+    invoice_years = Invoice.objects.filter(store=store).dates('date','year',order='DESC')
     invoice_years = [y.year for y in invoice_years]
 
     if request.method == 'POST':
         selected_year = request.POST.get('selected_year')
-        selected_supplier = request.POST.get('supplier_select')
+        selected_supplier_id = request.POST.get('supplier_select')
         
         if selected_year:
             result = Invoice.objects.filter(date__year=selected_year)
-            result = result.filter(store=store, supplier=selected_supplier)
+            result = result.filter(store=store, supplier=selected_supplier_id)
         else:
-            result = Invoice.objects.filter(store=store, supplier=selected_supplier)
+            result = Invoice.objects.filter(store=store, supplier=selected_supplier_id)
 
 
         products = Products.objects.filter(invoice_id__in=result).annotate(name_cleaned=Lower('name'))\
             .values('name_cleaned', 'price', 'unit')\
             .annotate(total_quantity=Sum('quantity'))
 
-        supplier = Supplier.objects.filter(invoice__store=store).distinct 
+        if selected_year:
+            supplier = Supplier.objects.filter(invoice__store=store,invoice__date__year=selected_year).distinct()
+        else:
+            supplier = Supplier.objects.filter(invoice__store=store).distinct()
 
-        total_amount = Invoice.objects.filter(store=store, supplier=selected_supplier).aggregate(Sum('total'))
+        selected_supplier = get_object_or_404(Supplier, id=selected_supplier_id)
+
+        total_amount = result.aggregate(Sum('total'))
 
         context_to_html = {
             'products':products,

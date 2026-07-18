@@ -9,9 +9,12 @@
     {% csrf_token %}
 
     <label for="supplier_select">Επιλογή Έτους</label>
-    <select name="selected_year" id="selected_year">
+    <!-- onchange="this.form.submit()" javascript to automate post when user selects a year.
+     That way user selects the suppliers of the selected year. -->
+    <select name="selected_year" id="selected_year" onchange="this.form.submit()">
         <option value="">Όλα τα έτη</option>
         {% for y in invoice_years %}
+        <!-- |stringformat:"s" make the value string to be able to compare it. -->
         <option value="{{ y }}" {% if y|stringformat:"s" == selected_year %}selected{% endif %}>{{ y }}</option>
         {% endfor %}
     </select>
@@ -19,7 +22,7 @@
     <label for="supplier_select">Επιλογή προμηθευτή</label>
     <select name="supplier_select" id="supplier_select">
         {% for s in supplier %}
-        <option value="{{ s.id }}" {% if s.id == selected_supplier %}selected{% endif %}>{{ s }}</option>
+        <option value="{{ s.id }}" {% if s.id == selected_supplier.id %}selected{% endif %}>{{ s }}</option>
         {% endfor %}
     </select>
     <button type="submit">Επιλογή</button>
@@ -34,6 +37,8 @@
 
 <table>
     <ul>
+
+        {% if products %}
         <br>
         <p>Προμηθευτής: {{ selected_supplier }} - Συνολικές Αγορές: {{ total_amount.total__sum }} €</p>
         <br>
@@ -41,6 +46,11 @@
         <li>{{ p.name_cleaned|title }} - {{ p.price }} € - {{ p.total_quantity }} {{ p.unit }}</li>
         <br>
         {% endfor %}
+        {% else %}
+        <br>
+        <p>Δέν υπάρχουν δεδομένα</p>
+        <br>
+        {% endif %}
     </ul>
 </table>
     <div class="back-link">
