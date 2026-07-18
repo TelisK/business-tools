@@ -257,10 +257,20 @@ def invoice_supplier_summary(request):
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
+    invoice_years = Invoice.objects.filter(store=store).dates('date','year')
+    invoice_years = [y.year for y in invoice_years]
+
     if request.method == 'POST':
+        selected_year = request.POST.get('selected_year')
         selected_supplier = request.POST.get('supplier_select')
         
-        result = Invoice.objects.filter(store=store, supplier=selected_supplier)
+        if selected_year:
+            result = Invoice.objects.filter(date__year=selected_year)
+            result = result.filter(store=store, supplier=selected_supplier)
+        else:
+            result = Invoice.objects.filter(store=store, supplier=selected_supplier)
+
+
         products = Products.objects.filter(invoice_id__in=result).annotate(name_cleaned=Lower('name'))\
             .values('name_cleaned', 'price', 'unit')\
             .annotate(total_quantity=Sum('quantity'))
@@ -274,15 +284,17 @@ def invoice_supplier_summary(request):
             'supplier':supplier,
             'selected_supplier':selected_supplier,
             'total_amount':total_amount,
+            'selected_year':selected_year,
+            'invoice_years':invoice_years,
         }
 
         return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
 
     try:
         # distinct returns unique values
-        supplier = Supplier.objects.filter(invoice__store=store).distinct 
+        supplier = Supplier.objects.filter(invoice__store=store).distinct()
 
-        context_to_html = {'supplier':supplier,}
+        context_to_html = {'supplier':supplier,'invoice_years':invoice_years,}
 
 
     except Exception as e:

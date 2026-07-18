@@ -7,6 +7,14 @@
 
 <form method="POST" action="{% url 'invoices:invoice_supplier' %}">
     {% csrf_token %}
+
+    <label for="supplier_select">Επιλογή Έτους</label>
+    <select name="selected_year" id="selected_year">
+        <option value="">Όλα τα έτη</option>
+        {% for y in invoice_years %}
+        <option value="{{ y }}" {% if y|stringformat:"s" == selected_year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+    </select>
     
     <label for="supplier_select">Επιλογή προμηθευτή</label>
     <select name="supplier_select" id="supplier_select">
