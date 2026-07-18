@@ -153,6 +153,7 @@
                         <td>{{ income.income_check }}</td>
                         <td>{{ income.income_other }}</td>
                         <td><strong>{{ income.income_sum }}</strong></td>
+                        <td><a href="{% url 'income_expenses:detail' income.id %}?next={{ request.path }}" class="btn btn-edit">Λεπτομέρ.</a></td>
                         <td><a href="{% url 'income_expenses:income_update' income.id %}?next={{ request.path }}" class="btn btn-edit">Επεξ.</a></td>
                         <td><a href="{% url 'income_expenses:income_delete' income.id %}" class="btn btn-danger">Διαγρ.</a></td>
                     </tr>
@@ -177,8 +178,9 @@
                     <tr>
                         <td>{{ expense.day }}</td>
                         <td><strong>{{ expense.amount }}</strong></td>
-                        <td><a href="{% url 'income_expenses:expense_update' expense.id %}?next={{ request.path }}" class="btn btn-edit">Επεξ.</a></td>
-                        <td><a href="{% url 'income_expenses:expense_delete' expense.id %}" class="btn btn-danger">Διαγρ.</a></td>
+                        <td><a href="{% url 'income_expenses:expenses_detail' expense.id %}?next={{ request.path }}" class="btn btn-edit">Λεπτομέριες</a></td>
+                        <td><a href="{% url 'income_expenses:expense_update' expense.id %}?next={{ request.path }}" class="btn btn-edit">Επεξεργασία</a></td>
+                        <td><a href="{% url 'income_expenses:expense_delete' expense.id %}" class="btn btn-danger">Διαγραφή</a></td>
                     </tr>
                     {% empty %}
                     <tr>

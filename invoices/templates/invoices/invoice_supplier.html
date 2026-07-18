@@ -10,7 +10,7 @@
 
     <label for="supplier_select">Επιλογή Έτους</label>
     <!-- onchange="this.form.submit()" javascript to automate post when user selects a year.
-     That way user selects the suppliers of the selected year. -->
+     That way user selects the suppliers available on the selected year. -->
     <select name="selected_year" id="selected_year" onchange="this.form.submit()">
         <option value="">Όλα τα έτη</option>
         {% for y in invoice_years %}
