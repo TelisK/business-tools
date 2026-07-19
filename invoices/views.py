@@ -222,10 +222,37 @@ def invoice_list(request):
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
-    invoices = Invoice.objects.filter(store=store)
-    context_to_html = {'invoices':invoices}
+    invoices = Invoice.objects.filter(store=store).order_by('-date')
+    invoice_years = invoices.filter().dates('date','year',order='DESC')
+    invoice_years = [y.year for y in invoice_years]
+
+    if request.method == 'POST':
+        selected_year = request.POST.get('selected_year')
+        selected_month  = request.POST.get('selected_month')
+
+        if selected_year:
+            invoices = Invoice.objects.filter(store=store, date__year=selected_year)
+
+            invoice_month = invoices.filter().dates('date','month',order='DESC')
+            invoice_month = [i.month for i in invoice_month]
+            if selected_month:
+                invoices = invoices.filter(date__month=selected_month)
+        else:
+            invoices = Invoice.objects.filter(store=store).order_by('-date')
+
+        context_to_html = {
+            'selected_year':selected_year,
+            'invoices': invoices,
+            'invoice_years':invoice_years,
+            'invoice_month':invoice_month,
+        }
+
+        return render(request, 'invoices/invoice_list.html', context=context_to_html)
+
+    context_to_html = {'invoices':invoices,'invoice_years':invoice_years}
     return render(request, 'invoices/invoice_list.html', context=context_to_html)
 
+# Need to check how to add on the invoice list. If I filter with the year or the supplier ??
 @login_required
 def paid_checkbox(request,id):
     inv = get_object_or_404(Invoice, id=id, store__user=request.user)

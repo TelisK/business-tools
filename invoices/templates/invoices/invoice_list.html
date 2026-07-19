@@ -6,7 +6,32 @@
         <h2>Τιμολόγια</h2>
         <a href="{% url 'invoices:invoice_reader' %}" class="btn btn-primary">+ Νέο Τιμολόγιο</a>
     </div>
+<form method="POST" action="{% url 'invoices:invoice_list' %}">
+    {% csrf_token %}
 
+    <label for="selected_year">Επιλογή Έτους</label>
+    <!-- onchange="this.form.submit()" javascript to automate post when user selects a year.
+     That way user selects the suppliers available on the selected year. -->
+    <select name="selected_year" id="selected_year" onchange="this.form.submit()">
+        <option value="">Όλα τα έτη</option>
+        {% for y in invoice_years %}
+        <!-- |stringformat:"s" make the value string to be able to compare it. -->
+        <option value="{{ y }}" {% if y|stringformat:"s" == selected_year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+    </select>
+    <label for="selected_month">Επιλογή Μήνα</label>
+    <!-- onchange="this.form.submit()" javascript to automate post when user selects a year.
+     That way user selects the suppliers available on the selected year. -->
+    <select name="selected_month" id="selected_month" onchange="this.form.submit()">
+        <option value="">Όλοι οι μήνες</option>
+        {% for i in invoice_months %}
+        <!-- |stringformat:"s" make the value string to be able to compare it. -->
+        <option value="{{ i }}" {% if y|stringformat:"s" == selected_month %}selected{% endif %}>{{ i }}</option>
+        {% endfor %}
+    </select>
+    <!-- <button type="submit">Επιλογή</button> -->
+
+</form>
     {% if invoices %}
     <div class="invoice-cards">
         {% for invoice in invoices %}
