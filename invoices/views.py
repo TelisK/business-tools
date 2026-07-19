@@ -227,6 +227,14 @@ def invoice_list(request):
     return render(request, 'invoices/invoice_list.html', context=context_to_html)
 
 @login_required
+def paid_checkbox(request,id):
+    inv = get_object_or_404(Invoice, id=id, store__user=request.user)
+    # Changing 0 to 1 and 1 to 0 instead using if condition.
+    inv.paid = not inv.paid
+    inv.save(update_fields=['paid'])
+    return redirect(request, 'invoices/invoice_list.html')
+
+@login_required
 def invoice_details(request, id):
     invoice_detail = get_object_or_404(Invoice, id=id)
     products = invoice_detail.products.all()
