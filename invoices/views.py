@@ -231,17 +231,19 @@ def invoice_list(request):
         selected_month  = request.POST.get('selected_month')
 
         if selected_year:
-            invoices = Invoice.objects.filter(store=store, date__year=selected_year)
+            invoices = Invoice.objects.filter(store=store, date__year=selected_year).order_by('-date')
 
-            invoice_month = invoices.filter().dates('date','month',order='DESC')
+            invoice_month = invoices.dates('date','month',order='DESC')
             invoice_month = [i.month for i in invoice_month]
             if selected_month:
-                invoices = invoices.filter(date__month=selected_month)
+                invoices = invoices.filter(date__month=selected_month).order_by('-date')
         else:
             invoices = Invoice.objects.filter(store=store).order_by('-date')
+            invoice_month = [] # crashes without it because it expects this value
 
         context_to_html = {
             'selected_year':selected_year,
+            'selected_month':selected_month,
             'invoices': invoices,
             'invoice_years':invoice_years,
             'invoice_month':invoice_month,
@@ -249,7 +251,11 @@ def invoice_list(request):
 
         return render(request, 'invoices/invoice_list.html', context=context_to_html)
 
-    context_to_html = {'invoices':invoices,'invoice_years':invoice_years}
+    context_to_html = {
+        'invoices':invoices,
+        'invoice_years':invoice_years,
+        'invoice_month':[],
+    }
     return render(request, 'invoices/invoice_list.html', context=context_to_html)
 
 # Need to check how to add on the invoice list. If I filter with the year or the supplier ??

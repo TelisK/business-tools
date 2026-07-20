@@ -24,9 +24,9 @@
      That way user selects the suppliers available on the selected year. -->
     <select name="selected_month" id="selected_month" onchange="this.form.submit()">
         <option value="">Όλοι οι μήνες</option>
-        {% for i in invoice_months %}
+        {% for i in invoice_month %}
         <!-- |stringformat:"s" make the value string to be able to compare it. -->
-        <option value="{{ i }}" {% if y|stringformat:"s" == selected_month %}selected{% endif %}>{{ i }}</option>
+        <option value="{{ i }}" {% if i|stringformat:"s" == selected_month %}selected{% endif %}>{{ i }}</option>
         {% endfor %}
     </select>
     <!-- <button type="submit">Επιλογή</button> -->
