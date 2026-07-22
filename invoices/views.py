@@ -265,7 +265,7 @@ def paid_checkbox(request,id):
     # Changing 0 to 1 and 1 to 0 instead using if condition.
     inv.paid = not inv.paid
     inv.save(update_fields=['paid'])
-    return redirect(request, 'invoices/invoice_list.html')
+    return redirect('invoices:invoice_list')
 
 @login_required
 def invoice_details(request, id):
