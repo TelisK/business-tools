@@ -45,6 +45,8 @@ class Expenses(models.Model):
         return f"{self.day} : {self.amount} €"
     
     EXPENSES_CATEGORIES = {
+        'WITH_FPA_6' : 'ΜΕ ΦΠΑ 6%',
+        'WITH_FPA_13' : 'ΜΕ ΦΠΑ 13%',
         'WITH_FPA_TAX' : 'ΜΕ ΦΠΑ 24%',
         'WITHOUT_FPA_TAX' : 'ΧΩΡΙΣ ΦΠΑ',
     }

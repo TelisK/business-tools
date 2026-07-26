@@ -50,11 +50,15 @@ def get_totals(store: int,date_from: str,date_to: str):
 
     income_result = Income.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
     expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
-    expenses_fpa = Expenses.objects.filter(
-        store=store, day__range=[date_from, date_to], category='WITH_FPA_TAX'
-    ).order_by('day')
+    expenses_fpa_taxes = Expenses.objects.filter(
+        store=store, day__range=[date_from, date_to],
+        category__in=['WITH_FPA_TAX', 'WITH_FPA_13', 'WITH_FPA_6']
+        ).values=('category').annotate(total=Sum('amount'))
 
-    expenses_fpa = expenses_fpa.aggregate(total_expenses=Sum('amount'))['total_expenses'] or 0
+    #annotate instead of aggregate because we filter with values, and we need different total
+    #for every value. Aggregate would give us just one number, the Sum of all amounts.
+
+    expenses_fpa = {i['category'] : i['total'] for i in expenses_fpa_taxes}
 
     income_df = pd.DataFrame.from_records(income_result.values(
         'day', 'income_cash', 'income_pos', 'income_deposit', 'income_check', 'income_other'
@@ -105,7 +109,24 @@ def last_years_income_comparison(store: int,date_from: str,date_to: str):
 
     return last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals
 
+def fpa_calculator(expenses_dictionary):
+    fpa24 = expenses_dictionary['WITH_FPA_TAX']
+    fpa24net = fpa24/Decimal(1.24)
+    fpa24tax = fpa24 - fpa24net
 
+    fpa13 = expenses_dictionary['WITH_FPA_13']
+    fpa13net = fpa13/Decimal(1.13)
+    fpa13tax = fpa13 - fpa13net
+
+    fpa6 = expenses_dictionary['WITH_FPA_6']
+    fpa6net = fpa6/Decimal(1.06)
+    fpa6tax = fpa6 - fpa6net
+
+    expenses_fpa = fpa24 + fpa13 + fpa6
+    net_expenses = fpa24net + fpa13net + fpa6net
+    fpa_expenses_tax = fpa24tax + fpa13tax + fpa6tax
+
+    return expenses_fpa, net_expenses, fpa_expenses_tax
 
 # Create your views here.
 @login_required
@@ -244,8 +265,11 @@ def analytics(request):
     # tax removal to calculate net result
     net_income = sum_income_result/Decimal(1.24)
     fpa_income_tax = sum_income_result - net_income
-    net_expenses = expenses_fpa/Decimal(1.24)
-    fpa_expenses_tax = expenses_fpa - net_expenses
+
+    expenses_fpa, net_expenses, fpa_expenses_tax = fpa_calculator(expenses_fpa)
+
+    # net_expenses = expenses_fpa/Decimal(1.24)
+    # fpa_expenses_tax = expenses_fpa - net_expenses
 
     if net_income != 0:
         gross_profit_margin = ((net_income - net_expenses)/net_income)*100 # Περιθώριο Μικτού Κέρδους

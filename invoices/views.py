@@ -163,6 +163,14 @@ def invoice_reader(request):
                         return redirect('invoices:invoice_list')
 
                     else:
+                        if data_to_db["Ποσά"]["ΦΠΑ"] == 24:
+                            fpa_category = 'WITH_FPA_TAX'
+                        elif data_to_db["Ποσά"]["ΦΠΑ"] == 13:
+                            fpa_category = 'WITH_FPA_13'
+                        elif data_to_db["Ποσά"]["ΦΠΑ"] == 6:
+                            fpa_category = 'WITH_FPA_6'
+                        else:
+                            fpa_category = 'WITHOUT_FPA_TAX'
                         try:
 
                             AI_Usage.objects.create(store=store) # usage is autocreated inside the db.
@@ -171,7 +179,7 @@ def invoice_reader(request):
                                 store = store,
                                 day = date_to_db,
                                 amount = data_to_db["Ποσά"]["Σύνολο πληρωτέο"],
-                                category = 'WITH_FPA_TAX',
+                                category = fpa_category,
                                 comments = f'{data_to_db["Προμηθευτής"]} - Αυτόματη Καταχώρηση μέσω AI.'
                             )
 
