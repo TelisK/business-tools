@@ -53,7 +53,7 @@ def get_totals(store: int,date_from: str,date_to: str):
     expenses_fpa_taxes = Expenses.objects.filter(
         store=store, day__range=[date_from, date_to],
         category__in=['WITH_FPA_TAX', 'WITH_FPA_13', 'WITH_FPA_6']
-        ).values=('category').annotate(total=Sum('amount'))
+        ).values('category').annotate(total=Sum('amount'))
 
     #annotate instead of aggregate because we filter with values, and we need different total
     #for every value. Aggregate would give us just one number, the Sum of all amounts.
@@ -110,15 +110,15 @@ def last_years_income_comparison(store: int,date_from: str,date_to: str):
     return last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals
 
 def fpa_calculator(expenses_dictionary):
-    fpa24 = expenses_dictionary['WITH_FPA_TAX']
+    fpa24 = expenses_dictionary.get('WITH_FPA_TAX') or 0
     fpa24net = fpa24/Decimal(1.24)
     fpa24tax = fpa24 - fpa24net
 
-    fpa13 = expenses_dictionary['WITH_FPA_13']
+    fpa13 = expenses_dictionary.get('WITH_FPA_13') or 0
     fpa13net = fpa13/Decimal(1.13)
     fpa13tax = fpa13 - fpa13net
 
-    fpa6 = expenses_dictionary['WITH_FPA_6']
+    fpa6 = expenses_dictionary.get('WITH_FPA_6') or 0
     fpa6net = fpa6/Decimal(1.06)
     fpa6tax = fpa6 - fpa6net
 
