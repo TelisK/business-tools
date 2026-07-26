@@ -45,6 +45,7 @@
                     {{ invoice.total }} €
                     <form method="post" action="{% url 'invoices:paid_checkbox' invoice.id %}">
                         {% csrf_token %}
+                        Εξοφλημένο:
                         <button type="submit" class="paid-box {% if invoice.paid %}paid-checked{% endif %}">
                             {% if invoice.paid %}✓{% endif %}
                         </button>
