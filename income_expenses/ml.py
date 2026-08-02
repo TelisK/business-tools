@@ -88,5 +88,5 @@ def prediction_model(df, days_prediction=15):
         'day': future_dates.strftime('%d/%m/%Y'),
         'predicted_income': predictions.round(2)
     })
-
+    
     return result.to_dict('records')  # records returns a list of dictionaries

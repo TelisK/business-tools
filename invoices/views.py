@@ -171,6 +171,7 @@ def invoice_reader(request):
                             fpa_category = 'WITH_FPA_6'
                         else:
                             fpa_category = 'WITHOUT_FPA_TAX'
+                            
                         try:
 
                             AI_Usage.objects.create(store=store) # usage is autocreated inside the db.
