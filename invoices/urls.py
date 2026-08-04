@@ -27,4 +27,5 @@ urlpatterns = [
     path('invoice_delete/<int:id>/', views.delete_invoice, name='invoice_delete'),
     path('invoice_supplier/', views.invoice_supplier_summary, name='invoice_supplier'),
     path('invoice_list/<int:id>/paid_checkbox/', views.paid_checkbox, name='paid_checkbox'),
+    path('<int:id>/update/', views.invoice_update, name='invoice_update'),
 ]

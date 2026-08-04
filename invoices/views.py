@@ -357,3 +357,19 @@ def invoice_supplier_summary(request):
         messages.error(request, e)
 
     return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
+
+def invoice_update(request, id):
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    invoice = get_object_or_404(Invoice, id=id, store=store)
+    if request.method == 'POST':
+        invoice.save()
+
+        return redirect('invoices:invoice_list')
+
+    context_to_html = {
+        'invoice':invoice,
+    }
+
+    return render(request, 'invoices/invoice_details.html', context=context_to_html)

@@ -72,6 +72,7 @@
     <!-- Actions -->
     <div class="action-buttons">
         <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">← Πίσω στη Λίστα</a>
+        <a href="{% url 'invoices:invoice_update' invoice_detail.id %}" class="btn btn-secondary">Επεξεργασία</a>
         <a href="{% url 'invoices:invoice_delete' invoice_detail.id %}" class="btn btn-danger">Διαγραφή Τιμολογίου</a>
     </div>
 </div>
