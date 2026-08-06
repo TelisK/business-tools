@@ -2,5 +2,48 @@
 {% block body %}
 
 <h1>This is edit page</h1>
+<div>
+ <form method="POST">
+{% csrf_token %}
+            <div class="form-group">
+                <label>Προμηθευτής</label>
+                {{ form.supplier }}
+
+                            <div class="form-group">
+                <label>ΑΦΜ</label>
+                {{ form.supplier.afm }}
+
+            <div class="form-group">
+                <label>Αριθμός Τιμολογίου</label>
+                {{ form.invoice_number }}
+
+
+            <div class="form-group">
+                <label>Ημερομηνία</label>
+                {{ form.date }}
+
+            <div class="form-group">
+                <label>Ποσό (€)</label>
+                {{ form.amount }}
+
+                
+            <div class="form-group">
+                <label>Ποσό ΦΠΑ (€)</label>
+                {{ form.fpa }}
+
+                            <div class="form-group">
+                <label>Ποσοστό ΦΠΑ (%)</label>
+                {{ form.fpa_persentage }}
+
+                            <div class="form-group">
+                <label>Τελικό Σύνολο (€)</label>
+                {{ form.total }}
+
+                        <div class="form-actions">
+
+            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+            <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Ακύρωση</a>
+</form>               
+</div>
 
 {% endblock %}

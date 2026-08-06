@@ -47,7 +47,8 @@ class UploadIncoiceForm(forms.Form):
 class InvoiceUpdateForm(forms.ModelForm):
     class Meta:
         model = Invoice
-        fields = '__all__'
+        fields = ['supplier', 'invoice_number', 'date', 'amount', 'fpa',
+                  'fpa_persentage','total']
         widgets = {
             'date': forms.DateInput(attrs={'type':'date'}, format='%Y-%m-%d'),
         }
