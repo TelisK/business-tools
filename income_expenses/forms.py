@@ -1,5 +1,6 @@
 from django import forms
 from .models import Income, Expenses, Store, FixedExpenses
+from invoices.models import Invoice, Products
 from django.core.validators import FileExtensionValidator
 
 
@@ -42,3 +43,11 @@ class UploadIncoiceForm(forms.Form):
         widget=forms.ClearableFileInput(attrs={
             'capture': 'environment',  # This lets the user to upload straight from his cellphone camera
             'accept': 'image/*,.pdf',}))
+
+class InvoiceUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Invoice
+        fields = '__all__'
+        widgets = {
+            'date': forms.DateInput(attrs={'type':'date'}, format='%Y-%m-%d'),
+        }
