@@ -369,7 +369,7 @@ def invoice_update(request, id):
     
     if request.method == 'POST':
         form = InvoiceUpdateForm(request.POST, instance=invoice)
-        old_total = form.data.get('total')
+        old_total = invoice.total
         if form.is_valid():
             form.save()
 
