@@ -400,13 +400,21 @@ def invoice_update(request, id):
         return render(request, 'invoices/invoice_update.html', context=context_to_html)
 
 def supplier_update(request,id):
+    """
+    Fetches the Supplier data by the id
+    and updates the values. At the end informs user.
+    """
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
     supplier = get_object_or_404(Supplier, id=id)
     if request.method == 'POST':
         form = SupplierUpdateForm(request.POST, instance=supplier)
-        form.save()
+
+        if form.afm is str and len(form.afm) != 9:
+            messages.error(request, 'Το ΑΦΜ αποτελείτε απο 9 αριθμητικά στοιχεία')   # ΠΡΕΠΕΙ ΝΑ ΤΟ ΔΩ ΛΕΠΤΟΜΕΡΩΣ
+        else:
+            form.save()
 
         messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
         messages.warning(request, 'Στα ήδη καταχωρημένα τιμολόγια με αυτά τα στοιχεία,\n' \
