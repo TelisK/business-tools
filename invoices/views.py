@@ -369,17 +369,21 @@ def invoice_update(request, id):
     
     if request.method == 'POST':
         form = InvoiceUpdateForm(request.POST, instance=invoice)
+        old_total = form.data.get('total')
         if form.is_valid():
+            form.save()
+
             total = form.cleaned_data.get('total')
-            if total != invoice.total:
+
+            if old_total != total:
                 invoice.expense.amount = total  ### NOT WORKING
                 invoice.expense.save()
-            form.save()
-            # messages.info('Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
+
+            messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
 
             return redirect('invoices:invoice_list')
         else:
-            messages.error('Έχει γίνει κάποιο λάθος.')
+            messages.error(request, 'Έχει γίνει κάποιο λάθος.')
 
     else:
         form = InvoiceUpdateForm(instance=invoice)
