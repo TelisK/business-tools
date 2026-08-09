@@ -1,6 +1,6 @@
 from django import forms
 from .models import Income, Expenses, Store, FixedExpenses
-from invoices.models import Invoice, Products
+from invoices.models import Invoice, Products, Supplier
 from django.core.validators import FileExtensionValidator
 
 
@@ -52,3 +52,8 @@ class InvoiceUpdateForm(forms.ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'type':'date'}, format='%Y-%m-%d'),
         }
+
+class SupplierUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = '__all__'

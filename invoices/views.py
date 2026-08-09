@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from income_expenses.decorators import AI_limit
 import logging
 from django.db import DatabaseError
-from income_expenses.forms import InvoiceUpdateForm
+from income_expenses.forms import InvoiceUpdateForm, SupplierUpdateForm
 
 logger = logging.getLogger(__name__)
 
@@ -398,3 +398,23 @@ def invoice_update(request, id):
         }
 
         return render(request, 'invoices/invoice_update.html', context=context_to_html)
+
+def supplier_update(request,id):
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    supplier = get_object_or_404(Supplier, id=id)
+    if request.method == 'POST':
+        form = SupplierUpdateForm(request.POST, instance=supplier)
+        form.save()
+
+        messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
+        return redirect('invoices:invoice_supplier')
+    else:
+        form = SupplierUpdateForm(instance=supplier)
+
+        context_to_html = {
+            'form':form,
+        }
+        return render(request, 'invoices/supplier_update.html', context=context_to_html)
+

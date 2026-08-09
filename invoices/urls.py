@@ -28,4 +28,5 @@ urlpatterns = [
     path('invoice_supplier/', views.invoice_supplier_summary, name='invoice_supplier'),
     path('invoice_list/<int:id>/paid_checkbox/', views.paid_checkbox, name='paid_checkbox'),
     path('<int:id>/update/', views.invoice_update, name='invoice_update'),
+    path('invoice_supplier/<int:id>/update/', views.supplier_update, name='supplier_update'),
 ]

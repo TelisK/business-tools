@@ -26,6 +26,9 @@
         {% endfor %}
     </select>
     <button type="submit">Επιλογή</button>
+    {% if selected_supplier %}
+    <a href="{% url 'invoices:supplier_update' selected_supplier.id %}" class="btn btn-secondary">Επεξεργασία Προμηθευτή</a>
+    {% endif %}
 
 </form>
 
