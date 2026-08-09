@@ -409,6 +409,8 @@ def supplier_update(request,id):
         form.save()
 
         messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
+        messages.warning(request, 'Στα ήδη καταχωρημένα τιμολόγια με αυτά τα στοιχεία,\n' \
+        ' το σε αντιστοιχία έξοδο, θα έχει το παλιό όνομα. Οι νέες καταχωρήσεις θα έχουν το νέο όνομα')
         return redirect('invoices:invoice_supplier')
     else:
         form = SupplierUpdateForm(instance=supplier)
