@@ -370,14 +370,20 @@ def invoice_update(request, id):
     if request.method == 'POST':
         form = InvoiceUpdateForm(request.POST, instance=invoice)
         old_total = invoice.total
+        old_date = invoice.date
         if form.is_valid():
             form.save()
 
             total = form.cleaned_data.get('total')
+            new_date = form.cleaned_data.get('date')
 
             if old_total != total:
-                invoice.expense.amount = total  ### NOT WORKING
-                invoice.expense.save()
+                invoice.expense.amount = total
+                
+            if old_date != new_date:
+                invoice.expense.day = new_date
+
+            invoice.expense.save()
 
             messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
 
