@@ -305,6 +305,12 @@ def delete_invoice(request, id):
 
 @login_required
 def invoice_supplier_summary(request):
+    """
+    User can filter by supplier and/or by year, to get informed 
+    of the totals of the products he received.
+    The purpose is to help seasonal businesses have their totals
+    for their next year's orders.
+    """
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
@@ -360,6 +366,10 @@ def invoice_supplier_summary(request):
     return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
 
 def invoice_update(request, id):
+    """
+    Fetched the invoice by the id and gives the user the ability
+    to update/make corrections on the recorded data.
+    """
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
