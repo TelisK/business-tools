@@ -415,7 +415,7 @@ def supplier_update(request,id):
 
             if not afm.isnumeric() or len(afm) != 9:
                 messages.error(request, 'Το ΑΦΜ πρέπει να αποτελείτε απο 9 αριθμητικά στοιχεία')
-                return redirect('invoices:supplier_update', id=supplier.id)
+                return render(request, 'invoices/supplier_update.html', {'form':form})
             else:
                 form.save()
                 messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
