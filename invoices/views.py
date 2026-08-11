@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from income_expenses.decorators import AI_limit
 import logging
 from django.db import DatabaseError
+from income_expenses.forms import InvoiceUpdateForm, SupplierUpdateForm
 
 logger = logging.getLogger(__name__)
 
@@ -304,6 +305,12 @@ def delete_invoice(request, id):
 
 @login_required
 def invoice_supplier_summary(request):
+    """
+    User can filter by supplier and/or by year, to get informed 
+    of the totals of the products he received.
+    The purpose is to help seasonal businesses have their totals
+    for their next year's orders.
+    """
     store_id = request.session.get('selected_store')
     store = get_object_or_404(Store, id=store_id, user=request.user)
 
@@ -357,3 +364,80 @@ def invoice_supplier_summary(request):
         messages.error(request, e)
 
     return render(request, 'invoices/invoice_supplier.html', context=context_to_html)
+
+def invoice_update(request, id):
+    """
+    Fetched the invoice by the id and gives the user the ability
+    to update/make corrections on the recorded data.
+    """
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    invoice = get_object_or_404(Invoice, id=id, store=store)
+    products = invoice.products.all()
+
+    
+    if request.method == 'POST':
+        form = InvoiceUpdateForm(request.POST, instance=invoice)
+        old_total = invoice.total
+        old_date = invoice.date
+        if form.is_valid():
+            form.save()
+
+            total = form.cleaned_data.get('total')
+            new_date = form.cleaned_data.get('date')
+
+            if old_total != total:
+                invoice.expense.amount = total
+                
+            if old_date != new_date:
+                invoice.expense.day = new_date
+
+            invoice.expense.save()
+
+            messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
+
+            return redirect('invoices:invoice_list')
+        else:
+            messages.error(request, 'Έχει γίνει κάποιο λάθος.')
+
+    else:
+        form = InvoiceUpdateForm(instance=invoice)
+        context_to_html = {
+            'form':form,
+        }
+
+        return render(request, 'invoices/invoice_update.html', context=context_to_html)
+
+def supplier_update(request,id):
+    """
+    Fetches the Supplier data by the id
+    and updates the values. At the end informs user.
+    """
+    store_id = request.session.get('selected_store')
+    store = get_object_or_404(Store, id=store_id, user=request.user)
+
+    supplier = get_object_or_404(Supplier, id=id)
+    if request.method == 'POST':
+        form = SupplierUpdateForm(request.POST, instance=supplier)
+        if form.is_valid():
+            afm = form.cleaned_data.get('afm')
+
+            if not afm.isnumeric() or len(afm) != 9:
+                messages.error(request, 'Το ΑΦΜ πρέπει να αποτελείτε απο 9 αριθμητικά στοιχεία')
+                return render(request, 'invoices/supplier_update.html', {'form':form})
+            else:
+                form.save()
+                messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
+                messages.warning(request, 'Στα ήδη καταχωρημένα τιμολόγια με αυτά τα στοιχεία,\n' \
+                ' το σε αντιστοιχία έξοδο, θα έχει το παλιό όνομα. Οι νέες καταχωρήσεις θα έχουν το νέο όνομα')
+                return redirect('invoices:invoice_supplier')
+
+    else:
+        form = SupplierUpdateForm(instance=supplier)
+
+        context_to_html = {
+            'form':form,
+        }
+        return render(request, 'invoices/supplier_update.html', context=context_to_html)
+
