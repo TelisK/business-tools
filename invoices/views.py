@@ -410,16 +410,19 @@ def supplier_update(request,id):
     supplier = get_object_or_404(Supplier, id=id)
     if request.method == 'POST':
         form = SupplierUpdateForm(request.POST, instance=supplier)
+        if form.is_valid():
+            afm = form.cleaned_data.get('afm')
 
-        if form.afm is str and len(form.afm) != 9:
-            messages.error(request, 'Το ΑΦΜ αποτελείτε απο 9 αριθμητικά στοιχεία')   # ΠΡΕΠΕΙ ΝΑ ΤΟ ΔΩ ΛΕΠΤΟΜΕΡΩΣ
-        else:
-            form.save()
+            if not afm.isnumeric() or len(afm) != 9:
+                messages.error(request, 'Το ΑΦΜ πρέπει να αποτελείτε απο 9 αριθμητικά στοιχεία')
+                return redirect('invoices:supplier_update', id=supplier.id)
+            else:
+                form.save()
+                messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
+                messages.warning(request, 'Στα ήδη καταχωρημένα τιμολόγια με αυτά τα στοιχεία,\n' \
+                ' το σε αντιστοιχία έξοδο, θα έχει το παλιό όνομα. Οι νέες καταχωρήσεις θα έχουν το νέο όνομα')
+                return redirect('invoices:invoice_supplier')
 
-        messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
-        messages.warning(request, 'Στα ήδη καταχωρημένα τιμολόγια με αυτά τα στοιχεία,\n' \
-        ' το σε αντιστοιχία έξοδο, θα έχει το παλιό όνομα. Οι νέες καταχωρήσεις θα έχουν το νέο όνομα')
-        return redirect('invoices:invoice_supplier')
     else:
         form = SupplierUpdateForm(instance=supplier)
 
