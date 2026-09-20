@@ -61,23 +61,12 @@ This is my first real-life project. I've built several small apps, but this is t
 ### Local Development
 
 ```bash
-git clone https://github.com/TelisK/business-tools.git
-cd business-tools
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
-```
-
-Visit: http://127.0.0.1:8000/biztools/
-
-### Docker
-
-```bash
-docker compose up -d --build
+docker compose -f docker-compose.local.yml up -d --build
 docker compose exec web python manage.py migrate
 ```
+
+Visit: http://127.0.0.1:8001/biztools/
+
 
 ## Project Structure
 
