@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="el">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,74 +10,77 @@
     <link rel="stylesheet" href="{% static 'income_expenses/css/style.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2NR670TKQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2NR670TKQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-Z2NR670TKQ');
-</script>
+        gtag('config', 'G-Z2NR670TKQ');
+    </script>
 </head>
+
 <body>
 
-<nav>
-    <a href="{% url 'income_expenses:index' %}" class="nav-brand">BizTools</a>
-    <ul class="nav-links">
-        <li><a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Αρχική</a></li>
-<li>
-    <form method="get" action="{% url 'income_expenses:index' %}">
-        <select name="store" onchange="this.form.submit()">
-            {% for s in stores_list %}
-            <option value="{{ s.id }}" {% if s == current_store %}selected{% endif %}>{{ s.name }}</option>
-            {% endfor %}
-        </select>
-    </form>
-</li>
-        <li><a href="{% url 'income_expenses:prediction_with_ml' %}" class="btn btn-secondary">Πρόβλεψη Εισοδημάτων</a></li>
-        <li><a href="{% url 'income_expenses:load_old_data' %}" class="btn btn-secondary">Εισαγωγή Δεδομένων</a></li>
-        <li><a href="{% url 'income_expenses:export_data' %}?store={{ store.id }}" class="btn btn-secondary">Εξαγωγή σε Excel</a></li>
-        <li><a href="{% url 'income_expenses:submit_income' %}" class="btn-income btn btn-sm">+ Έσοδο</a></li>
-        <li><a href="{% url 'income_expenses:submit_expense' %}" class="btn-expense btn btn-sm">+ Έξοδο</a></li>
-        <li><a href="{% url 'income_expenses:fixed_expenses' %}" class="btn-expense btn btn-sm">Πάγια Έξοδα</a></li>
-        <li><a href="{% url 'invoices:invoice_reader' %}" class="btn-expense btn btn-sm">Τιμολόγιο</a></li>
-        <li><a href="{% url 'ai_assistant:chat' %}" class="btn-expense btn btn-sm">Βοηθός ΑΙ</a></li>
-        <li><a href="{% url 'income_expenses:analytics' %}" class="btn btn-secondary">Αναλυτικά</a></li>
-        <li><a href="{% url 'income_expenses:stores' %}"  class="btn btn-secondary">Καταστήματα</a></li>
-    </ul>
-</nav>
-{% if user.is_authenticated %}
-    <li><span style="font-size:0.875rem; color:var(--text-muted);">{{ user.username }}</span></li>
+    <nav>
+        <a href="{% url 'income_expenses:index' %}" class="nav-brand">BizTools</a>
+        <ul class="nav-links">
+            <li><a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Αρχική</a></li>
+            <li>
+                <form method="get" action="{% url 'income_expenses:index' %}">
+                    <select name="store" onchange="this.form.submit()">
+                        {% for s in stores_list %}
+                        <option value="{{ s.id }}" {% if s == current_store %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </li>
+            <li><a href="{% url 'income_expenses:prediction_with_ml' %}" class="btn btn-secondary">Πρόβλεψη
+                    Εισοδημάτων</a></li>
+            <li><a href="{% url 'income_expenses:load_old_data' %}" class="btn btn-secondary">Εισαγωγή Δεδομένων</a>
+            </li>
+            <li><a href="{% url 'income_expenses:export_data' %}?store={{ store.id }}" class="btn btn-secondary">Εξαγωγή
+                    σε Excel</a></li>
+            <li><a href="{% url 'income_expenses:submit_income' %}" class="btn-income btn btn-sm">+ Έσοδο</a></li>
+            <li><a href="{% url 'income_expenses:submit_expense' %}" class="btn-expense btn btn-sm">+ Έξοδο</a></li>
+            <li><a href="{% url 'income_expenses:fixed_expenses' %}" class="btn-expense btn btn-sm">Πάγια Έξοδα</a></li>
+            <li><a href="{% url 'invoices:invoice_reader' %}" class="btn-expense btn btn-sm">Τιμολόγιο</a></li>
+            <li><a href="{% url 'ai_assistant:chat' %}" class="btn-expense btn btn-sm">Βοηθός ΑΙ</a></li>
+            <li><a href="{% url 'income_expenses:analytics' %}" class="btn btn-secondary">Αναλυτικά</a></li>
+            <li><a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">Καταστήματα</a></li>
+        </ul>
+    </nav>
+    {% if user.is_authenticated %}
+    <li><span class="user-auth">{{ user.username }}</span></li>
     <li>
-    <form method="post" action="{% url 'logout' %}" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-secondary btn-sm">Αποσύνδεση</button>
-    </form>
-</li>
-{% else %}
+        <form method="post" action="{% url 'logout' %}" class="logout">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary btn-sm">Αποσύνδεση</button>
+        </form>
+    </li>
+    {% else %}
     <li><a href="{% url 'login' %}">Σύνδεση</a></li>
-{% endif %}
-{% if messages %}
+    {% endif %}
+    {% if messages %}
     {% for message in messages %}
-    <div style="background:{% if message.tags == 'error' %}#fdf0f0{% else %}#e8f5e9{% endif %}; 
-                border-left:4px solid {% if message.tags == 'error' %}#9b2226{% else %}#2d6a4f{% endif %}; 
-                padding:0.75rem 1.25rem; margin:1rem 2rem; border-radius:4px; font-size:0.875rem;
-                color:{% if message.tags == 'error' %}#9b2226{% else %}#2d6a4f{% endif %};">
+    <div
+        class="login-messages {% if message.tags == 'error' %}login-messages-error{% else %}login-messages-success{% endif %}">
         {{ message }}
     </div>
     {% endfor %}
-{% endif %}
-<div class="container">
-    {% block body %}{% endblock %}
-</div>
-<footer>
-    <a href="{% url 'income_expenses:privacy_policy' %}">Πολιτική Απορρήτου</a>
-    <br>
-    <a href="{% url 'accounts:delete_account' %}">Διαγραφή λογαριασμού</a>
-</footer>
+    {% endif %}
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
+    <footer>
+        <a href="{% url 'income_expenses:privacy_policy' %}">Πολιτική Απορρήτου</a>
+        <br>
+        <a href="{% url 'accounts:delete_account' %}">Διαγραφή λογαριασμού</a>
+    </footer>
 </body>
+
 </html>

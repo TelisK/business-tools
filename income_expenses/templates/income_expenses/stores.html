@@ -14,7 +14,7 @@
         {% for store in stores_list %}
         <li class="entry-item">
             <div class="entry-row">
-                <span style="font-size:0.9rem; font-weight:500;">{{ store.name }}</span>
+                <span>{{ store.name }}</span>
                 <div class="entry-actions">
                     <a href="{% url 'income_expenses:update_store' store.id %}" class="btn btn-edit">Επεξεργασία</a>
                     {% if stores_list.count > 1 %}

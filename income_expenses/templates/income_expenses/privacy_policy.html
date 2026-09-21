@@ -1,5 +1,6 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
+{% load static %}
 
 <div class="privacy-policy">
     <h1>Πολιτική Απορρήτου</h1>
@@ -45,42 +46,5 @@
         <p>Email: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a></p>
     </div>
 </div>
-
-<style>
-.privacy-policy {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-.privacy-policy h1 {
-    color: #333;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-}
-
-.section {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.section h2 {
-    color: #444;
-    margin-top: 0;
-}
-
-.section ul {
-    padding-left: 20px;
-}
-
-.section ul li {
-    margin-bottom: 8px;
-    color: #555;
-}
-</style>
 
 {% endblock %}

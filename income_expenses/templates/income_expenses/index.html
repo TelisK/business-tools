@@ -1,86 +1,79 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
+{% load static %}
 
 <!-- SUMMARY SECTION -->
-<div style="margin-bottom:2rem;">
+<div class="summary-section">
 
     <!-- Date filter form -->
-
-
-</select>
     <form method="get" action="{% url 'income_expenses:index' %}">
         <h3>Σύγκριση περιόδου με την ίδια περίοδο του προηγούμενου έτους</h3>
-        <span style="font-size:0.8rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">Περίοδος</span>
-        <input type="date" name="date_from" value="{{ date_from }}" style="font-size:0.875rem;">
-        <span style="color:var(--text-muted); font-size:0.875rem;">—</span>
-        <input type="date" name="date_to" value="{{ date_to }}" style="font-size:0.875rem;">
+        <span class="stat-label">Περίοδος</span>
+        <input type="date" name="date_from" value="{{ date_from }}" class="date-input">
+        <span class="filter-sep">—</span>
+        <input type="date" name="date_to" value="{{ date_to }}" class="date-input">
         <button type="submit" class="btn btn-primary btn-sm">Εφαρμογή</button>
-
     </form>
 
     <!-- Totals -->
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
+    <div class="stats-grid">
 
-        <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
-            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Τζίρος Τρέχων Μήνα</div>
-            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--income);">{{ sum_income_result }} €</div>
-            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Τζίρος Τρέχων Έτους</div>
-            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--income);">{{ YTD_result }} €</div>
-            <div style="font-size:0.50rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Διαφορά με πέρυσι ανα Μήνα / Έτος</div>
-            <div style="font-family:'DM Mono',monospace; font-size:1rem; font-weight:500;">
-    
-    <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
-        {{ diff_by_percentage }}%
-    </span>
-    
-    <span style="color: var(--income);"> / </span>
-
-    <span class="{% if diff_by_percentage_YTD >= 0 %}text-success{% else %}text-danger{% endif %}">
-        {{ diff_by_percentage_YTD }}%
-    </span>
-
-</div>
+        <div class="stat-card">
+            <div class="stat-label">Τζίρος Τρέχων Μήνα</div>
+            <div class="stat-value income">{{ sum_income_result }} €</div>
+            <div class="stat-label">Τζίρος Τρέχων Έτους</div>
+            <div class="stat-value income">{{ YTD_result }} €</div>
+            <div class="stat-label stat-label-sm">Διαφορά με πέρυσι ανα Μήνα / Έτος</div>
+            <div class="stat-diff">
+                <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
+                    {{ diff_by_percentage }}%
+                </span>
+                <span class="stat-diff-sep"> / </span>
+                <span class="{% if diff_by_percentage_YTD >= 0 %}text-success{% else %}text-danger{% endif %}">
+                    {{ diff_by_percentage_YTD }}%
+                </span>
+            </div>
         </div>
 
-
-        <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
-            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Σύνολο Εξόδων</div>
-            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--expense);">{{ sum_expenses_result }} €</div>
+        <div class="stat-card">
+            <div class="stat-label">Σύνολο Εξόδων</div>
+            <div class="stat-value expense">{{ sum_expenses_result }} €</div>
         </div>
 
-        <div style="background:var(--text); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
-            <div style="font-size:0.75rem; font-weight:500; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Αποτέλεσμα</div>
-            <div style="font-family:'DM Mono',monospace; font-size:1.5rem; font-weight:500; color:#fff;">{{ net_result }} €</div>
+        <div class="stat-card stat-card-dark">
+            <div class="stat-label">Αποτέλεσμα</div>
+            <div class="stat-value">{{ net_result }} €</div>
         </div>
 
-        <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.5rem;">
-            <div style="font-size:0.75rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Ανάλυση Εσόδων</div>
-            <div style="display:flex; flex-direction:column; gap:0.25rem;">
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
-                    <span style="color:var(--text-muted);">Μετρητά</span>
-                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_cash }} €</span>
+        <div class="stat-card">
+            <div class="stat-label margin">Ανάλυση Εσόδων</div>
+            <div class="stat-breakdown">
+                <div class="breakdown-row">
+                    <span class="label">Μετρητά</span>
+                    <span class="value">{{ income_totals.total_cash }} €</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
-                    <span style="color:var(--text-muted);">POS</span>
-                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_pos }} €</span>
+                <div class="breakdown-row">
+                    <span class="label">POS</span>
+                    <span class="value">{{ income_totals.total_pos }} €</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
-                    <span style="color:var(--text-muted);">Κατάθεση</span>
-                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_deposit }} €</span>
+                <div class="breakdown-row">
+                    <span class="label">Κατάθεση</span>
+                    <span class="value">{{ income_totals.total_deposit }} €</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
-                    <span style="color:var(--text-muted);">Επιταγή</span>
-                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_check }} €</span>
+                <div class="breakdown-row">
+                    <span class="label">Επιταγή</span>
+                    <span class="value">{{ income_totals.total_check }} €</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
-                    <span style="color:var(--text-muted);">Άλλο</span>
-                    <span style="font-family:'DM Mono',monospace;">{{ income_totals.total_other }} €</span>
+                <div class="breakdown-row">
+                    <span class="label">Άλλο</span>
+                    <span class="value">{{ income_totals.total_other }} €</span>
                 </div>
             </div>
         </div>
 
     </div>
 </div>
+
 <div>
     {% if next_day_prediction %}
     <p>Πρόβλεψη για τη σημερινή είσπραξη: {{ next_day_prediction }} €</p>
@@ -90,7 +83,7 @@
 </div>
 
 <!-- LISTS SECTION -->
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+<div class="lists-grid">
 
     <!-- INCOME -->
     <div class="card">
@@ -106,7 +99,7 @@
                         <div>
                             <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
                             {% if i.comments %}
-                            <div style="font-size:0.78rem; color:var(--text-muted);">{{ i.comments }}</div>
+                            <div class="entry-comment">{{ i.comments }}</div>
                             {% endif %}
                         </div>
                         <span class="entry-amount amount-income">{{ i.income_sum }} €</span>
@@ -122,11 +115,11 @@
             {% endfor %}
         </ul>
         {% if income_list.has_other_pages %}
-        <div style="display:flex; gap:0.5rem; padding:0.75rem 1.25rem; border-top:1px solid var(--border); align-items:center;">
+        <div class="pagination-bar">
             {% if income_list.has_previous %}
                 <a href="?income_page={{ income_list.previous_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">←</a>
             {% endif %}
-            <span style="font-size:0.8rem; color:var(--text-muted);">{{ income_list.number }} / {{ income_list.paginator.num_pages }}</span>
+            <span class="pagination-info">{{ income_list.number }} / {{ income_list.paginator.num_pages }}</span>
             {% if income_list.has_next %}
                 <a href="?income_page={{ income_list.next_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">→</a>
             {% endif %}
@@ -148,7 +141,7 @@
                         <div>
                             <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
                             {% if i.comments %}
-                            <div style="font-size:0.78rem; color:var(--text-muted);">{{ i.comments }}</div>
+                            <div class="entry-comment">{{ i.comments }}</div>
                             {% endif %}
                         </div>
                         <span class="entry-amount amount-expense">{{ i.amount }} €</span>
@@ -164,11 +157,11 @@
             {% endfor %}
         </ul>
         {% if expense_list.has_other_pages %}
-        <div style="display:flex; gap:0.5rem; padding:0.75rem 1.25rem; border-top:1px solid var(--border); align-items:center;">
+        <div class="pagination-bar">
             {% if expense_list.has_previous %}
                 <a href="?expense_page={{ expense_list.previous_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">←</a>
             {% endif %}
-            <span style="font-size:0.8rem; color:var(--text-muted);">{{ expense_list.number }} / {{ expense_list.paginator.num_pages }}</span>
+            <span class="pagination-info">{{ expense_list.number }} / {{ expense_list.paginator.num_pages }}</span>
             {% if expense_list.has_next %}
                 <a href="?expense_page={{ expense_list.next_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">→</a>
             {% endif %}
