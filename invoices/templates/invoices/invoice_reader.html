@@ -1,7 +1,13 @@
-
 {% extends 'income_expenses/base.html' %}
 {% load static %}
+
+<!-- Load this css file to base.html on income_expenses app. -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'invoices/css/style.css' %}">
+{% endblock %}
+
 {% block body %}
+
 
 <div class="invoice-upload-wrapper">
     <!-- Display Django messages -->

@@ -1,0 +1,11 @@
+#ai-assist {
+    height: 300px; 
+    overflow-y: auto;
+}
+#prompt {
+    max-width: 75%;
+}
+#answer {
+    max-width: 85%; 
+    white-space: pre-wrap;
+}

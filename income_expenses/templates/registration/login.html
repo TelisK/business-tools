@@ -1,8 +1,9 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
+{% load static %}
 
-<div class="form-card" style="max-width:400px; margin:4rem auto;">
-    <h1 style="font-size:1.4rem; margin-bottom:1.5rem;">Σύνδεση</h1>
+<div class="form-card login-div">
+    <h1 class="login-h1">Σύνδεση</h1>
         {% if form.non_field_errors %}
     <div class="bg-red-500 text-white p-2">
         {% for error in form.non_field_errors %}

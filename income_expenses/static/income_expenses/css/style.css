@@ -752,6 +752,7 @@
     text-align: center;
 }
 
+
 @media (max-width: 768px) {
     .charts-grid {
         grid-template-columns: 1fr;
@@ -801,4 +802,13 @@
     .section ul li {
         margin-bottom: 8px;
         color: #555;
+    }
+
+    .login-div {
+        max-width:400px; 
+        margin:4rem auto;
+    }
+    .login-h1 {
+        font-size:1.4rem; 
+        margin-bottom:1.5rem;
     }
