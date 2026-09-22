@@ -28,6 +28,9 @@ services:
       volumes:
         - ./nginx:/etc/nginx/conf.d:ro  
         - ./static:/app/static:ro  # Ο Nginx διαβάζει τα static (Read-Only)
+        - ./income_expenses/static:/app/income_expenses/static:ro
+        - ./invoices/static:/app/invoices/static:ro
+        - ./ai_assistant/static:/app/ai_assistant/static:ro
       depends_on:
         - web
 
