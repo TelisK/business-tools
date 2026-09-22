@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Tools</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+         <link rel="stylesheet" href="{% static 'income_expenses/css/style.css' %}">
+
     <!-- We add an empty block, to load another style.css when the page is requested.(check invoices app) -->
     <!-- {% block extra_css %}{% endblock %} -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +31,26 @@
         <div id="menuToggle">
             <div class="menu-container">
                 <div class="menu-label">Biztools</div>
-                <li><div class="user-auth">telisk</div></li>
+                    </div>
+    {% if user.is_authenticated %}
+    <li><span class="user-auth">{{ user.username }}</span></li>
+    <li>
+        <form method="post" action="{% url 'logout' %}" class="logout">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary btn-sm">Αποσύνδεση</button>
+        </form>
+    </li>
+    {% else %}
+    <li><a href="{% url 'login' %}">Σύνδεση</a></li>
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <div
+        class="login-messages {% if message.tags == 'error' %}login-messages-error{% else %}login-messages-success{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
             </div>
 
             <!--
@@ -82,13 +103,18 @@
         </div>
     </nav>
     <main>
-
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
 
     </main>
 
     <footer>
-
-    </footer>
+        Biztools
+        <a href="{% url 'income_expenses:privacy_policy' %}">Πολιτική Απορρήτου</a>
+        <br>
+        <a href="{% url 'accounts:delete_account' %}">Διαγραφή λογαριασμού</a>
+    </footer> -->
 
     <!-- 
     </div>

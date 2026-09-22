@@ -7,9 +7,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Tools</title>
-    <link rel="stylesheet" href="{% static 'income_expenses/css/style.css' %}">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+         <link rel="stylesheet" href="{% static 'income_expenses/css/style.css' %}">
+z
     <!-- We add an empty block, to load another style.css when the page is requested.(check invoices app) -->
-    {% block extra_css %}{% endblock %}
+    <!-- {% block extra_css %}{% endblock %} -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
@@ -27,46 +29,12 @@
 </head>
 
 <body>
-    <div class="nav-container">
-        <nav>
-            <input class="hamb-checkbox" type="checkbox" id="checkbox" />
-            <label class="hamb-label" for="checkbox">
-                <span class="line1 hamb-line"></span>
-                <span class="line2 hamb-line"></span>
-                <span class="line3 hamb-line"></span>
-            </label>
-            <a href="{% url 'income_expenses:index' %}" class="nav-brand">BizTools</a>
-            <ul class="nav-links">
-                <li><a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Αρχική</a></li>
-                <li>
-                    <form method="get" action="{% url 'income_expenses:index' %}">
-                        <select name="store" onchange="this.form.submit()">
-                            {% for s in stores_list %}
-                            <option value="{{ s.id }}" {% if s==current_store %}selected{% endif %}>{{ s.name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </form>
-                </li>
-                <li><a href="{% url 'income_expenses:prediction_with_ml' %}" class="btn btn-secondary">Πρόβλεψη
-                        Εισοδημάτων</a></li>
-                <li><a href="{% url 'income_expenses:load_old_data' %}" class="btn btn-secondary">Εισαγωγή Δεδομένων</a>
-                </li>
-                <li><a href="{% url 'income_expenses:export_data' %}?store={{ store.id }}"
-                        class="btn btn-secondary">Εξαγωγή
-                        σε Excel</a></li>
-                <li><a href="{% url 'income_expenses:submit_income' %}" class="btn-income btn btn-sm">+ Έσοδο</a></li>
-                <li><a href="{% url 'income_expenses:submit_expense' %}" class="btn-expense btn btn-sm">+ Έξοδο</a></li>
-                <li><a href="{% url 'income_expenses:fixed_expenses' %}" class="btn-expense btn btn-sm">Πάγια Έξοδα</a>
-                </li>
-                <li><a href="{% url 'invoices:invoice_reader' %}" class="btn-expense btn btn-sm">Τιμολόγιο</a></li>
-                <li><a href="{% url 'ai_assistant:chat' %}" class="btn-expense btn btn-sm">Βοηθός ΑΙ</a></li>
-                <li><a href="{% url 'income_expenses:analytics' %}" class="btn btn-secondary">Αναλυτικά</a></li>
-                <li><a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">Καταστήματα</a></li>
-            </ul>
-        </nav>
-    </div>
-    <!-- {% if user.is_authenticated %}
+    <nav role="navigation">
+        <div id="menuToggle">
+            <div class="menu-container">
+                <div class="menu-label">Biztools</div>
+                    </div>
+    {% if user.is_authenticated %}
     <li><span class="user-auth">{{ user.username }}</span></li>
     <li>
         <form method="post" action="{% url 'logout' %}" class="logout">
@@ -85,14 +53,67 @@
     </div>
     {% endfor %}
     {% endif %}
+            </div>
+
+            <!--
+    A fake / hidden checkbox is used as click reciever,
+    so you can use the :checked selector on it.
+    -->
+            <input type="checkbox" id="menuCheckbox" />
+
+            <!--
+    Some spans to act as a hamburger.
+    
+    They are acting like a real hamburger,
+    not that McDonalds stuff.
+    -->
+            <span></span>
+            <span></span>
+            <span></span>
+
+            <!--
+    Too bad the menu has to be inside of the button
+    but hey, it's pure CSS magic.
+    -->
+            <ul id="menu">
+                <!-- 
+      We can use a label here to close upon click (when doing same page navigation), this
+      does require a slight bit of JS.
+      -->
+                <li>
+                    <a href="#">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Home</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#about">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">About</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <label for="menuCheckbox">Info</label>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <label for="menuCheckbox">Contact</label>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main>
     <div class="container">
         {% block body %}{% endblock %}
     </div>
+
+    </main>
+
     <footer>
+        Biztools
         <a href="{% url 'income_expenses:privacy_policy' %}">Πολιτική Απορρήτου</a>
         <br>
         <a href="{% url 'accounts:delete_account' %}">Διαγραφή λογαριασμού</a>
     </footer>
-</body>
-
-</html> -->
