@@ -1,7 +1,8 @@
 :root {
     --bg: rgba(0, 200, 120, 0.55);
     --bg2: rgba(0, 150, 90, 0.35);
-    --bg3: rgba(10, 14, 18, 0.2);
+    /* --bg3: rgba(10, 14, 18, 0.2);  too dark*/
+    --bg3: rgba(255, 255, 255, 0.415);
     --purple1: #65358A;
     --purple2: #43245C;
     --green1: #1D6B50;
@@ -165,7 +166,7 @@ p {
   padding-top: 125px;
   box-sizing: border-box;
   overflow-y: auto;
-  background: #ededed;
+  background: var(--bg2);
   list-style-type: none;
   -webkit-font-smoothing: antialiased;
   /* to stop flickering of text in safari */
@@ -185,6 +186,7 @@ p {
 #menu li label
 {
   cursor: pointer;
+  color: var(--gray);
 }
 
 /*
@@ -195,4 +197,34 @@ p {
   transform: none;
 }
 
+.menu-container {
+    display: flex;
+    justify-content: space-around;
+    /* flex-wrap: wrap; */
+    position: absolute;
+    top: -10px;
+    left: 100px;
+}
+.menu-container li {
+    list-style-type: none;
+}
+.menu-label {
+    padding: 10px;
+    
+  transform: translateX(-40%);
+  font-size: 2rem;
+  color: #fff;
+  transition: opacity 0.2s ease;
+}
+.user-auth {
+    padding: 10px;
+    font-size: 1.2rem;
+    color: #fff;
+    transform: translateX(40%);
+    transition: opacity 0.2s ease; */
+}
+
 /* MAIN */
+main h1 {
+
+}
