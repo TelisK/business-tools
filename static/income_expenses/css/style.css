@@ -226,10 +226,7 @@ p {
     font-size: 1.2rem;
     color: #fff;
     /* transform: translateX(40%); */
-    transition: opacity 0.2s ease; */
+    transition: opacity 0.2s ease;
 }
 
 /* MAIN */
-main h1 {
-
-}

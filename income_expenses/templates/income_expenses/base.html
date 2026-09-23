@@ -8,10 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Tools</title>
     <!-- <link rel="stylesheet" href="style.css"> -->
-         <link rel="stylesheet" href="{% static 'income_expenses/css/style.css' %}">
-z
+     <link rel="stylesheet" href="{% static 'income_expenses/css/style.css' %}">
     <!-- We add an empty block, to load another style.css when the page is requested.(check invoices app) -->
-    <!-- {% block extra_css %}{% endblock %} -->
+    {% block extra_css %}{% endblock %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
@@ -33,56 +32,38 @@ z
         <div id="menuToggle">
             <div class="menu-container">
                 <div class="menu-label">Biztools</div>
-                    </div>
-    {% if user.is_authenticated %}
-    <li><span class="user-auth">{{ user.username }}</span></li>
-    <li>
-        <form method="post" action="{% url 'logout' %}" class="logout">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-secondary btn-sm">Αποσύνδεση</button>
-        </form>
-    </li>
-    {% else %}
-    <li><a href="{% url 'login' %}">Σύνδεση</a></li>
-    {% endif %}
-    {% if messages %}
-    {% for message in messages %}
-    <div
-        class="login-messages {% if message.tags == 'error' %}login-messages-error{% else %}login-messages-success{% endif %}">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
+                {% if user.is_authenticated %}
+                <li><div class="user-auth">{{ user.username }}</div></li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}" class="logout">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary btn-sm">Αποσύνδεση</button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Σύνδεση</a></li>
+                {% endif %}
+                {% if messages %}
+                {% for message in messages %}
+                <div
+                    class="login-messages {% if message.tags == 'error' %}login-messages-error{% else %}login-messages-success{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
             </div>
 
-            <!--
-    A fake / hidden checkbox is used as click reciever,
-    so you can use the :checked selector on it.
-    -->
             <input type="checkbox" id="menuCheckbox" />
 
-            <!--
-    Some spans to act as a hamburger.
-    
-    They are acting like a real hamburger,
-    not that McDonalds stuff.
-    -->
             <span></span>
             <span></span>
             <span></span>
 
-            <!--
-    Too bad the menu has to be inside of the button
-    but hey, it's pure CSS magic.
-    -->
             <ul id="menu">
-                <!-- 
-      We can use a label here to close upon click (when doing same page navigation), this
-      does require a slight bit of JS.
-      -->
+
                 <li>
-                    <a href="#">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Home</label>
+                    <a href="{% url 'income_expenses:index' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Αρχική</label>
                     </a>
                 </li>
                 <li>
@@ -91,8 +72,8 @@ z
                     </a>
                 </li>
                 <li>
-                    <a href="">
-                        <label for="menuCheckbox">Info</label>
+                    <a href="{% url 'invoices:invoice_reader' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Tιμολόγιο</label>
                     </a>
                 </li>
 
@@ -105,9 +86,9 @@ z
         </div>
     </nav>
     <main>
-    <div class="container">
-        {% block body %}{% endblock %}
-    </div>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
 
     </main>
 
