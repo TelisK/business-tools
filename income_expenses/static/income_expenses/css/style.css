@@ -157,7 +157,8 @@ p {
  */
 #menu
 {
-  position: absolute;
+  display: block;
+  /* position: absolute; */
   max-width: 400px;
   width: 100vw;
   max-height: 100vh;
