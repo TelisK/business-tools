@@ -34,14 +34,14 @@
                 <div class="menu-label">Biztools</div>
                 {% if user.is_authenticated %}
                 <li><div class="user-auth">{{ user.username }}</div></li>
-                <li>
+                <li class="user-login">
                     <form method="post" action="{% url 'logout' %}" class="logout">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-secondary btn-sm">Αποσύνδεση</button>
+                        <button type="submit" class="user-login-btn">Αποσύνδεση</button>
                     </form>
                 </li>
                 {% else %}
-                <li><a href="{% url 'login' %}">Σύνδεση</a></li>
+                <li class="user-login"><a href="{% url 'login' %}">Σύνδεση</a></li>
                 {% endif %}
                 {% if messages %}
                 {% for message in messages %}
@@ -51,6 +51,18 @@
                 </div>
                 {% endfor %}
                 {% endif %}
+                {% if user.is_authenticated %}
+                <li class="store-select">
+                <form method="get" action="{% url 'income_expenses:index' %}">
+                    <select name="store" onchange="this.form.submit()">
+                        {% for s in stores_list %}
+                        <option value="{{ s.id }}" {% if s == current_store %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                {% endif %}
+
+                    </select>
+                </form>
+            </li>
             </div>
 
             <input type="checkbox" id="menuCheckbox" />
@@ -67,8 +79,32 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#about">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">About</label>
+                    <a href="{% url 'income_expenses:analytics' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Αναλυτικά</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:prediction_with_ml' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Πρόβλεψη
+                    Εισοδημάτων</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:load_old_data' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Εισαγωγή
+                    Δεδομένων</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:export_data' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Εξαγωγή
+                    σε Excel</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:fixed_expenses' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Πάγια
+                    Έξοδα</label>
                     </a>
                 </li>
                 <li>
@@ -76,10 +112,9 @@
                         <label for="menuCheckbox" onclick="this.parentNode.click();">Tιμολόγιο</label>
                     </a>
                 </li>
-
                 <li>
-                    <a href="">
-                        <label for="menuCheckbox">Contact</label>
+                    <a href="{% url 'ai_assistant:chat' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Βοηθός ΑΙ</label>
                     </a>
                 </li>
             </ul>
