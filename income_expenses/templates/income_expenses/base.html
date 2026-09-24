@@ -33,7 +33,7 @@
             <div class="menu-container">
                 <div class="menu-label">Biztools</div>
                 {% if user.is_authenticated %}
-                <li><div class="user-auth">{{ user.username }}</div></li>
+                <li><div class="user-auth"><a href="{% url 'income_expenses:stores' %}">{{ user.username }}</a></div></li>
                 <li class="user-login">
                     <form method="post" action="{% url 'logout' %}" class="logout">
                         {% csrf_token %}
