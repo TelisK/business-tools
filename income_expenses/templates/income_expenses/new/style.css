@@ -36,10 +36,12 @@ nav ul {
 }
 nav .burger-label {
   position: relative;
-  width: auto;
+  width: 64px;
   cursor: hand;
-  float: right;
+  float: left;
   padding: 20px;
+  display: flex;
+  flex: row;
 }
 nav .line {
   background: white;
@@ -49,20 +51,74 @@ nav .line {
   width: 24px;
   transition: all 0 1s ease;
 }
-nav .line1 {
+nav .line.line1 {
   top: 10px;
 }
-nav .line2 {
+nav .line.line2 {
   top: 18px;
 }
-nav .line3 {
+nav .line.line3 {
   top: 26px;
 }
-#checkbox {
+.burger-checkbox {
   display: none;
 }
-
-#checkbox:checked ~ label {
-  background-color: green;
-  border: 2px solid black;
+nav .burger-checkbox:checked ~ ul {
+  display: flex;
+  height: 100%;
+  clear: left;
+}
+nav .burger-checkbox:checked ~ .burger-label .line1 {
+  transform: rotate(45deg);
+  top: 18px;
+}
+.burger-checkbox:checked ~ .burger-label .line2 {
+  background-color: transparent;
+}
+.burger-checkbox:checked ~ .burger-label .line3 {
+  transform: rotate(-45deg);
+  top: 18px;
+}
+/* when it's not collapsed */
+nav {
+  background-color: var(--bg1);
+}
+nav ul {
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  list-style-type: none;
+  padding: 0;
+  width: 40%;
+}
+nav ul li {
+  margin: 0 10px;
+  padding: 0 10px;
+  width: 50%;
+  height: 40px;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  background-color: var(--bg1);
+  color: var(--purple2)
+}
+nav ul li a {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+nav ul li:hover {
+  background-color: var(--gray);
+}
+nav ul li:active {
+  background-color: red;
+}
+@media screen and (min-width: 1000px) {
+  nav .burger-label {
+    display: none;
+  }
+  nav ul {
+    display: flex;
+  }
+  
 }
