@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="el">
 
@@ -5,9 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Tools</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="{% static 'income_expenses/css/style.css' %}">
     <!-- We add an empty block, to load another style.css when the page is requested.(check invoices app) -->
-    <!-- {% block extra_css %}{% endblock %} -->
+    {% block extra_css %}{% endblock %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
@@ -34,20 +37,103 @@
                         <li>
                             <h1>Biztools</h1>
                         </li>
-                        <li>Καταστήματα</li>
-                        <li><a href="">telisk</a></li>
-                        <li>Αποσύνδεση</li>
+                        {% if user.is_authenticated %}
+                        <li>
+                            <form method="get" action="{% url 'income_expenses:index' %}">
+                            <select name="store" onchange="this.form.submit()">
+                                {% for s in stores_list %}
+                                <option value="{{ s.id }}" {% if s == current_store %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                                {% endif %}
+
+                            </select>
+                        </li>
+                        <li><a href="{% url 'income_expenses:stores' %}">{{ user.username }}</a></li>
+
+                        <li>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Αποσύνδεση</button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Σύνδεση</a></li>
+                {% endif %}
+                {% if messages %}
+                {% for message in messages %}
+                <div
+                    class="login-messages {% if message.tags == 'error' %}login-messages-error{% else %}login-messages-success{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
                     </ul>
                 </div>
 
                 <ul class="burger">
-                    <li><a href="#">Αρχική</a></li>
-                    <li><a href="#">καταστήματα</a></li>
+                    <li>
+                    <a href="{% url 'income_expenses:index' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Αρχική</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:analytics' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Αναλυτικά</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:prediction_with_ml' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Πρόβλεψη
+                    Εισοδημάτων</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:load_old_data' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Εισαγωγή
+                    Δεδομένων</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:export_data' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Εξαγωγή
+                    σε Excel</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'income_expenses:fixed_expenses' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Πάγια
+                    Έξοδα</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'invoices:invoice_reader' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Tιμολόγιο</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'ai_assistant:chat' %}">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Βοηθός ΑΙ</label>
+                    </a>
                 </ul>
             </nav>
         </header>
     </div>
 
+    <main>
+
+            {% block body %}{% endblock %}
+
+    </main>
+
+    <footer>
+        Biztools
+        <a href="{% url 'income_expenses:privacy_policy' %}">Πολιτική Απορρήτου</a>
+        <br>
+        <a href="{% url 'accounts:delete_account' %}">Διαγραφή λογαριασμού</a>
+    </footer>
+</body>
+
+</html>
 
     <!-- <nav role="navigation">
         <div id="menuToggle">
@@ -126,6 +212,3 @@
         <br>
         <a href="{% url 'accounts:delete_account' %}">Διαγραφή λογαριασμού</a>
     </footer> -->
-</body>
-
-</html>
