@@ -27,7 +27,25 @@ body
   min-height: 100vh;
   font-family: "Avenir Next", "Avenir", sans-serif;
 }
+.menu-container {
+  height: 70px;
+  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.menu-container .standard-menu {
+  display: grid;
+  /* width: 100%; */
+  list-style-type: none;
+  /* grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; */
+  grid-template-areas: 
+  'biztools username'
+  'store disconnect';
+}
 
+.menu
 nav {
   overflow: auto;
 }
@@ -63,7 +81,7 @@ nav .line.line3 {
 .burger-checkbox {
   display: none;
 }
-nav .burger-checkbox:checked ~ ul {
+nav .burger-checkbox:checked ~ .burger {
   display: flex;
   height: 100%;
   clear: left;
@@ -83,7 +101,7 @@ nav .burger-checkbox:checked ~ .burger-label .line1 {
 nav {
   background-color: var(--bg1);
 }
-nav ul {
+nav .burger {
   flex-direction: column;
   align-items: center;
   margin: 10px;
@@ -91,7 +109,7 @@ nav ul {
   padding: 0;
   width: 40%;
 }
-nav ul li {
+nav .burger li {
   margin: 0 10px;
   padding: 0 10px;
   width: 50%;
@@ -102,17 +120,39 @@ nav ul li {
   background-color: var(--bg1);
   color: var(--purple2)
 }
-nav ul li a {
+nav .burger li a {
   text-decoration: none;
   display: block;
   color: inherit;
 }
-nav ul li:hover {
+nav .burger li:hover {
   background-color: var(--gray);
 }
-nav ul li:active {
+nav .burger li:active {
   background-color: red;
 }
+.menu-container .standard-menu li:first-child {
+  grid-area: biztools;
+  height: 60px;
+}
+.menu-container .standard-menu li:nth-child(2) {
+  grid-area: store;
+}
+.menu-container .standard-menu li:nth-child(3) {
+  grid-area: username;
+}
+.menu-container .standard-menu li:last-child {
+  grid-area: disconnect;
+}
+
+
+
+
+
+
+
+
+
 @media screen and (min-width: 1000px) {
   nav .burger-label {
     display: none;
