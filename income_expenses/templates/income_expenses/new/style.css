@@ -28,7 +28,7 @@ body
   font-family: "Avenir Next", "Avenir", sans-serif;
 }
 .menu-container {
-  height: 70px;
+  height: 60px;
   
   display: flex;
   flex-direction: row;
@@ -36,20 +36,27 @@ body
 }
 .menu-container .standard-menu {
   display: grid;
-  /* width: 100%; */
+  width: 100%;
   list-style-type: none;
-  /* grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr; */
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
   grid-template-areas: 
   'biztools username'
   'store disconnect';
+  padding-top: 20px;
+  align-items: center;
+  color: var(--gray);
+}
+.standard-menu h1 {
+  margin: 0;
+  color: white;
 }
 
 .menu
 nav {
   overflow: auto;
 }
-nav ul {
+nav .burger {
   display: none;
 }
 nav .burger-label {
@@ -81,7 +88,7 @@ nav .line.line3 {
 .burger-checkbox {
   display: none;
 }
-nav .burger-checkbox:checked ~ .burger {
+nav:has(.burger-checkbox:checked) .burger {
   display: flex;
   height: 100%;
   clear: left;
@@ -117,7 +124,7 @@ nav .burger li {
   display: flex;
   align-items: left;
   justify-content: left;
-  background-color: var(--bg1);
+  background-color: transparent;
   color: var(--purple2)
 }
 nav .burger li a {
@@ -126,20 +133,22 @@ nav .burger li a {
   color: inherit;
 }
 nav .burger li:hover {
-  background-color: var(--gray);
+  background-color: transparent;
 }
 nav .burger li:active {
-  background-color: red;
+  color: var(--green2);
 }
 .menu-container .standard-menu li:first-child {
   grid-area: biztools;
-  height: 60px;
 }
 .menu-container .standard-menu li:nth-child(2) {
   grid-area: store;
 }
 .menu-container .standard-menu li:nth-child(3) {
   grid-area: username;
+}
+.menu-container .standard-menu a {
+  text-decoration: none;
 }
 .menu-container .standard-menu li:last-child {
   grid-area: disconnect;
@@ -157,8 +166,21 @@ nav .burger li:active {
   nav .burger-label {
     display: none;
   }
-  nav ul {
+  nav .burger {
     display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: -70px;
+    top: 80px;
+  }
+  .menu-container .standard-menu {
+    grid-template-columns: 1.5fr 0.5fr 1fr 1fr;
+    grid-template-areas: 
+    'biztools username disconnect store';
+    top: 10px;
+    align-items: center;
+    position: relative;
+    width: 40%;
   }
   
 }
