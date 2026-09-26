@@ -2,27 +2,19 @@
 {% block body %}
 {% load static %}
 
-<!-- Income - Expenses Buttons -->
-
-<a href="{% url 'income_expenses:submit_income' %}" class="btn-income">+ Νέο Έσοδο</a>
-<a href="{% url 'income_expenses:submit_expense' %}" class="btn-expense">+ Νέο Έξοδο</a>
-
-
 <!-- SUMMARY SECTION -->
-<div class="summary">
+<div class="summary-section">
 
     <!-- Date filter form -->
-     
     <form method="get" action="{% url 'income_expenses:index' %}">
-        <div class="fast-search">
-            <h3>Γρήγορη αναζήτηση</h3>
-            <input type="date" name="date_from" value="{{ date_from }}" class="date-input date-from">
-            <span>—</span>
-            <input type="date" name="date_to" value="{{ date_to }}" class="date-input date-to">
-            <button type="submit" class="btn-gray">Εφαρμογή</button>
-        </div>
+        <h3>Σύγκριση περιόδου με την ίδια περίοδο του προηγούμενου έτους</h3>
+        <span class="stat-label">Περίοδος</span>
+        <input type="date" name="date_from" value="{{ date_from }}" class="date-input">
+        <span class="filter-sep">—</span>
+        <input type="date" name="date_to" value="{{ date_to }}" class="date-input">
+        <button type="submit" class="btn btn-primary btn-sm">Εφαρμογή</button>
     </form>
-    
+
     <!-- Totals -->
     <div class="stats-grid">
 
@@ -96,8 +88,8 @@
     <!-- INCOME -->
     <div class="card">
         <div class="card-header">
-            <span class="income">↑ Έσοδα (Τελευταίες 10 καταχωρήσεις)</span>
-            
+            <span class="card-title">↑ Έσοδα (Τελευταίες 10 καταχωρήσεις)</span>
+            <a href="{% url 'income_expenses:submit_income' %}" class="btn btn-income btn-sm">+ Νέο</a>
         </div>
         <ul class="entry-list">
             {% for i in income_list %}
@@ -138,8 +130,8 @@
     <!-- EXPENSES -->
     <div class="card">
         <div class="card-header">
-            <span class="expenses">↓ Έξοδα (Τελευταίες 10 καταχωρήσεις)</span>
-            
+            <span class="card-title">↓ Έξοδα (Τελευταίες 10 καταχωρήσεις)</span>
+            <a href="{% url 'income_expenses:submit_expense' %}" class="btn btn-expense btn-sm">+ Νέο</a>
         </div>
         <ul class="entry-list">
             {% for i in expense_list %}

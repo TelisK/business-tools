@@ -197,3 +197,60 @@ nav .burger li:active {
   }
   
 }
+
+/* MAIN */
+main {
+  max-width: 60%;
+  margin: 0 auto;
+  position: relative;
+  /* text-align: center; */
+  margin-top: 60px;
+}
+.btn-income {
+  background-color: var(--green1);
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+}
+.btn-expense {
+  background-color: var(--purple1);
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+}
+.fast-search {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: 1fr 0.6fr 0.6fr;
+  grid-template-areas:
+  'h3 h3 h3'
+  'start dash end'
+  'apply apply apply';
+}
+.fast-search h3 {
+  grid-area: h3;
+}
+.fast-search .date-input {
+  background-color: var(--gray);
+  border-radius: 10px;
+  padding: 0 10px;
+}
+.fast-search .date-from {
+  grid-area: start;
+}
+.fast-search span {
+  grid-area: dash;
+}
+.fast-search .date-to {
+  grid-area: end;
+}
+.btn-gray {
+  grid-area: apply;
+  background-color: var(--gray);
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
+}

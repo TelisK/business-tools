@@ -1,7 +1,7 @@
 :root {
     --bg: rgba(0, 200, 120, 0.55);
     --bg2: rgba(0, 150, 90, 0.35);
-    /* --bg3: rgba(10, 14, 18, 0.2);  too dark*/
+    /* --bg3: rgba(10, 14, 18, 0.2); */
     --bg3: rgba(255, 255, 255, 0.415);
     --header:rgb(202, 214, 167);
     --purple1: #65358A;
@@ -196,4 +196,63 @@ nav .burger li:active {
     width: 40%;
   }
   
+}
+
+/* MAIN */
+main {
+  max-width: 60%;
+  margin: 0 auto;
+  position: relative;
+  /* text-align: center; */
+  margin-top: 60px;
+}
+.btn-income {
+  background-color: var(--green1);
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+}
+.btn-expense {
+  background-color: var(--purple1);
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+}
+.fast-search {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: 1fr 0.6fr 0.6fr;
+  grid-template-areas:
+  'h3 h3 h3'
+  'start dash end'
+  'apply apply apply';
+}
+.fast-search h3 {
+  grid-area: h3;
+}
+.fast-search .date-input {
+  background-color: #082a2b;
+  border-radius: 10px;
+  padding: 0 10px;
+  color: white;
+  color-scheme: dark;
+}
+.fast-search .date-from {
+  grid-area: start;
+}
+.fast-search span {
+  grid-area: dash;
+}
+.fast-search .date-to {
+  grid-area: end;
+}
+.btn-gray {
+  grid-area: apply;
+  background-color: #082a2b;
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
 }
