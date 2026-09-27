@@ -9,6 +9,7 @@
     --green1: #1D6B50;
     --green2: #164A3A;
     --gray: #92989F;
+    --buttons: #082a2b;
 }
 /* NAV */
 body
@@ -198,7 +199,10 @@ nav .burger li:active {
   
 }
 
+
+
 /* MAIN */
+/* index.html */
 main {
   max-width: 60%;
   margin: 0 auto;
@@ -210,14 +214,14 @@ main {
   background-color: var(--green1);
   padding: 5px 10px;
   border-radius: 10px;
-  color: white;
+  color: var(--header);
   text-decoration: none;
 }
 .btn-expense {
   background-color: var(--purple1);
   padding: 5px 10px;
   border-radius: 10px;
-  color: white;
+  color: var(--gray);
   text-decoration: none;
 }
 .fast-search {
@@ -234,10 +238,10 @@ main {
   grid-area: h3;
 }
 .fast-search .date-input {
-  background-color: #082a2b;
+  background-color: var(--buttons);
   border-radius: 10px;
   padding: 0 10px;
-  color: white;
+  color: var(--gray);
   color-scheme: dark;
 }
 .fast-search .date-from {
@@ -254,5 +258,53 @@ main {
   background-color: #082a2b;
   padding: 5px 10px;
   border-radius: 10px;
-  color: white;
+  color: var(--gray);
 }
+.stats-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-areas: 
+  'income-card'
+  'expenses-result-card'
+  'analyse-card';
+  gap: 10px;
+  
+}
+.stats-grid h4 {
+  color: var(--green2);
+}
+.income-card {
+  grid-area: income-card;
+}
+.expenses-result-card {
+  grid-area: expenses-result-card;
+}
+.analyse-card {
+  grid-area: analyse-card;
+}
+.income-card, .expenses-result-card, .analyse-card {
+  background-color: var(--gray);
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+}
+.text-success {
+  color: var(--green1);
+}
+.text-danger {
+  color: var(--purple1);
+}
+
+/* PREDICTION */
+
+.prediction {
+  margin-top: 20px;
+  background-color: #022625;
+  color: var(--gray);
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* LATEST TRANSACTIONS */

@@ -16,6 +16,7 @@ import plotly.express as px
 from django.conf import settings
 from decimal import Decimal
 import logging
+from itertools import chain #for connecting 2 different querysets.
 
 logger = logging.getLogger(__name__)
 
@@ -176,14 +177,13 @@ def index(request):
     expense_list = Expenses.objects.filter(store=store).order_by('-day')
     stores_list = Store.objects.filter(user=request.user)
 
-    # paginator_income = Paginator(income_list, 15)
-    # paginator_expense = Paginator(expense_list, 15)
-    # income_page = request.GET.get('income_page', 1)
-    # expense_page = request.GET.get('expense_page', 1)
-    # income_obj = paginator_income.get_page(income_page)
-    # expense_obj = paginator_expense.get_page(expense_page)
     income_obj = income_list[:10]
     expense_obj = expense_list[:10]
+
+    combined = sorted(chain(income_obj, expense_obj),
+                      key=lambda x:x.day, reverse=True
+                      )
+
 
     last_year_sum_income_result, last_year_income_totals, last_year_YTD_result, last_year_YTD_totals = \
         last_years_income_comparison(store,date_from,date_to)
@@ -219,6 +219,7 @@ def index(request):
         'diff_by_percentage':diff_by_percentage,
         'diff_by_percentage_YTD':diff_by_percentage_YTD,
         'next_day_prediction':next_day_prediction,
+        'combined':combined,
     }
     return render(request, 'income_expenses/index.html', context=context_to_html)
 

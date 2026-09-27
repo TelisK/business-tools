@@ -26,54 +26,52 @@
     <!-- Totals -->
     <div class="stats-grid">
 
-        <div class="stat-card">
-            <div class="stat-label">Τζίρος Τρέχων Μήνα</div>
-            <div class="stat-value income">{{ sum_income_result }} €</div>
-            <div class="stat-label">Τζίρος Τρέχων Έτους</div>
-            <div class="stat-value income">{{ YTD_result }} €</div>
-            <div class="stat-label stat-label-sm">Διαφορά με πέρυσι ανα Μήνα / Έτος</div>
-            <div class="stat-diff">
+        <div class="income-card">
+            <div class="heading">Τζίρος Τρέχων Μήνα</div>
+            <div class="text-success">{{ sum_income_result }} €</div>
+            <div class="heading">Τζίρος Τρέχων Έτους</div>
+            <div class="text-success">{{ YTD_result }} €</div>
+            <div class="heading">Διαφορά με πέρυσι ανα Μήνα / Έτος</div>
+            <div>
                 <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
                     {{ diff_by_percentage }}%
                 </span>
-                <span class="stat-diff-sep"> / </span>
+                <span> / </span>
                 <span class="{% if diff_by_percentage_YTD >= 0 %}text-success{% else %}text-danger{% endif %}">
                     {{ diff_by_percentage_YTD }}%
                 </span>
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Σύνολο Εξόδων</div>
-            <div class="stat-value expense">{{ sum_expenses_result }} €</div>
+        <div class="expenses-result-card">
+            <div class="heading">Σύνολο Εξόδων</div>
+            <div class="text-danger">{{ sum_expenses_result }} €</div>
+            <br>
+            <div class="heading">Αποτέλεσμα</div>
+            <div>{{ net_result }} €</div>
         </div>
 
-        <div class="stat-card stat-card-dark">
-            <div class="stat-label">Αποτέλεσμα</div>
-            <div class="stat-value">{{ net_result }} €</div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-label margin">Ανάλυση Εσόδων</div>
-            <div class="stat-breakdown">
-                <div class="breakdown-row">
-                    <span class="label">Μετρητά</span>
+        <div class="analyse-card">
+            <div class="heading">Ανάλυση Εσόδων</div>
+            <div>
+                <div class="cash-usage">
+                    <span class="label">Μετρητά:</span>
                     <span class="value">{{ income_totals.total_cash }} €</span>
                 </div>
-                <div class="breakdown-row">
-                    <span class="label">POS</span>
+                <div class="pos-usage">
+                    <span class="label">POS:</span>
                     <span class="value">{{ income_totals.total_pos }} €</span>
                 </div>
-                <div class="breakdown-row">
-                    <span class="label">Κατάθεση</span>
+                <div class="deposit-usage">
+                    <span class="label">Κατάθεση:</span>
                     <span class="value">{{ income_totals.total_deposit }} €</span>
                 </div>
-                <div class="breakdown-row">
-                    <span class="label">Επιταγή</span>
+                <div class="check-usage">
+                    <span class="label">Επιταγή:</span>
                     <span class="value">{{ income_totals.total_check }} €</span>
                 </div>
-                <div class="breakdown-row">
-                    <span class="label">Άλλο</span>
+                <div class="other-usage">
+                    <span class="label">Άλλο:</span>
                     <span class="value">{{ income_totals.total_other }} €</span>
                 </div>
             </div>
@@ -82,101 +80,47 @@
     </div>
 </div>
 
-<div>
+<div class="prediction">
+    
+    <div>Πρόβλεψη για τη σημερινή είσπραξη:</div>
     {% if next_day_prediction %}
-    <p>Πρόβλεψη για τη σημερινή είσπραξη: {{ next_day_prediction }} €</p>
+    <p> {{ next_day_prediction }} €</p>
     {% else %}
-    <p>Πρόβλεψη για τη σημερινή είσπραξη: Δέν υπάρχουν δεδομένα</p>
+    <p>Δέν υπάρχουν δεδομένα</p>
     {% endif %}
 </div>
 
-<!-- LISTS SECTION -->
-<div class="lists-grid">
-
-    <!-- INCOME -->
-    <div class="card">
-        <div class="card-header">
-            <span class="income">↑ Έσοδα (Τελευταίες 10 καταχωρήσεις)</span>
-            
-        </div>
-        <ul class="entry-list">
-            {% for i in income_list %}
-            <li class="entry-item">
-                <div class="entry-row">
-                    <a href="{% url 'income_expenses:detail' i.id %}" class="entry-link">
+<!-- Latest Transactions -->
+<div class="lists">
+    <div class="heading">
+        <ul>
+            {% for i in combined %}
+            <li>
+                {% if i.income_sum %}
+                <a href="{% url 'income_expenses:detail' i.id %}">
+                    <div>
+                    <span>ΕΣΟΔΟ: {{ i.day|date:"d/m/Y" }}</span>
+                    {% if i.comments %}
+                    <div>{{ i.comments }}</div>
+                    {% endif %}
+                  </div>
+                 <span>{{ i.income_sum }} €</span>
+                </a>
+                {% else %}
+                    <a href="{% url 'income_expenses:expenses_detail' i.id %}">
                         <div>
-                            <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
+                            <span>ΕΞΟΔΟ:{{ i.day|date:"d/m/Y" }}</span>
                             {% if i.comments %}
-                            <div class="entry-comment">{{ i.comments }}</div>
+                            <div>{{ i.comments }}</div>
                             {% endif %}
                         </div>
-                        <span class="entry-amount amount-income">{{ i.income_sum }} €</span>
+                        <span>{{ i.amount }} €</span>
                     </a>
-                    <div class="entry-actions">
-                        <a href="{% url 'income_expenses:income_update' i.id %}" class="btn btn-edit">Επεξ.</a>
-                        <a href="{% url 'income_expenses:income_delete' i.id %}" class="btn btn-danger">Διαγρ.</a>
-                    </div>
-                </div>
+                    {% endif %}
             </li>
-            {% empty %}
-            <li class="entry-empty">Δεν υπάρχουν εγγραφές</li>
-            {% endfor %}
+             {% endfor %}
         </ul>
-        {% if income_list.has_other_pages %}
-        <div class="pagination-bar">
-            {% if income_list.has_previous %}
-                <a href="?income_page={{ income_list.previous_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">←</a>
-            {% endif %}
-            <span class="pagination-info">{{ income_list.number }} / {{ income_list.paginator.num_pages }}</span>
-            {% if income_list.has_next %}
-                <a href="?income_page={{ income_list.next_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">→</a>
-            {% endif %}
-        </div>
-        {% endif %}
     </div>
-
-    <!-- EXPENSES -->
-    <div class="card">
-        <div class="card-header">
-            <span class="expenses">↓ Έξοδα (Τελευταίες 10 καταχωρήσεις)</span>
-            
-        </div>
-        <ul class="entry-list">
-            {% for i in expense_list %}
-            <li class="entry-item">
-                <div class="entry-row">
-                    <a href="{% url 'income_expenses:expenses_detail' i.id %}" class="entry-link">
-                        <div>
-                            <span class="entry-date">{{ i.day|date:"d/m/Y" }}</span>
-                            {% if i.comments %}
-                            <div class="entry-comment">{{ i.comments }}</div>
-                            {% endif %}
-                        </div>
-                        <span class="entry-amount amount-expense">{{ i.amount }} €</span>
-                    </a>
-                    <div class="entry-actions">
-                        <a href="{% url 'income_expenses:expense_update' i.id %}" class="btn btn-edit">Επεξ.</a>
-                        <a href="{% url 'income_expenses:expense_delete' i.id %}" class="btn btn-danger">Διαγρ.</a>
-                    </div>
-                </div>
-            </li>
-            {% empty %}
-            <li class="entry-empty">Δεν υπάρχουν εγγραφές</li>
-            {% endfor %}
-        </ul>
-        {% if expense_list.has_other_pages %}
-        <div class="pagination-bar">
-            {% if expense_list.has_previous %}
-                <a href="?expense_page={{ expense_list.previous_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">←</a>
-            {% endif %}
-            <span class="pagination-info">{{ expense_list.number }} / {{ expense_list.paginator.num_pages }}</span>
-            {% if expense_list.has_next %}
-                <a href="?expense_page={{ expense_list.next_page_number }}&date_from={{ date_from }}&date_to={{ date_to }}" class="btn btn-secondary btn-sm">→</a>
-            {% endif %}
-        </div>
-        {% endif %}
-    </div>
-
 </div>
 
 {% endblock %}
