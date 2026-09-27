@@ -91,30 +91,29 @@
 </div>
 
 <!-- Latest Transactions -->
-<div class="lists">
+<div class="list">
     <div class="heading">
         <ul>
             {% for i in combined %}
-            <li>
+            <li class="{% if i.income_sum %}heading-btn-income{% else %}heading-btn-expense{% endif %}">
                 {% if i.income_sum %}
                 <a href="{% url 'income_expenses:detail' i.id %}">
                     <div>
-                    <span>ΕΣΟΔΟ: {{ i.day|date:"d/m/Y" }}</span>
+                    <span>ΕΣΟΔΟ : {{ i.day|date:"d/m/Y" }}  -  {{ i.income_sum }} €</span>
                     {% if i.comments %}
                     <div>{{ i.comments }}</div>
                     {% endif %}
                   </div>
-                 <span>{{ i.income_sum }} €</span>
+                 
                 </a>
                 {% else %}
                     <a href="{% url 'income_expenses:expenses_detail' i.id %}">
                         <div>
-                            <span>ΕΞΟΔΟ:{{ i.day|date:"d/m/Y" }}</span>
+                            <span>ΕΞΟΔΟ : {{ i.day|date:"d/m/Y" }}  -  {{ i.amount }} €</span>
                             {% if i.comments %}
                             <div>{{ i.comments }}</div>
                             {% endif %}
                         </div>
-                        <span>{{ i.amount }} €</span>
                     </a>
                     {% endif %}
             </li>

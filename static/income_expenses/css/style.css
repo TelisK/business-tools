@@ -295,6 +295,9 @@ main {
 .text-danger {
   color: var(--purple1);
 }
+
+/* PREDICTION */
+
 .prediction {
   margin-top: 20px;
   background-color: #022625;
@@ -304,3 +307,34 @@ main {
   text-align: center;
 }
 
+/* LATEST TRANSACTIONS */
+.heading {
+  margin-top: 20px;
+  background-color: var(--gray);
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px;
+}
+.heading ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.heading li {
+  margin: 10px 0;
+  padding: 5px;
+  border: solid 1px black;
+  border-radius: 10px;
+}
+.heading-btn-income {
+  background-color: var(--green1);
+  color: var(--header);
+}
+.heading-btn-expense {
+  background-color: var(--purple1);
+  color: var(--gray);
+}
+.heading li a {
+  text-decoration: none;
+  /* color: var(--green1); */
+}

@@ -10,6 +10,7 @@
     --green2: #164A3A;
     --gray: #92989F;
     --buttons: #082a2b;
+    --text: rgba(209, 229, 211, 0.75);
 }
 /* NAV */
 body
@@ -204,7 +205,7 @@ nav .burger li:active {
 /* MAIN */
 /* index.html */
 main {
-  max-width: 60%;
+  max-width: 80%;
   margin: 0 auto;
   position: relative;
   /* text-align: center; */
@@ -214,14 +215,14 @@ main {
   background-color: var(--green1);
   padding: 5px 10px;
   border-radius: 10px;
-  color: var(--header);
+  color: var(--text);
   text-decoration: none;
 }
 .btn-expense {
   background-color: var(--purple1);
   padding: 5px 10px;
   border-radius: 10px;
-  color: var(--gray);
+  color: var(--text);
   text-decoration: none;
 }
 .fast-search {
@@ -301,10 +302,47 @@ main {
 .prediction {
   margin-top: 20px;
   background-color: #022625;
-  color: var(--gray);
+  color: var(--text);
   padding: 10px;
   border-radius: 10px;
   text-align: center;
 }
 
 /* LATEST TRANSACTIONS */
+.heading {
+  margin-top: 20px;
+  background-color: var(--gray);
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px;
+}
+.heading ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.heading li {
+  margin: 10px 0;
+  padding: 5px;
+  border-radius: 10px;
+}
+.heading-btn-income {
+  background-color: var(--green1);
+}
+.heading-btn-income a {
+  color: var(--text);
+  text-decoration: none;
+}
+.heading-btn-expense {
+  background-color: var(--purple1);  
+}
+.heading-btn-expense a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+@media screen and (min-width: 1000px) {
+  main {
+    max-width: 40%;
+  }
+}
