@@ -10,6 +10,8 @@
     --green2: #164A3A;
     --gray: #92989F;
     --buttons: #082a2b;
+    --text: rgba(209, 229, 211, 0.75);
+    --black: #0a0a0a;
 }
 /* NAV */
 body
@@ -53,6 +55,22 @@ body
   color: var(--header);
   font-weight: 200;
 }
+.standard-menu button {
+  padding: 5px;
+  border-radius: 25px;
+  background-color: var(--gray);
+}
+.standard-menu select {
+  padding: 5px;
+  border-radius: 25px;
+  background-color: var(--gray);
+}
+.connect-button {
+  padding: 5px;
+  border-radius: 25px;
+  background-color: var(--gray);
+  text-align: center;
+}
 
 .menu
 nav {
@@ -71,7 +89,7 @@ nav .burger-label {
   flex: row;
 }
 nav .line {
-  background: white;
+  background: var(--text);
   display: block;
   height: 2px;
   position: absolute;
@@ -127,7 +145,7 @@ nav .burger li {
   align-items: left;
   justify-content: left;
   background-color: transparent;
-  color: white
+  color: var(--text)
 }
 nav .burger li a {
   text-decoration: none;
@@ -173,6 +191,7 @@ nav .burger li:active {
 
 
 
+
 @media screen and (min-width: 1000px) {
   body {
     font-size: 1.3rem;
@@ -204,7 +223,7 @@ nav .burger li:active {
 /* MAIN */
 /* index.html */
 main {
-  max-width: 60%;
+  max-width: 80%;
   margin: 0 auto;
   position: relative;
   /* text-align: center; */
@@ -214,14 +233,14 @@ main {
   background-color: var(--green1);
   padding: 5px 10px;
   border-radius: 10px;
-  color: var(--header);
+  color: var(--text);
   text-decoration: none;
 }
 .btn-expense {
   background-color: var(--purple1);
   padding: 5px 10px;
   border-radius: 10px;
-  color: var(--gray);
+  color: var(--text);
   text-decoration: none;
 }
 .fast-search {
@@ -283,6 +302,12 @@ main {
 .analyse-card {
   grid-area: analyse-card;
 }
+.analyse ~ div {
+  padding: 40px;
+}
+.analyse label {
+  color: red;
+}
 .income-card, .expenses-result-card, .analyse-card {
   background-color: var(--gray);
   padding: 10px;
@@ -301,7 +326,7 @@ main {
 .prediction {
   margin-top: 20px;
   background-color: #022625;
-  color: var(--gray);
+  color: var(--text);
   padding: 10px;
   border-radius: 10px;
   text-align: center;
@@ -314,6 +339,8 @@ main {
   border-radius: 10px;
   text-align: center;
   padding: 10px;
+  color: var(--text);
+  font-variant: small-caps;
 }
 .heading ul {
   list-style-type: none;
@@ -322,19 +349,40 @@ main {
 }
 .heading li {
   margin: 10px 0;
-  padding: 5px;
-  border: solid 1px black;
+  padding: 10px 5px;
   border-radius: 10px;
 }
 .heading-btn-income {
   background-color: var(--green1);
-  color: var(--header);
+}
+.heading-btn-income a {
+  color: var(--text);
+  text-decoration: none;
 }
 .heading-btn-expense {
-  background-color: var(--purple1);
-  color: var(--gray);
+  background-color: var(--purple1);  
 }
-.heading li a {
+.heading-btn-expense a {
+  color: var(--text);
   text-decoration: none;
-  /* color: var(--green1); */
 }
+.heading-btn-neutral {
+  background-color: var(--gray);
+  border: solid black 1px;
+  border-radius: 10px;
+}
+.heading-btn-result {
+  background-color: var(--black);
+  /* border: solid black 1px; */
+  border-radius: 10px;
+  color: var(--text);
+}
+
+@media screen and (min-width: 1000px) {
+  main {
+    max-width: 40%;
+  }
+}
+
+
+/*  */

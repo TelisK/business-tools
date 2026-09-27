@@ -47,6 +47,7 @@
                                 {% endif %}
 
                             </select>
+                            </form>
                         </li>
                         {% if user.is_authenticated %}
                         <li><a href="{% url 'income_expenses:stores' %}">{{ user.username }}</a></li>
@@ -58,7 +59,7 @@
                     </form>
                 </li>
                 {% else %}
-                <li><a href="{% url 'login' %}">Σύνδεση</a></li>
+                <li class="connect-button"><a href="{% url 'login' %}">Σύνδεση</a></li>
                 {% endif %}
                 {% if messages %}
                 {% for message in messages %}

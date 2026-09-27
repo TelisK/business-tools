@@ -27,50 +27,56 @@
     <div class="stats-grid">
 
         <div class="income-card">
-            <div class="heading">Τζίρος Τρέχων Μήνα</div>
-            <div class="text-success">{{ sum_income_result }} €</div>
-            <div class="heading">Τζίρος Τρέχων Έτους</div>
-            <div class="text-success">{{ YTD_result }} €</div>
-            <div class="heading">Διαφορά με πέρυσι ανα Μήνα / Έτος</div>
-            <div>
-                <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
-                    {{ diff_by_percentage }}%
-                </span>
-                <span> / </span>
-                <span class="{% if diff_by_percentage_YTD >= 0 %}text-success{% else %}text-danger{% endif %}">
-                    {{ diff_by_percentage_YTD }}%
-                </span>
+            <div class="heading heading-btn-income">Τζίρος Τρέχων Μήνα
+                <div>{{ sum_income_result }} €</div>
+            </div>
+            
+            <div class="heading heading-btn-income">Τζίρος Τρέχων Έτους
+                <div>{{ YTD_result }} €</div>
+            </div>
+            <div class="heading heading-btn-neutral">Διαφορά με πέρυσι ανα Μήνα / Έτος
+                <div>
+                    <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        {{ diff_by_percentage }}%
+                    </span>
+                    <span> / </span>
+                    <span class="{% if diff_by_percentage_YTD >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        {{ diff_by_percentage_YTD }}%
+                    </span>
+                </div>
             </div>
         </div>
 
         <div class="expenses-result-card">
-            <div class="heading">Σύνολο Εξόδων</div>
-            <div class="text-danger">{{ sum_expenses_result }} €</div>
+            <div class="heading heading-btn-expense">Σύνολο Εξόδων
+                <div>{{ sum_expenses_result }} €</div>
+            </div>
             <br>
-            <div class="heading">Αποτέλεσμα</div>
-            <div>{{ net_result }} €</div>
+            <div class="heading heading-btn-result">Αποτέλεσμα
+                <div>{{ net_result }} €</div>
+            </div>
         </div>
 
         <div class="analyse-card">
             <div class="heading">Ανάλυση Εσόδων</div>
-            <div>
-                <div class="cash-usage">
+            <div class="analyse">
+                <div>
                     <span class="label">Μετρητά:</span>
                     <span class="value">{{ income_totals.total_cash }} €</span>
                 </div>
-                <div class="pos-usage">
+                <div>
                     <span class="label">POS:</span>
                     <span class="value">{{ income_totals.total_pos }} €</span>
                 </div>
-                <div class="deposit-usage">
+                <div>
                     <span class="label">Κατάθεση:</span>
                     <span class="value">{{ income_totals.total_deposit }} €</span>
                 </div>
-                <div class="check-usage">
+                <div>
                     <span class="label">Επιταγή:</span>
                     <span class="value">{{ income_totals.total_check }} €</span>
                 </div>
-                <div class="other-usage">
+                <div>
                     <span class="label">Άλλο:</span>
                     <span class="value">{{ income_totals.total_other }} €</span>
                 </div>
@@ -99,7 +105,7 @@
                 {% if i.income_sum %}
                 <a href="{% url 'income_expenses:detail' i.id %}">
                     <div>
-                    <span>ΕΣΟΔΟ : {{ i.day|date:"d/m/Y" }}  -  {{ i.income_sum }} €</span>
+                    <span>Έσοδο : {{ i.day|date:"d/m/Y" }}  -  {{ i.income_sum }} €</span>
                     {% if i.comments %}
                     <div>{{ i.comments }}</div>
                     {% endif %}
@@ -109,7 +115,7 @@
                 {% else %}
                     <a href="{% url 'income_expenses:expenses_detail' i.id %}">
                         <div>
-                            <span>ΕΞΟΔΟ : {{ i.day|date:"d/m/Y" }}  -  {{ i.amount }} €</span>
+                            <span>Έξοδο : {{ i.day|date:"d/m/Y" }}  -  {{ i.amount }} €</span>
                             {% if i.comments %}
                             <div>{{ i.comments }}</div>
                             {% endif %}
