@@ -50,7 +50,7 @@
                             </form>
                         </li>
                         {% if user.is_authenticated %}
-                        <li><a href="{% url 'income_expenses:stores' %}">{{ user.username }}</a></li>
+                        <li class="username"><a href="{% url 'income_expenses:stores' %}">{{ user.username }}</a></li>
 
                         <li>
                     <form method="post" action="{% url 'logout' %}" class="logout">

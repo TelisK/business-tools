@@ -34,7 +34,7 @@
             <div class="heading heading-btn-income">Τζίρος Τρέχων Έτους
                 <div>{{ YTD_result }} €</div>
             </div>
-            <div class="heading heading-btn-neutral">Διαφορά με πέρυσι ανα Μήνα / Έτος
+            <div class="heading-btn-neutral">Διαφορά με πέρυσι ανα Μήνα / Έτος
                 <div>
                     <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
                         {{ diff_by_percentage }}%
@@ -48,11 +48,11 @@
         </div>
 
         <div class="expenses-result-card">
-            <div class="heading heading-btn-expense">Σύνολο Εξόδων
+            <div class="heading-expense heading-btn-expense">Σύνολο Εξόδων
                 <div>{{ sum_expenses_result }} €</div>
             </div>
             <br>
-            <div class="heading heading-btn-result">Αποτέλεσμα
+            <div class="heading-btn-result">Αποτέλεσμα
                 <div>{{ net_result }} €</div>
             </div>
         </div>
@@ -107,7 +107,7 @@
                     <div>
                     <span>Έσοδο : {{ i.day|date:"d/m/Y" }}  -  {{ i.income_sum }} €</span>
                     {% if i.comments %}
-                    <div>{{ i.comments }}</div>
+                    <div class="comments">{{ i.comments }}</div>
                     {% endif %}
                   </div>
                  
@@ -117,7 +117,7 @@
                         <div>
                             <span>Έξοδο : {{ i.day|date:"d/m/Y" }}  -  {{ i.amount }} €</span>
                             {% if i.comments %}
-                            <div>{{ i.comments }}</div>
+                            <div class="comments">{{ i.comments }}</div>
                             {% endif %}
                         </div>
                     </a>
