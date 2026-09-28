@@ -1,32 +1,34 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<div class="page-header">
-    <div>
-        <h1>Καταστήματα</h1>
-        <p>Διαχείριση καταστημάτων</p>
+<div class="stores-container">
+    <div class="page-header">
+        <div>
+            <h1>Καταστήματα</h1>
+            <p>Διαχείριση καταστημάτων</p>
+        </div>
+        <a href="{% url 'income_expenses:add_store' %}" class="btn btn-primary">+ Νέο Κατάστημα</a>
     </div>
-    <a href="{% url 'income_expenses:add_store' %}" class="btn btn-primary">+ Νέο Κατάστημα</a>
-</div>
 
-<div class="card">
-    <ul class="entry-list">
-        {% for store in stores_list %}
-        <li class="entry-item">
-            <div class="entry-row">
-                <span>{{ store.name }}</span>
-                <div class="entry-actions">
-                    <a href="{% url 'income_expenses:update_store' store.id %}" class="btn btn-edit">Επεξεργασία</a>
-                    {% if stores_list.count > 1 %}
-                    <a href="{% url 'income_expenses:delete_store' store.id %}" class="btn btn-danger">Διαγραφή</a>
-                    {% endif %}
+    <div class="stores">
+        <ul class="store-list">
+            {% for store in stores_list %}
+            <li class="entry-item">
+                <div class="entry-row">
+                    <span>{{ store.name }}</span>
+                    <div class="entry-actions">
+                        <a href="{% url 'income_expenses:update_store' store.id %}" class="btn btn-edit">Επεξεργασία</a>
+                        {% if stores_list.count > 1 %}
+                        <a href="{% url 'income_expenses:delete_store' store.id %}" class="btn btn-danger">Διαγραφή</a>
+                        {% endif %}
 
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
 
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
 {% endblock %}

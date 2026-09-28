@@ -1,34 +1,31 @@
 :root {
-    --bg: rgba(0, 200, 120, 0.55);
-    --bg2: rgba(0, 150, 90, 0.35);
-    /* --bg3: rgba(10, 14, 18, 0.2); */
-    --bg3: rgba(255, 255, 255, 0.415);
+    --bg-main: #eef1f0;
+    --bg-dark: #164A3A;
     --header:rgb(202, 214, 167);
-    --purple1: #65358A;
-    --purple2: #43245C;
+    --purple1: #7651A5;
+    --purple2: #5D4085;
+    --purple-light: #EEE7F6;
     --green1: #1D6B50;
     --green2: #164A3A;
+    --green-light: #dff2eb;
     --gray: #92989F;
     --buttons: #082a2b;
     --text: rgba(209, 229, 211, 0.75);
     --black: #0a0a0a;
+    --border: #d5ddda;
+    --cards: #f8faf9;
 }
 /* NAV */
 body
 {
   margin: 0;
   padding: 0;
-  
-  /* make it look decent enough */
-  background-color: #0a0e12; /* το πολύ σκούρο background γύρω γύρω */
-  background-image: radial-gradient(
-    circle at center,
-    var(--bg) 0%,   /* πράσινο στο κέντρο */
-    var(--bg2) 25%,  /* σταδιακά πιο αχνό */
-    var(--bg3) 80%      /* διαλύεται στο σκοτεινό background */
-  );
+  background: var(--bg-main);
   min-height: 100vh;
   font-family: "Avenir Next", "Avenir", sans-serif;
+}
+.container nav {
+  background: var(--bg-dark);
 }
 .menu-container {
   height: 60px;
@@ -193,8 +190,8 @@ nav .burger li:active {
 
 
 @media screen and (min-width: 1000px) {
-  body {
-    font-size: 1.3rem;
+  * {
+    font-size: 1.2rem;
   }
   nav .burger-label {
     display: none;
@@ -205,6 +202,12 @@ nav .burger li:active {
     position: fixed;
     left: -130px;
     top: 80px;
+  }
+  nav .burger li {
+    color: var(--bg-dark);
+  }
+  nav .burger li:hover {
+    color: var(--gray);
   }
   .menu-container .standard-menu {
     grid-template-columns: 1.5fr 0.5fr 1fr 1fr;
@@ -255,13 +258,14 @@ main {
 }
 .fast-search h3 {
   grid-area: h3;
+  color: var(--bg-dark);
 }
 .fast-search .date-input {
-  background-color: var(--buttons);
+  background-color: var(--bg-main);
   border-radius: 10px;
   padding: 0 10px;
-  color: var(--gray);
-  color-scheme: dark;
+  color: var(--bg-dark);
+  /* color-scheme: dark; */
 }
 .fast-search .date-from {
   grid-area: start;
@@ -274,10 +278,10 @@ main {
 }
 .btn-gray {
   grid-area: apply;
-  background-color: #082a2b;
+  background-color: var(--border);
   padding: 5px 10px;
   border-radius: 10px;
-  color: var(--gray);
+  color: var(--bg-dark);
 }
 .stats-grid {
   margin-top: 10px;
@@ -319,10 +323,11 @@ main {
   
 }
 .income-card, .expenses-result-card, .analyse-card {
-  background-color: var(--gray);
+  background-color: var(--cards);
   padding: 10px;
   text-align: center;
-  border-radius: 10px;
+  border: solid 1px var(--border);
+  border-radius: 8px;
 }
 .text-success {
   color: var(--green1);
@@ -345,8 +350,9 @@ main {
 /* LATEST TRANSACTIONS */
 .heading {
   margin-top: 20px;
-  background-color: var(--gray);
-  border-radius: 10px;
+  background-color: var(--cards);
+  border: 1px solid var(--border);
+  border-radius: 8px;
   text-align: center;
   padding: 10px;
   color: var(--text);
@@ -396,3 +402,12 @@ main {
 
 
 /* stores.html */
+.stores-container {
+  background-color: var(--bg-main);
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+}
+.stores-container ul {
+  list-style-type: none;
+}

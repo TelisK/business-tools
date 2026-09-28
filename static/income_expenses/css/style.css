@@ -282,7 +282,7 @@ main {
 .stats-grid {
   margin-top: 10px;
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: 1fr 0.8fr 0.8fr;
   grid-template-areas: 
   'income-card'
   'expenses-result-card'
@@ -302,11 +302,21 @@ main {
 .analyse-card {
   grid-area: analyse-card;
 }
-.analyse ~ div {
-  padding: 40px;
+.analyse {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 50%;
+  margin: 0 auto;
+  color: var(--green2);
 }
-.analyse label {
-  color: red;
+.analyse div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.analyse .label {
+  
 }
 .income-card, .expenses-result-card, .analyse-card {
   background-color: var(--gray);
@@ -385,4 +395,7 @@ main {
 }
 
 
-/*  */
+/* stores.html */
+.stores-container {
+  background-color: var(--gray);
+}
