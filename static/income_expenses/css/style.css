@@ -51,9 +51,6 @@ body
   color: var(--header);
   font-weight: 200;
 }
-.standard-menu .username {
-  color: var(--green-light);
-}
 .standard-menu button {
   padding: 5px;
   border-radius: 25px;
@@ -144,7 +141,8 @@ nav .burger li {
   align-items: left;
   justify-content: left;
   background-color: transparent;
-  color: var(--green-light)
+  color: var(--green-light);
+  transition: color 0.3s ease;
 }
 nav .burger li a {
   text-decoration: none;
@@ -156,7 +154,7 @@ nav .burger li:hover {
   color: var(--green1);
 }
 nav .burger li:active {
-  color: var(--green2);
+  color: var(--black);
 }
 .menu-container .standard-menu li:first-child {
   grid-area: biztools;
@@ -169,14 +167,14 @@ nav .burger li:active {
 }
 .menu-container .standard-menu a {
   text-decoration: none;
-  color: #232323;
+  color: var(--green-light);
   transition: color 0.3s ease;
 }
 .menu-container .standard-menu a:hover {
   color: var(--green1);
 }
 .menu-container .standard-menu a:active {
-  color: var(--green2);
+  color: var(--black);
 }
 .menu-container .standard-menu li:last-child {
   grid-area: disconnect;
@@ -189,11 +187,9 @@ nav .burger li:active {
 
 
 
-
-
 @media screen and (min-width: 1000px) {
   * {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   nav .burger-label {
     display: none;
@@ -207,6 +203,7 @@ nav .burger li:active {
   }
   nav .burger li {
     color: var(--bg-dark);
+    transition: color 0.3s ease;
   }
   nav .burger li:hover {
     color: var(--gray);
@@ -435,7 +432,27 @@ main {
 
 @media screen and (min-width: 1000px) {
   main {
-    max-width: 40%;
+    max-width: 50%;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas: 
+    'income-card expenses-result-card analyse-card';
+    align-items: start;
+    height: auto;
+  }
+  .stats-grid .income-card {
+    grid-area: income-card;
+  }
+  .stats-grid .expenses-result-card {
+    grid-area: expenses-result-card;
+  }
+  .stats-card .analyse-card {
+    grid-area: analyse-card;
+  }
+  .analyse {
+  max-width: 90%;
   }
 }
 

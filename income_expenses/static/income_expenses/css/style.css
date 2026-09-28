@@ -189,7 +189,7 @@ nav .burger li:active {
 
 @media screen and (min-width: 1000px) {
   * {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   nav .burger-label {
     display: none;
@@ -434,7 +434,25 @@ main {
   main {
     max-width: 50%;
   }
-  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: min-content;
+    grid-template-areas: 
+    'income-card expenses-result-card analyse-card';
+  }
+  .stats-grid .income-card {
+    grid-area: income-card;
+  }
+  .stats-grid .expenses-result-card {
+    grid-area: expenses-result-card;
+  }
+  .stats-card .analyse-card {
+    grid-area: analyse-card;
+  }
+  .analyse {
+  max-width: 90%;
+  }
 }
 
 
