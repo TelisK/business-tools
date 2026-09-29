@@ -57,16 +57,26 @@ body
   border-radius: 25px;
   background-color: var(--gray);
 }
+.standard-menu button:hover {
+  background-color: var(--cards);
+}
+
 .standard-menu select {
   padding: 5px;
   border-radius: 25px;
   background-color: var(--gray);
+}
+.standard-menu select:hover {
+  background-color: var(--cards);
 }
 .connect-button {
   padding: 5px;
   border-radius: 25px;
   background-color: var(--gray);
   text-align: center;
+}
+.connect-button:hover {
+  background-color: var(--cards);
 }
 
 .menu
@@ -120,10 +130,6 @@ nav .burger-checkbox:checked ~ .burger-label .line1 {
 .burger-checkbox:checked ~ .burger-label .line3 {
   transform: rotate(-45deg);
   top: 18px;
-}
-/* when it's not collapsed */
-nav {
-  background-color: var(--bg1);
 }
 nav .burger {
   flex-direction: column;
@@ -269,6 +275,7 @@ main {
 }
 .fast-search .date-from {
   grid-area: start;
+  border-color: var(--border);
 }
 .fast-search span {
   grid-area: dash;
@@ -277,16 +284,21 @@ main {
 }
 .fast-search .date-to {
   grid-area: end;
+  border-color: var(--border);
 }
 .fast-search button {
   margin-top: 5px;
 }
 .btn-gray {
   grid-area: apply;
-  background-color: var(--border);
+  background-color: var(--bg-main);
   padding: 5px 10px;
+  border-color: var(--border);
   border-radius: 10px;
   color: var(--bg-dark);
+}
+.btn-gray:hover {
+  background-color: var(--border);
 }
 .stats-grid {
   margin-top: 10px;
@@ -493,10 +505,54 @@ main {
 .stores-container {
   background-color: var(--cards);
   padding: 20px;
-  margin: 20px;
   border: 1px solid var(--border);
   border-radius: 8px;
+  margin-bottom: 20px;
 }
-.stores-container ul {
+.stores-container .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stores-container h1 {
+  font-size: 1.6rem;
+}
+.stores-container div p {
+  color: var(--gray);
+}
+.btn-store {
+  background-color: var(--gray);
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: var(--green-light);
+  text-decoration: none;
+}
+.btn-store:hover {
+  background-color: var(--black);
+}
+.store-list {
+  border: 1px solid var(--border);
+  border-radius: 8px;
   list-style-type: none;
+  align-self: center;
+  /* width: 100%; */
+  margin: 0;
+  padding: 0;
+}
+.store-list .store-item {
+  padding: 20px;
+  border: 1px solid var(--border);
+
+}
+.store-list .store-item .store {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.store-list .store-item span a {
+  text-decoration: none;
+}
+.btn-delete {
+  background-color: var(--purple-light);
+  color: var(--purple1);
 }
