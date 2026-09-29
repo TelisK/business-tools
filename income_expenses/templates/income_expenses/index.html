@@ -27,14 +27,14 @@
     <div class="stats-grid">
 
         <div class="income-card">
-            <div class="heading heading-btn-income">Τζίρος Τρέχων Μήνα
+            <div class="heading">Τζίρος Τρέχων Μήνα
                 <div>{{ sum_income_result }} €</div>
             </div>
             
-            <div class="heading heading-btn-income">Τζίρος Τρέχων Έτους
+            <div class="heading">Τζίρος Τρέχων Έτους
                 <div>{{ YTD_result }} €</div>
             </div>
-            <div class="heading-btn-neutral">Διαφορά με πέρυσι ανα Μήνα / Έτος
+            <div class="heading-neutral">Διαφορά με πέρυσι ανα Μήνα / Έτος
                 <div>
                     <span class="{% if diff_by_percentage >= 0 %}text-success{% else %}text-danger{% endif %}">
                         {{ diff_by_percentage }}%

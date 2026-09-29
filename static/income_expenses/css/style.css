@@ -10,8 +10,8 @@
     --green1: #1D6B50;
     --green2: #164A3A;
     --green-light: #dff2eb;
-    --gray: #92989F;
-    --black: #0a0a0a;
+    --gray: #abb2bb;
+    --black: #1d3e40;
     --border: #d5ddda;
     --cards: #f8faf9;
 }
@@ -272,9 +272,14 @@ main {
 }
 .fast-search span {
   grid-area: dash;
+  align-self: center;
+  padding: 0 10px;
 }
 .fast-search .date-to {
   grid-area: end;
+}
+.fast-search button {
+  margin-top: 5px;
 }
 .btn-gray {
   grid-area: apply;
@@ -371,13 +376,21 @@ main {
   color: var(--gray);
   font-variant: small-caps;
 }
+.heading-neutral {
+  margin-top: 20px;
+  background-color: var(--cards);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+}
 
 /* PREDICTION */
 
 .prediction {
   margin-top: 20px;
-  background-color: var(--bg-dark);
-  color: var(--green-light);
+  background-color: var(--green-light);
+  color: var(--green1);
   padding: 10px;
   border-radius: 8px;
   text-align: center;
@@ -400,10 +413,10 @@ main {
 .table-header,
 .table {
     display: grid;
-    grid-template-columns: 1fr 1.2fr 1.2fr 3fr;
+    grid-template-columns: 1fr 1.2fr 1.5fr 3fr;
     align-items: center;
     gap: 10px;
-    padding: 10px;
+    padding: 15px 5px;
 }
 .table-header {
   border-bottom: solid 1px var(--border);
@@ -420,59 +433,25 @@ main {
     background: var(--hover-white);
 }
 .income-sign {
-    background: #d4f0e4;
-    color: #1d6b50;
+    background: var(--green-light);
+    color: var(--green1);
+    padding: 4px 9px;
+    border-radius: 12px;
 }
 .expense-sign {
-    background: #e6ddf5;
-    color: #65358a;
+    background: var(--purple-light);
+    color: var(--purple1);
+    padding: 4px 9px;
+    border-radius: 12px;
 }
-
-/* .list .heading {
-  margin-top: 20px;
-  background-color: var(--cards);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  text-align: center;
-  padding: 10px;
+.income-amount { 
   color: var(--green1);
-  font-variant: small-caps;
+  font-weight: 600;
 }
-.heading ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-.heading li {
-  margin: 10px 0;
-  padding: 10px 5px;
-  border-radius: 10px;
-}
-.heading-btn-income {
-  background-color: var(--bg-income);
-}
-.heading-btn-income a {
-  color: var(--green1);
-  text-decoration: none;
-}
-.heading-btn-expense {
-  background-color: var(--bg-expenses);  
-}
-.heading-btn-expense a {
+.expense-amount { 
   color: var(--purple1);
-  text-decoration: none;
+  font-weight: 600;
 }
-.heading-btn-neutral {
-  margin-top: 20px;
-  background-color: var(--gray);
-  border: solid black 1px;
-  border-radius: 8px;
-  padding: 10px;
-  font-variant: small-caps;
-}
-.comments {
-  font-variant: normal;
-} */
 
 
 @media screen and (min-width: 1000px) {
@@ -498,6 +477,15 @@ main {
   .analyse {
   max-width: 90%;
   }
+.table-header,
+.table {
+    grid-template-columns: 1fr 1fr 1fr 3fr;
+    gap: 10px;
+    padding: 20px 10px;
+}
+.comments {
+  font-size: 0.9rem;
+}
 }
 
 
