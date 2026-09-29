@@ -11,7 +11,7 @@
     --green2: #164A3A;
     --green-light: #dff2eb;
     --gray: #abb2bb;
-    --black: #1d3e40;
+    --black: #2d3336;
     --border: #d5ddda;
     --cards: #f8faf9;
 }
@@ -526,6 +526,7 @@ main {
   border-radius: 8px;
   color: var(--green-light);
   text-decoration: none;
+  transition: background-color 0.5s;
 }
 .btn-store:hover {
   background-color: var(--black);
@@ -535,14 +536,15 @@ main {
   border-radius: 8px;
   list-style-type: none;
   align-self: center;
-  /* width: 100%; */
   margin: 0;
   padding: 0;
 }
 .store-list .store-item {
   padding: 20px;
-  border: 1px solid var(--border);
-
+  border-bottom: 1px solid var(--border);
+}
+.store-list .store-item:last-child {
+ border-bottom: none;
 }
 .store-list .store-item .store {
   display: flex;
@@ -552,7 +554,43 @@ main {
 .store-list .store-item span a {
   text-decoration: none;
 }
+.btn-edit {
+  background-color: var(--green-light);
+  color: var(--green1);
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.5s;
+}
+.btn-edit:hover {
+  background-color: var(--hover-white);
+}
 .btn-delete {
+  text-decoration: none;
   background-color: var(--purple-light);
   color: var(--purple1);
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.5s;
+}
+.btn-delete:hover {
+  background-color: var(--hover-white);
+}
+
+/* prediction_with_ml.html */
+.prediction-container {
+  background-color: var(--cards);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.prediction-container .page-header h1 {
+  font-size: 1.6rem;
+}
+.prediction-table-header,
+.prediction-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }

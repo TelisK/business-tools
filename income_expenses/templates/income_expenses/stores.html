@@ -15,7 +15,7 @@
             {% for store in stores_list %}
             <li class="store-item">
                 <div class="store">
-                    <span><a href="{% url 'income_expenses:update_store' store.id %}" class="btn btn-edit">{{ store.name }}</a></span>
+                    <span><a href="{% url 'income_expenses:update_store' store.id %}" class="btn-edit">{{ store.name }}</a></span>
                     <div class="entry-actions">
                         {% if stores_list.count > 1 %}
                         <a href="{% url 'income_expenses:delete_store' store.id %}" class="btn-delete">Διαγραφή</a>

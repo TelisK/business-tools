@@ -2,13 +2,23 @@
 {% load static %}
 
 {% block body %}
-
-<div class="page-header">
-    <h1>Πρόβλεψη Εσόδων</h1>
+<div class="prediction-container">
+    <div class="page-header">
+        <h1>Πρόβλεψη Εσόδων</h1>
+    </div>
+    <div class="prediction-table-header">
+        <span class="date">Ημερομηνία</span>
+        <span class="amount">Ποσό</span>
+    </div>
+    <div class="prediction-list">
+        {% for row in result %}
+        <div class="prediction-row">
+            <span>{{ row.day }}</span>
+            <span>{{ row.predicted_income }} €</span>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
-{% for row in result %}
-<p>{{ row.day }} → {{ row.predicted_income }} €</p>
-{% endfor %}
 
 {% endblock %}
