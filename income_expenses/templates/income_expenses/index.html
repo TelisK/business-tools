@@ -98,33 +98,32 @@
 
 <!-- Latest Transactions -->
 <div class="list">
+        <div class="table-header">
+            <span class="date">Ημερομηνία</span>
+            <span class="category">Κατηγορία</span>
+            <span class="amount">Ποσό</span>
+            <span class="desc">Περιγραφή</span>
+    </div>
     <div class="heading">
-        <ul>
-            {% for i in combined %}
-            <li class="{% if i.income_sum %}heading-btn-income{% else %}heading-btn-expense{% endif %}">
+        {% for i in combined %}
+        <a href="{% if i.income_sum %}{% url 'income_expenses:detail' i.id %}{% else %}{% url 'income_expenses:expenses_detail' i.id %}{% endif %}" class="table">
+            <span>{{ i.day|date:"d/m/Y" }}</span>
+            <span>
                 {% if i.income_sum %}
-                <a href="{% url 'income_expenses:detail' i.id %}">
-                    <div>
-                    <span>Έσοδο : {{ i.day|date:"d/m/Y" }}  -  {{ i.income_sum }} €</span>
-                    {% if i.comments %}
-                    <div class="comments">{{ i.comments }}</div>
-                    {% endif %}
-                  </div>
-                 
-                </a>
+                <span class="income-sign">Έσοδο</span>
                 {% else %}
-                    <a href="{% url 'income_expenses:expenses_detail' i.id %}">
-                        <div>
-                            <span>Έξοδο : {{ i.day|date:"d/m/Y" }}  -  {{ i.amount }} €</span>
-                            {% if i.comments %}
-                            <div class="comments">{{ i.comments }}</div>
-                            {% endif %}
-                        </div>
-                    </a>
-                    {% endif %}
-            </li>
-             {% endfor %}
-        </ul>
+                <span class="expense-sign">Έξοδο</span>
+                {% endif %}
+            </span>
+            <span class="{% if i.income_sum %}income-amount{% else %}expense-amount{% endif %}">
+                {% if i.income_sum %}+ {{ i.income_sum }} €{% else %}- {{ i.amount }} €{% endif %}
+            </span>
+            <span class="comments">{{ i.comments|default:"-" }}</span>
+            
+        </a>
+        {% endfor %}
+
+    
     </div>
 </div>
 

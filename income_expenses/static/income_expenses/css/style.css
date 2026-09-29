@@ -3,14 +3,15 @@
     --bg-dark: #164A3A;
     --bg-income: #eff8f6;
     --bg-expenses: #f6f3fa;
+    --hover-white: #f4f4f2;
     --header:rgb(202, 214, 167);
     --purple1: #7651A5;
     --purple-light: #EEE7F6;
     --green1: #1D6B50;
     --green2: #164A3A;
     --green-light: #dff2eb;
-    --gray: #92989F;
-    --black: #0a0a0a;
+    --gray: #abb2bb;
+    --black: #1d3e40;
     --border: #d5ddda;
     --cards: #f8faf9;
 }
@@ -375,15 +376,70 @@ main {
 
 .prediction {
   margin-top: 20px;
-  background-color: var(--bg-dark);
-  color: var(--green-light);
+  background-color: var(--green-light);
+  color: var(--green1);
   padding: 10px;
   border-radius: 8px;
   text-align: center;
 }
 
 /* LATEST TRANSACTIONS */
-.list .heading {
+.list {
+  margin: 20px 0;
+  background-color: var(--cards);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+  color: var(--gray);
+  font-size: 0.8rem;
+}
+.comments {
+  font-size: 0.7rem;
+}
+.table-header,
+.table {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1.5fr 3fr;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+.table-header {
+  border-bottom: solid 1px var(--border);
+}
+.table {
+  text-decoration: none;
+  color: var(--black);
+  border-bottom: solid 1px var(--border);
+}
+.table:last-child {
+    border-bottom: none;
+}
+.table:hover {
+    background: var(--hover-white);
+}
+.income-sign {
+    background: var(--green-light);
+    color: var(--green1);
+    padding: 4px 9px;
+    border-radius: 12px;
+}
+.expense-sign {
+    background: var(--purple-light);
+    color: var(--purple1);
+    padding: 4px 9px;
+    border-radius: 12px;
+}
+.income-amount { 
+  color: var(--green1);
+  font-weight: 600;
+}
+.expense-amount { 
+  color: var(--purple1);
+  font-weight: 600;
+}
+/* .list .heading {
   margin-top: 20px;
   background-color: var(--cards);
   border: 1px solid var(--border);
@@ -427,7 +483,7 @@ main {
 }
 .comments {
   font-variant: normal;
-}
+} */
 
 
 @media screen and (min-width: 1000px) {

@@ -3,6 +3,7 @@
     --bg-dark: #164A3A;
     --bg-income: #eff8f6;
     --bg-expenses: #f6f3fa;
+    --hover-white: #f4f4f2;
     --header:rgb(202, 214, 167);
     --purple1: #7651A5;
     --purple-light: #EEE7F6;
@@ -383,7 +384,51 @@ main {
 }
 
 /* LATEST TRANSACTIONS */
-.list .heading {
+.list {
+  margin: 20px 0;
+  background-color: var(--cards);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+  color: var(--gray);
+  font-size: 0.8rem;
+}
+.comments {
+  font-size: 0.7rem;
+}
+.table-header,
+.table {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1.2fr 3fr;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+.table-header {
+  border-bottom: solid 1px var(--border);
+}
+.table {
+  text-decoration: none;
+  color: var(--black);
+  border-bottom: solid 1px var(--border);
+}
+.table:last-child {
+    border-bottom: none;
+}
+.table:hover {
+    background: var(--hover-white);
+}
+.income-sign {
+    background: #d4f0e4;
+    color: #1d6b50;
+}
+.expense-sign {
+    background: #e6ddf5;
+    color: #65358a;
+}
+
+/* .list .heading {
   margin-top: 20px;
   background-color: var(--cards);
   border: 1px solid var(--border);
@@ -427,7 +472,7 @@ main {
 }
 .comments {
   font-variant: normal;
-}
+} */
 
 
 @media screen and (min-width: 1000px) {
@@ -437,10 +482,9 @@ main {
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: min-content;
     grid-template-areas: 
     'income-card expenses-result-card analyse-card';
-    align-items: start;
-    height: auto;
   }
   .stats-grid .income-card {
     grid-area: income-card;
