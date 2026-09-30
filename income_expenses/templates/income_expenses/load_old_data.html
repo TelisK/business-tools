@@ -3,31 +3,35 @@
 
 {% block body %}
 
-<a href="{% static 'income_expenses/template_old_data.xlsx' %}" download class="btn btn-secondary">
-    Κατέβασε Πρότυπο Αρχείο
-</a>
+<div class="upload">
+    <a href="{% static 'income_expenses/template_old_data.xlsx' %}" download class="btn-download">
+        Κατέβασε Πρότυπο Αρχείο
+    </a>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.file }}
-    <button type="submit">Upload</button>
-</form>
+    <form class="file-upload" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.file }}
+        <button class="btn-download" type="submit">Upload</button>
+    </form>
+</div>
 <br>
-<h2>ΟΔΗΓΙΕΣ</h2>
+<div class="instructions">
+    <h2>ΟΔΗΓΙΕΣ</h2>
 
-<p>Αρχικά κατεβάζουμε το πρότυπο αρχείο, και το ανοίγουμε με excel.</p><br>
-<p>Υπάρχουν δύο φύλλα. Το πρώτο φύλλο είναι τα έσοδα. <b>Προσοχή</b>, καταχωρούμε μία ημέρα σε κάθε γραμμή, με τα
-    ημερήσια έσοδα.
-    Επίσης εάν υπάρχει ήδη καταχωρημένη κάποια ημερομηνία στο πρόγραμμα, και την καταχωρούμε και μέσω του excel, θα
-    πάρουμε σφάλμα.</p><br>
-<p>Το δεύτερο φύλλο είναι τα έξοδα. Σε αυτό μπορούμε να περάσουμε πολλαπλές γραμμές για κάθε ημέρα.</p><br>
+    <p>Αρχικά κατεβάζουμε το πρότυπο αρχείο, και το ανοίγουμε με excel.</p><br>
+    <p>Υπάρχουν δύο φύλλα. Το πρώτο φύλλο είναι τα έσοδα. <b>Προσοχή</b>, καταχωρούμε μία ημέρα σε κάθε γραμμή, με τα
+        ημερήσια έσοδα.
+        Επίσης εάν υπάρχει ήδη καταχωρημένη κάποια ημερομηνία στο πρόγραμμα, και την καταχωρούμε και μέσω του excel, θα
+        πάρουμε σφάλμα.</p><br>
+    <p>Το δεύτερο φύλλο είναι τα έξοδα. Σε αυτό μπορούμε να περάσουμε πολλαπλές γραμμές για κάθε ημέρα.</p><br>
 
-</p> Προσθέτουμε τα δεδομένα στο αρχείο Excel, αποθηκεύουμε. Έπειτα επιλέγουμε το αρχείο μέσω της εφαρμογής και
-επιλέγουμε upload</p>
-<br>
-<p>Παράδειγμα Έσοδα:</p>
-<img src="{% static 'income_expenses/έσοδα.png' %}" alt="έσοδα">
-<br>
-<p>Παράδειγμα Έξοδα:</p>
-<img src="{% static 'income_expenses/έξοδα.png' %}" alt="έξοδα">
+    </p> Προσθέτουμε τα δεδομένα στο αρχείο Excel, αποθηκεύουμε. Έπειτα επιλέγουμε το αρχείο μέσω της εφαρμογής και
+    επιλέγουμε upload</p>
+    <br>
+    <p>Παράδειγμα Έσοδα:</p>
+    <img src="{% static 'income_expenses/έσοδα.png' %}" alt="έσοδα">
+    <br>
+    <p>Παράδειγμα Έξοδα:</p>
+    <img src="{% static 'income_expenses/έξοδα.png' %}" alt="έξοδα">
+</div>
 {% endblock %}
