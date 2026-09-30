@@ -596,4 +596,13 @@ main {
 .prediction-row {
   display: flex;
   justify-content: space-between;
+  padding: 5px;
+}
+.prediction-row {
+  border-bottom: var(--border) solid 1px;
+  color: var(--black);
+}
+.prediction-row:first-child {
+  margin-top: 10px;
+
 }

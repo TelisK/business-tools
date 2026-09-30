@@ -587,10 +587,21 @@ main {
 .prediction-container .page-header h1 {
   font-size: 1.6rem;
 }
-.prediction-table-header,
+
 .prediction-list {
   display: flex;
   flex-direction: column;
+}
+.prediction-table-header,
+.prediction-row {
+  display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding: 5px;
+}
+.prediction-row {
+  border-bottom: var(--border) solid 1px;
+}
+.prediction-row:first-child {
+  margin-top: 10px;
+
 }
