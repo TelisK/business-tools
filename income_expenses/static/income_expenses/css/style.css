@@ -663,3 +663,66 @@ input[type="file"]::file-selector-button:hover {
 .instructions img {
   width: 100%;
 }
+
+/* fixed_expenses.html */
+
+.fixed-expenses-header p {
+  font-size: 0.8rem;
+}
+.fixed-expenses-card {
+  background-color: var(--cards);
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.fixed-expenses-card .entry-list-heading {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.entry-list-heading,
+.fixed-expenses-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1.4fr 1.4fr;
+    align-items: center;
+    padding: 15px 0;
+}
+.entry-list-heading {
+  border-bottom: solid 1px var(--border);
+}
+.fixed-expenses-row {
+  border-bottom: solid 1px var(--border);
+
+}
+.fixed-expenses-row:last-child {
+  border-bottom: none;
+}
+.fixed-expenses-information {
+  font-style: italic;
+}
+.fixed-expenses-form {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+}
+.fixed-expenses-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.fixed-expenses-fields label {
+  color: var(--black);
+}
+.field-wrapper input,
+.field-wrapper select,
+.field-wrapper textarea {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--black);
+    width: 100%;
+}
+

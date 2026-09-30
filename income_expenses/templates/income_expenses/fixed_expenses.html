@@ -1,7 +1,7 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<div class="page-header">
+<div class="fixed-expenses-header">
     <div>
         <h1>Πάγια Έξοδα</h1>
         <p>Διαχείριση Πάγιων Εξόδων</p>
@@ -9,54 +9,56 @@
     </div>
 </div>
 
-<div class="form-card">
+<div class="fixed-expenses-card">
     <h2>Καταχωρημένα Πάγια εξόδα</h2>
-    <ul class="entry-list">
+    <div class="entry-list-heading">
+        <span>Όνομα</span>
+        <span>Ποσό</span>
+        <span>Συχνότητα</span>
+        <span></span>
+    </div>
+    <div class="fixed-expenses-list">
+
         {% if fixed_expenses_list %}
         {% for fixed_expense in fixed_expenses_list %}
-        <li class="entry-item">
-            <div class="entry-row">
-                <span>
-                    <label>{{ fixed_expense.name }}</label>
-                    {{ fixed_expense.amount }} € - {{ fixed_expense.frequency}}</span>
-                <div class="entry-actions">
-                    <a href="{% url 'income_expenses:delete_fixed_expense' fixed_expense.id %}"
-                        class="btn btn-danger">Διαγραφή</a>
-                    {% endfor %}
-                    {% else %}
-                    <p>Δέν έχει καταχωρημένα πάγια έξοδα</p>
-                    {% endif %}
-    </ul>
-    <br>
-    <p>Τα καταχωρημένα πάγια έξοδα ενημερώνουν το σύστημα καθημερινά στις 01:00</p>
-
+        <div class="fixed-expenses-row">
+            <span>{{ fixed_expense.name }}</span>
+            <span>{{ fixed_expense.amount }} €</span>
+            <span>{{ fixed_expense.frequency}}</span>
+            <span>
+                <a href="{% url 'income_expenses:delete_fixed_expense' fixed_expense.id %}"
+                    class="btn-delete">Διαγραφή</a>
+            </span>
+        </div>
+        {% endfor %}
+        {% else %}
+        <span>Δέν έχει καταχωρημένα πάγια έξοδα</span>
+        {% endif %}
+    </div>
 </div>
-
-<div class="form-card">
+<div class="fixed-expenses-information">
+    <p>Τα καταχωρημένα πάγια έξοδα ενημερώνουν το σύστημα καθημερινά στις 01:00</p>
+</div>
+<div class="fixed-expenses-card">
     <h2>Προσθήκη Πάγιου εξόδου</h2>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-grid">
-
-            {% for field in form %}
-            <div class="form-group full">
-                <label>{{ field.label }}</label>
-                {{ field }}
+    <div>
+        <form class="fixed-expenses-form" method="POST">
+            {% csrf_token %}
+            <div class="fixed-expenses-fields">
+                {% for field in form %}
+                <div class="field-wrapper">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                <span class="error">{{ field.errors }}</span>
+                {% endif %}
+                {% endfor %}
             </div>
-
-            {% if field.errors %}
-            <span class="error">{{ field.errors }}</span>
-            {% endif %}
-            {% endfor %}
-
-
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Αποθήκευση Πάγιου Εξόδου</button>
-        </div>
-
-    </form>
-
+            <div>
+                <button type="submit" class="btn btn-primary">Αποθήκευση Πάγιου Εξόδου</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

@@ -12,7 +12,7 @@
 <div class="summary">
 
     <!-- Date filter form -->
-     
+
     <form method="get" action="{% url 'income_expenses:index' %}">
         <div class="fast-search">
             <h3>Γρήγορη αναζήτηση</h3>
@@ -22,7 +22,7 @@
             <button type="submit" class="btn-gray">Εφαρμογή</button>
         </div>
     </form>
-    
+
     <!-- Totals -->
     <div class="stats-grid">
 
@@ -30,7 +30,7 @@
             <div class="heading">Τζίρος Τρέχων Μήνα
                 <div>{{ sum_income_result }} €</div>
             </div>
-            
+
             <div class="heading">Τζίρος Τρέχων Έτους
                 <div>{{ YTD_result }} €</div>
             </div>
@@ -87,7 +87,7 @@
 </div>
 
 <div class="prediction">
-    
+
     <div>Πρόβλεψη για τη σημερινή είσπραξη:</div>
     {% if next_day_prediction %}
     <p> {{ next_day_prediction }} €</p>
@@ -98,15 +98,16 @@
 
 <!-- Latest Transactions -->
 <div class="list">
-        <div class="table-header">
-            <span class="date">Ημερομηνία</span>
-            <span class="category">Κατηγορία</span>
-            <span class="amount">Ποσό</span>
-            <span class="desc">Περιγραφή</span>
+    <div class="table-header">
+        <span class="date">Ημερομηνία</span>
+        <span class="category">Κατηγορία</span>
+        <span class="amount">Ποσό</span>
+        <span class="desc">Περιγραφή</span>
     </div>
     <div class="heading">
         {% for i in combined %}
-        <a href="{% if i.income_sum %}{% url 'income_expenses:detail' i.id %}{% else %}{% url 'income_expenses:expenses_detail' i.id %}{% endif %}" class="table">
+        <a href="{% if i.income_sum %}{% url 'income_expenses:detail' i.id %}{% else %}{% url 'income_expenses:expenses_detail' i.id %}{% endif %}"
+            class="table">
             <span>{{ i.day|date:"d/m/Y" }}</span>
             <span>
                 {% if i.income_sum %}
@@ -119,11 +120,11 @@
                 {% if i.income_sum %}+ {{ i.income_sum }} €{% else %}- {{ i.amount }} €{% endif %}
             </span>
             <span class="comments">{{ i.comments|default:"-" }}</span>
-            
+
         </a>
         {% endfor %}
 
-    
+
     </div>
 </div>
 
