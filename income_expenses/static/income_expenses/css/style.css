@@ -653,7 +653,13 @@ input[type="file"]::file-selector-button:hover {
 }
 .instructions {
   background-color: var(--cards);
-  padding: 30px;
   border: 1px solid var(--border);
   border-radius: 8px;
+  margin-bottom: 20px;
+}
+.instructions h2, .instructions p {
+  padding: 0 30px;
+}
+.instructions img {
+  width: 100%;
 }

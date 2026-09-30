@@ -627,6 +627,8 @@ main {
   border-radius: 8px;
   transition: background-color 0.5s;
   text-decoration: none;
+  border: 1px solid var(--green1);
+  cursor: pointer;
 }
 .btn-download:hover {
   background-color: var(--hover-white);
@@ -636,3 +638,27 @@ main {
   margin-top: 10px;
   padding-top: 10px;
 }
+/* style {{ form.file }} */
+input[type="file"]::file-selector-button {
+  color: var(--purple1);
+  border: 1px solid var(--purple1);
+  border-radius: 8px;
+  background-color: var(--purple-light);
+  padding: 7px;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: var(--hover-white);
+}
+.instructions {
+  background-color: var(--cards);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.instructions h2, .instructions p {
+  padding: 30px;
+}
+/* .instructions img {
+  padding-left: 0;
+} */
