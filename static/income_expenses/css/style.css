@@ -704,7 +704,6 @@ input[type="file"]::file-selector-button:hover {
 }
 .fixed-expenses-form {
   display: grid;
-  grid-template-rows: 1fr 1fr;
   gap: 20px;
 }
 .fixed-expenses-fields {
@@ -714,26 +713,44 @@ input[type="file"]::file-selector-button:hover {
 .fixed-expenses-fields label {
   color: var(--black);
 }
-.field-wrapper input,
+
 .field-wrapper select,
 .field-wrapper textarea {
     font-size: 0.9rem;
     padding: 6px 10px;
     border: 1px solid var(--border);
     border-radius: 8px;
-    background: var(--bg);
+    background: var(--bg-main);
     color: var(--black);
     width: 100%;
 }
-.fixed-expenses-form button {
-  grid-area: apply;
+.field-wrapper input {
+    font-size: 0.9rem;
+    padding: 6px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-main);
+    color: var(--black);
+    width: 100%;
+}
+.btn-green {
   background-color: var(--bg-main);
   padding: 5px 10px;
   border-color: var(--border);
   border-radius: 10px;
   color: var(--bg-dark);
 }
-.fixed-expenses-form button:hover {
+.btn-green:hover {
+  background-color: var(--border);
+}
+.btn-purple {
+  background-color: var(--purple-light);
+  padding: 5px 10px;
+  border-color: var(--border);
+  border-radius: 10px;
+  color: var(--purple1);
+}
+.btn-purple:hover {
   background-color: var(--border);
 }
 @media screen and (min-width: 1000px)  {
