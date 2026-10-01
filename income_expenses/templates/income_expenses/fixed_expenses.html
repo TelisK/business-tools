@@ -26,8 +26,7 @@
             <span>{{ fixed_expense.amount }} €</span>
             <span>{{ fixed_expense.frequency}}</span>
             <span>
-                <a href="{% url 'income_expenses:delete_fixed_expense' fixed_expense.id %}"
-                    class="btn-purple">Διαγραφή</a>
+                <button class="btn-purple"><a href="{% url 'income_expenses:delete_fixed_expense' fixed_expense.id %}">Διαγραφή</a></button>
             </span>
         </div>
         {% endfor %}
