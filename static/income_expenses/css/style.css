@@ -61,6 +61,7 @@ body
   padding: 5px;
   border-radius: 25px;
   background-color: var(--gray);
+  transition: background-color 0.5s;
 }
 .standard-menu button:hover {
   background-color: var(--cards);
@@ -70,6 +71,7 @@ body
   padding: 5px;
   border-radius: 25px;
   background-color: var(--gray);
+  transition: background-color 0.5s;
 }
 .standard-menu select:hover {
   background-color: var(--cards);
@@ -79,6 +81,7 @@ body
   border-radius: 25px;
   background-color: var(--gray);
   text-align: center;
+  transition: background-color 0.5s;
 }
 .connect-button:hover {
   background-color: var(--cards);
@@ -249,6 +252,11 @@ main {
   border-radius: 8px;
   color: var(--green-light);
   text-decoration: none;
+  transition: color 0.5s, background-color 0.5s;
+}
+.btn-income:hover {
+  background-color: var(--green-light);
+  color: var(--green1);
 }
 .btn-expense {
   background-color: var(--purple1);
@@ -256,6 +264,11 @@ main {
   border-radius: 8px;
   color: var(--purple-light);
   text-decoration: none;
+  transition: color 0.5s, background-color 0.5s;
+}
+.btn-expense:hover {
+  background-color: var(--purple-light);
+  color: var(--purple1);
 }
 .fast-search {
   width: 100%;
@@ -301,6 +314,7 @@ main {
   border-color: var(--border);
   border-radius: 10px;
   color: var(--bg-dark);
+  transition: background-color 0.5s;
 }
 .btn-gray:hover {
   background-color: var(--border);
@@ -699,6 +713,10 @@ input[type="file"]::file-selector-button:hover {
 .fixed-expenses-row:last-child {
   border-bottom: none;
 }
+.fixed-expenses-row a {
+  text-decoration: none;
+  color: var(--purple1);
+}
 .fixed-expenses-information {
   font-style: italic;
 }
@@ -762,4 +780,11 @@ input[type="file"]::file-selector-button:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* invoice_reader.html */
+
+.invoices-menu a {
+  text-decoration: none;
+  color: var(--bg-dark);
 }

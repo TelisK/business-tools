@@ -9,7 +9,7 @@
 {% block body %}
 
 
-<div class="invoice-upload-wrapper">
+<div class="invoice-upload-card">
     <!-- Display Django messages -->
     {% if messages %}
         {% for message in messages %}
@@ -26,29 +26,27 @@
         </div>
     {% endif %}
 
-    <div class="form-card">
+    <div class="invoice-upload">
         <h2>Ανέβασμα Τιμολογίου</h2>
-        <p class="form-subtitle">Ανεβάστε φωτογραφία ή PDF του τιμολογίου για αυτόματη ανάλυση</p>
+        <p>Ανεβάστε φωτογραφία ή PDF του τιμολογίου για αυτόματη ανάλυση</p>
 
         <form method="POST" enctype="multipart/form-data" id="upload-form">
             {% csrf_token %}
             
             <div class="upload-area">
                 {{ form.invoice }}
-                <p class="upload-hint">Επιλέξτε ή τραβήξτε φωτογραφία (PDF, JPG, PNG)</p>
+                <p>Επιλέξτε ή τραβήξτε φωτογραφία (PDF, JPG, PNG)</p>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-full" id="submit-btn">
+            <button type="submit" class="btn-store" id="submit-btn">
                 Ανάλυση Τιμολογίου
             </button>
         </form>
     </div>
 
-    <div class="back-link">
-        <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Καταχωρημένα Τιμολόγια</a>
-    </div>
-    <div class="back-link">
-        <a href="{% url 'invoices:invoice_supplier' %}" class="btn btn-secondary">Προμηθευτές</a>
+    <div class="invoices-menu">
+        <button class="btn-green"><a href="{% url 'invoices:invoice_list' %}">Καταχωρημένα Τιμολόγια</a></button>
+        <button class="btn-green"><a href="{% url 'invoices:invoice_supplier' %}">Προμηθευτές</a></button>
     </div>
 </div>
 
