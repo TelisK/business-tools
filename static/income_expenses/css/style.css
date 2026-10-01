@@ -15,7 +15,41 @@
     --border: #d5ddda;
     --cards: #f8faf9;
 }
+
+/* alert & messages */
+
+.message-container {
+  position: fixed;
+  top: 80px;
+  left: 50px;
+  z-index: 9999;
+}
+.alert-container {
+  position: fixed;
+  top: 150px;
+  left: 50px;
+  z-index: 9999;
+}
+.alert {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 4.5s forwards;
+    max-width: 350px;
+}
+.alert-message-success {
+    background: var(--bg-income);
+    color: #2d6a4f;
+}
+.alert-message-error,
+.alert-message-danger {
+    background: var(--purple-light);
+    color: #9b2226;
+}
+
 /* NAV */
+
 body
 {
   margin: 0;
@@ -784,7 +818,29 @@ input[type="file"]::file-selector-button:hover {
 
 /* invoice_reader.html */
 
+.invoice-upload-card {
+  background-color: var(--cards);
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.invoice-upload h2 {
+  font-size: 1.3rem;
+}
+.invoice-upload p {
+  font-size: 0.9rem;
+}
+.invoice-upload button {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
 .invoices-menu a {
   text-decoration: none;
   color: var(--bg-dark);
+}
+.invoices-menu {
+  display: flex;
+  justify-content: space-evenly;
 }

@@ -15,7 +15,52 @@
     --border: #d5ddda;
     --cards: #f8faf9;
 }
+
+/* alert & messages */
+
+.message-container {
+  position: fixed;
+  top: 80px;
+  left: 50px;
+  z-index: 9999;
+}
+.alert-container {
+  position: fixed;
+  top: 150px;
+  left: 50px;
+  z-index: 9999;
+}
+.alert {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 6.5s forwards;
+    max-width: 350px;
+}
+.alert-message-success {
+    background: var(--bg-income);
+    color: #2d6a4f;
+}
+.alert-message-error,
+.alert-message-danger {
+    background: var(--purple-light);
+    color: #9b2226;
+}
+/* The following keyframes make the alert window to disappear.
+Work together with animation on .alert */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+
 /* NAV */
+
 body
 {
   margin: 0;

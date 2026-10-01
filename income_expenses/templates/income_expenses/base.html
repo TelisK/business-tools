@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'income_expenses/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'income_expenses/favicon-32x32.png' %}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2NR670TKQ"></script>
@@ -40,82 +40,84 @@
                         {% if user.is_authenticated %}
                         <li>
                             <form method="get" action="{% url 'income_expenses:index' %}">
-                            <select name="store" onchange="this.form.submit()">
-                                {% for s in stores_list %}
-                                <option value="{{ s.id }}" {% if s == current_store %}selected{% endif %}>{{ s.name }}</option>
-                                {% endfor %}
-                                {% endif %}
+                                <select name="store" onchange="this.form.submit()">
+                                    {% for s in stores_list %}
+                                    <option value="{{ s.id }}" {% if s == current_store %}selected{% endif %}>{{ s.name }}
+                                    </option>
+                                    {% endfor %}
+                                    {% endif %}
 
-                            </select>
+                                </select>
                             </form>
                         </li>
                         {% if user.is_authenticated %}
                         <li class="username"><a href="{% url 'income_expenses:stores' %}">{{ user.username }}</a></li>
 
                         <li>
-                    <form method="post" action="{% url 'logout' %}" class="logout">
-                        {% csrf_token %}
-                        <button type="submit">Αποσύνδεση</button>
-                    </form>
-                </li>
-                {% else %}
-                <li class="connect-button"><a href="{% url 'login' %}">Σύνδεση</a></li>
-                {% endif %}
-                {% if messages %}
-                {% for message in messages %}
-                <div
-                    class="login-messages {% if message.tags == 'error' %}login-messages-error{% else %}login-messages-success{% endif %}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-                {% endif %}
+                            <form method="post" action="{% url 'logout' %}" class="logout">
+                                {% csrf_token %}
+                                <button type="submit">Αποσύνδεση</button>
+                            </form>
+                        </li>
+                        {% else %}
+                        <li class="connect-button"><a href="{% url 'login' %}">Σύνδεση</a></li>
+                        {% endif %}
+                        {% if messages %}
+                        <div class="message-container">
+                            {% for message in messages %}
+                            <div class="alert alert-message-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </ul>
                 </div>
 
                 <ul class="burger">
                     <li>
-                    <a href="{% url 'income_expenses:index' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Αρχική</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'income_expenses:analytics' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Αναλυτικά</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'income_expenses:prediction_with_ml' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Πρόβλεψη
-                    Εισοδημάτων</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'income_expenses:load_old_data' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Εισαγωγή
-                    Δεδομένων</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'income_expenses:export_data' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Εξαγωγή
-                    σε Excel</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'income_expenses:fixed_expenses' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Πάγια
-                    Έξοδα</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'invoices:invoice_reader' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Tιμολόγιο</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'ai_assistant:chat' %}">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Βοηθός ΑΙ</label>
-                    </a>
+                        <a href="{% url 'income_expenses:index' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Αρχική</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'income_expenses:analytics' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Αναλυτικά</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'income_expenses:prediction_with_ml' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Πρόβλεψη
+                                Εισοδημάτων</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'income_expenses:load_old_data' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Εισαγωγή
+                                Δεδομένων</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'income_expenses:export_data' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Εξαγωγή
+                                σε Excel</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'income_expenses:fixed_expenses' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Πάγια
+                                Έξοδα</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'invoices:invoice_reader' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Tιμολόγιο</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'ai_assistant:chat' %}">
+                            <label for="menuCheckbox" onclick="this.parentNode.click();">Βοηθός ΑΙ</label>
+                        </a>
                 </ul>
             </nav>
         </header>
@@ -123,7 +125,7 @@
 
     <main>
 
-            {% block body %}{% endblock %}
+        {% block body %}{% endblock %}
 
     </main>
 
