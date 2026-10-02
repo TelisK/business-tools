@@ -9,7 +9,7 @@
 {% block body %}
 
 <div>
-    <a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
+    <a href="{% url 'income_expenses:index' %}" onclick="history.back(); return false;" class="btn-gray-b">← Πίσω</a>
 </div>
 <div class="invoice-upload-card">
     <!-- Display form errors -->

@@ -22,12 +22,15 @@
   position: fixed;
   top: 80px;
   left: 50px;
+  /* need pointer-events: none because it's hidden and covers the buttons. */
+  pointer-events: none;
   z-index: 9999;
 }
 .alert-container {
   position: fixed;
   top: 150px;
   left: 50px;
+  pointer-events: none;
   z-index: 9999;
 }
 .alert {
@@ -61,6 +64,14 @@ Work together with animation on .alert */
 @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; visibility: hidden; }
+}
+@media screen and (min-width: 1000px) {
+  .message-container {
+  right: 50px;
+  }
+  .alert-container {
+  right: 50px;
+  }
 }
 
 /* NAV */
@@ -575,7 +586,7 @@ main {
   padding: 20px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 .stores-container .page-header {
   display: flex;
