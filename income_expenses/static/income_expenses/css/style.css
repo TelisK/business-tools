@@ -867,9 +867,9 @@ input[type="file"]::file-selector-button:hover {
   justify-content: space-evenly;
 }
 
-/* submit_income.html & submit_expense.html */
+/* submit_income.html & income_update.html */
 
-.submit-income-card {
+.income-card {
   background-color: var(--cards);
   padding: 30px;
   border: 1px solid var(--border);
@@ -895,7 +895,7 @@ input[type="file"]::file-selector-button:hover {
 .btn-gray-b:active {
   box-shadow: -1.5px -1.5px 0 #817e7e;
 }
-.submit-income-header h1 {
+.income-header h1 {
   font-size: 1.6rem;
 }
 .form-grid {
@@ -927,7 +927,7 @@ input[type="file"]::file-selector-button:hover {
   color: var(--black);
   width: 100%;
 }
-.submit-income-footer {
+.income-footer {
   margin-top: 20px;
 }
 @media screen and (min-width: 1000px) {

@@ -1,14 +1,14 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
-<div class="submit-income-form">
-<div class="submit-income-header">
+<div class="income-form">
+<div class="income-header">
     <div>
         <h1>Νέο Έσοδο</h1>
     </div>
     <a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
 </div>
 
-<div class="submit-income-card">
+<div class="income-card">
     <form method="post">
         {% csrf_token %}
         <div class="form-grid">
@@ -45,7 +45,7 @@
                 {{ form.comments }}
             </div>
         </div>
-        <div class="submit-income-footer">
+        <div class="income-footer">
             <button type="submit" class="btn-green">Αποθήκευση</button>
             <a href="{% url 'income_expenses:index' %}" class="btn-purple">Ακύρωση</a>
         </div>
