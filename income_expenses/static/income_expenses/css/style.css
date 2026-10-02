@@ -783,23 +783,16 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .field-wrapper select,
+.field-wrapper input,
 .field-wrapper textarea {
-    font-size: 0.9rem;
-    padding: 6px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-main);
-    color: var(--black);
-    width: 100%;
-}
-.field-wrapper input {
-    font-size: 0.9rem;
-    padding: 6px 0;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-main);
-    color: var(--black);
-    width: 100%;
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--black);
+  width: 100%;
 }
 .btn-green {
   text-decoration: none;
@@ -897,12 +890,51 @@ input[type="file"]::file-selector-button:hover {
 .btn-gray-b:active {
   box-shadow: -1.5px -1.5px 0 #817e7e;
 }
-
-
-
-
-
-
+.submit-income-header h1 {
+  font-size: 1.6rem;
+}
+.form-grid {
+  display: grid;
+}
+.standard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+.full-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+.standard-form input,
+.standard-form select,
+.standard-form textarea,
+.full-form input {
+  /* we need border-box because input is a little bit smaller */
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--black);
+  width: 100%;
+}
+.submit-income-footer {
+  margin-top: 20px;
+}
+@media screen and (min-width: 1000px) {
+  .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.btn-purple, .btn-gray-b {
+  font-size: 1.1rem;
+}
+}
 
 
 

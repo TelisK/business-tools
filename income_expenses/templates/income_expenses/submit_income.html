@@ -1,9 +1,9 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
-<div class="submit-income-card">
+<div class="submit-income-form">
 <div class="submit-income-header">
     <div>
-        <h1>{% if form.instance.pk %}Επεξεργασία Εσόδου{% else %}Νέο Έσοδο{% endif %}</h1>
+        <h1>Νέο Έσοδο</h1>
     </div>
     <a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
 </div>
@@ -40,12 +40,12 @@
                 <label>Άλλο (€)</label>
                 {{ form.income_other }}
             </div>
-            <div>
-                <label class="full-form">Σχόλια</label>
+            <div class="full-form">
+                <label>Σχόλια</label>
                 {{ form.comments }}
             </div>
         </div>
-        <div>
+        <div class="submit-income-footer">
             <button type="submit" class="btn-green">Αποθήκευση</button>
             <a href="{% url 'income_expenses:index' %}" class="btn-purple">Ακύρωση</a>
         </div>

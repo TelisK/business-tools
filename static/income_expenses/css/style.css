@@ -783,23 +783,16 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .field-wrapper select,
+.field-wrapper input,
 .field-wrapper textarea {
-    font-size: 0.9rem;
-    padding: 6px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-main);
-    color: var(--black);
-    width: 100%;
-}
-.field-wrapper input {
-    font-size: 0.9rem;
-    padding: 6px 0;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-main);
-    color: var(--black);
-    width: 100%;
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--black);
+  width: 100%;
 }
 .btn-green {
   text-decoration: none;
@@ -825,13 +818,13 @@ input[type="file"]::file-selector-button:hover {
   color: var(--purple1);
   cursor: pointer;
   transition: background-color 0.5s;
-  box-shadow: 1px 1px 0 #817e7e;
+  box-shadow: 1.5px 1.5px 0 #817e7e;
 }
 .btn-purple:hover {
   background-color: var(--border);
 }
 .btn-purple:active {
-  box-shadow: -1px -1px 0 #817e7e;
+  box-shadow: -1.5px -1.5px 0 #817e7e;
 }
 @media screen and (min-width: 1000px)  {
   .fixed-expenses-fields {
@@ -889,18 +882,46 @@ input[type="file"]::file-selector-button:hover {
   color: var(--bg-dark);
   cursor: pointer;
   transition: background-color 0.5s;
-  box-shadow: 1px 1px 0 #817e7e;
+  box-shadow: 1.5px 1.5px 0 #817e7e;
 }
-.btn-gray:hover {
+.btn-gray-b:hover {
   background-color: var(--border);
 }
-.btn-gray:active {
-  box-shadow: -1px -1px 0 #817e7e;
+.btn-gray-b:active {
+  box-shadow: -1.5px -1.5px 0 #817e7e;
 }
-
-
-
-
+.submit-income-header h1 {
+  font-size: 1.6rem;
+}
+.form-grid {
+  display: grid;
+}
+.standard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+.full-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+.standard-form input,
+.standard-form select,
+.standard-form textarea,
+.full-form input {
+  /* we need border-box because input is a little bit smaller */
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--black);
+  width: 100%;
+}
 
 
 
