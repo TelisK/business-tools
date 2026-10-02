@@ -3,6 +3,9 @@
 
 {% block body %}
 
+<div>
+<a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
+</div>
 <div class="upload">
     <a href="{% static 'income_expenses/template_old_data.xlsx' %}" download class="btn-download">
         Κατέβασε Πρότυπο Αρχείο
