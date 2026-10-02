@@ -7,11 +7,14 @@
     </div>
     <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">← Πίσω</a>
 </div>
-{% if form.errors %}
-<div class="form-errors">
-    {{ form.errors }}
-</div>
-{% endif %}
+    <!-- Display form errors -->
+    {% if form.errors %}
+    <div class="alert-container">
+        <div class="alert alert-message-danger">
+            {{ form.errors }}
+        </div>
+    </div>
+    {% endif %}
 <div class="form-card">
     <form method="post">
         {% csrf_token %}

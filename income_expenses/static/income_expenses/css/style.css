@@ -47,6 +47,10 @@
     background: var(--purple-light);
     color: #9b2226;
 }
+.alert-message-info {
+  background: var(--gray);
+  color: var(--black);
+}
 /* The following keyframes make the alert window to disappear.
 Work together with animation on .alert */
 @keyframes slideIn {
@@ -351,9 +355,9 @@ main {
 }
 .fast-search button {
   margin-top: 5px;
+  grid-area: apply;
 }
 .btn-gray {
-  grid-area: apply;
   background-color: var(--bg-main);
   padding: 5px 10px;
   border-color: var(--border);
@@ -697,6 +701,7 @@ main {
   margin-top: 10px;
   padding-top: 10px;
 }
+
 /* style {{ form.file }} */
 input[type="file"]::file-selector-button {
   color: var(--purple1);
@@ -803,6 +808,7 @@ input[type="file"]::file-selector-button:hover {
   border-color: var(--border);
   border-radius: 10px;
   color: var(--bg-dark);
+  cursor: pointer;
   transition: background-color 0.5s;
 }
 .btn-green:hover {
@@ -810,15 +816,22 @@ input[type="file"]::file-selector-button:hover {
 }
 .btn-purple {
   text-decoration: none;
+  display: inline-block;
+  font-size: 13.33px;
   background-color: var(--purple-light);
   padding: 5px 10px;
   border-color: var(--border);
   border-radius: 10px;
   color: var(--purple1);
+  cursor: pointer;
   transition: background-color 0.5s;
+  box-shadow: 1.5px 1.5px 0 #817e7e;
 }
 .btn-purple:hover {
   background-color: var(--border);
+}
+.btn-purple:active {
+  box-shadow: -1.5px -1.5px 0 #817e7e;
 }
 @media screen and (min-width: 1000px)  {
   .fixed-expenses-fields {
@@ -855,3 +868,69 @@ input[type="file"]::file-selector-button:hover {
   display: flex;
   justify-content: space-evenly;
 }
+
+/* submit_income.html & submit_expense.html */
+
+.submit-income-card {
+  background-color: var(--cards);
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.btn-gray-b {
+  text-decoration: none;
+  display: inline-block;
+  font-size: 13.33px;
+  background-color: var(--bg-main);
+  padding: 5px 10px;
+  border-color: var(--border);
+  border-radius: 10px;
+  color: var(--bg-dark);
+  cursor: pointer;
+  transition: background-color 0.5s;
+  box-shadow: 1.5px 1.5px 0 #817e7e;
+}
+.btn-gray-b:hover {
+  background-color: var(--border);
+}
+.btn-gray-b:active {
+  box-shadow: -1.5px -1.5px 0 #817e7e;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* a look like button */
+
+  /* text-decoration: none;
+  display: inline-block;
+  font-size: 13.33px;
+  background-color: var(--purple-light);
+  padding: 5px 10px;
+  border-color: var(--border);
+  border-radius: 10px;
+  color: var(--purple1);
+  cursor: pointer;
+  transition: background-color 0.5s;
+  box-shadow: 1px 1px 0 #817e7e;
+}
+.btn-purple:hover {
+  background-color: var(--border);
+}
+.btn-purple:active {
+  box-shadow: -1px -1px 0 #817e7e; */
