@@ -1011,7 +1011,7 @@ input[type="file"]::file-selector-button:hover {
 }
 }
 
-/* submit_expense.html & expense_update.html & expense_detail.html */
+/* submit_expense.html & expense_update.html & expenses_detail.html */
 
 .expense-header a:last-child {
   margin-left: 20px;

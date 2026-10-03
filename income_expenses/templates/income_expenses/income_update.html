@@ -2,55 +2,56 @@
 {% block body %}
 
 <div class="income-form">
-<div class="income-header">
-    <div>
-        <h1>Επεξεργασία Εσόδου</h1>
+    <div class="income-header">
+        <div>
+            <h1>Επεξεργασία Εσόδου</h1>
+        </div>
+        <a href="{% url 'income_expenses:index' %}" onclick="history.back(); return false;" class="btn-gray-b">←
+            Πίσω</a>
     </div>
-    <a href="{% url 'income_expenses:index' %}" onclick="history.back(); return false;" class="btn-gray-b">← Πίσω</a>
-</div>
 
-<div class="income-card">
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-grid">
-            <div class="standard-form">
-    <label>Κατάστημα</label>
-    {{ form.store }}
-</div>
-            <div class="standard-form">
-                <label>Ημερομηνία</label>
-                {{ form.day }}
+    <div class="income-card">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="standard-form">
+                    <label>Κατάστημα</label>
+                    {{ form.store }}
+                </div>
+                <div class="standard-form">
+                    <label>Ημερομηνία</label>
+                    {{ form.day }}
+                </div>
+                <div class="standard-form">
+                    <label>Μετρητά (€)</label>
+                    {{ form.income_cash }}
+                </div>
+                <div class="standard-form">
+                    <label>POS (€)</label>
+                    {{ form.income_pos }}
+                </div>
+                <div class="standard-form">
+                    <label>Κατάθεση (€)</label>
+                    {{ form.income_deposit }}
+                </div>
+                <div class="standard-form">
+                    <label>Επιταγή (€)</label>
+                    {{ form.income_check }}
+                </div>
+                <div class="standard-form">
+                    <label>Άλλο (€)</label>
+                    {{ form.income_other }}
+                </div>
+                <div class="full-form">
+                    <label>Σχόλια</label>
+                    {{ form.comments }}
+                </div>
             </div>
-            <div class="standard-form">
-                <label>Μετρητά (€)</label>
-                {{ form.income_cash }}
+            <div class="income-footer">
+                <button type="submit" class="btn-green">Αποθήκευση</button>
+                <a href="{% url 'income_expenses:index' %}" class="btn-purple">Ακύρωση</a>
             </div>
-            <div class="standard-form">
-                <label>POS (€)</label>
-                {{ form.income_pos }}
-            </div>
-            <div class="standard-form">
-                <label>Κατάθεση (€)</label>
-                {{ form.income_deposit }}
-            </div>
-            <div class="standard-form">
-                <label>Επιταγή (€)</label>
-                {{ form.income_check }}
-            </div>
-            <div class="standard-form">
-                <label>Άλλο (€)</label>
-                {{ form.income_other }}
-            </div>
-            <div class="full-form">
-                <label>Σχόλια</label>
-                {{ form.comments }}
-            </div>
-        </div>
-        <div class="income-footer">
-            <button type="submit" class="btn-green">Αποθήκευση</button>
-            <a href="{% url 'income_expenses:index' %}" class="btn-purple">Ακύρωση</a>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 </div>
 {% endblock %}

@@ -1,47 +1,44 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
-
-<div class="page-header">
-    <div>
-        <h1>Επεξεργασία Εξόδου</h1>
+<div class="expense-form">
+    <div class="expense-header">
+        <div>
+            <h1>Επεξεργασία Εξόδου</h1>
+        </div>
+        <a href="{% url 'income_expenses:index' %}" onclick="history.back(); return false;" class="btn-gray-b">←
+            Πίσω</a>
     </div>
-    {% if next %}
-    <a href="{{ next }}" class="btn btn-secondary">← Πίσω</a>
-    {% else %}
-    <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
-    {% endif %}
-</div>
 
-<div class="form-card">
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-grid">
-            <div class="form-group full">
-                <label>Κατάστημα</label>
-                {{ form.store }}
+    <div class="expense-card">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="standard-form">
+                    <label>Κατάστημα</label>
+                    {{ form.store }}
+                </div>
+                <div class="standard-form">
+                    <label>Ημερομηνία</label>
+                    {{ form.day }}
+                </div>
+                <div class="standard-form">
+                    <label>Ποσό (€)</label>
+                    {{ form.amount }}
+                </div>
+                <div class="standard-form">
+                    <label>Κατηγορία</label>
+                    {{ form.category }}
+                </div>
+                <div class="full-form">
+                    <label>Σχόλια</label>
+                    {{ form.comments }}
+                </div>
             </div>
-            <div class="form-group">
-                <label>Ημερομηνία</label>
-                {{ form.day }}
+            <div class="expense-footer">
+                <button type="submit" class="btn-green">Αποθήκευση</button>
+                <a href="{% url 'income_expenses:index' %}" class="btn-purple">Ακύρωση</a>
             </div>
-            <div class="form-group">
-                <label>Ποσό (€)</label>
-                {{ form.amount }}
-            </div>
-            <div class="form-group full">
-                <label>Κατηγορία</label>
-                {{ form.category }}
-            </div>
-            <div class="form-group full">
-                <label>Σχόλια</label>
-                {{ form.comments }}
-            </div>
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
-            <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Ακύρωση</a>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-
 {% endblock %}
