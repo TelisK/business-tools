@@ -1,46 +1,44 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
-
-<div class="page-header">
+<div class="expense-form">
+<div class="expense-header">
     <div>
-        <h1>{% if form.instance.pk %}Επεξεργασία Εξόδου{% else %}Νέο Έξοδο{% endif %}</h1>
+        <h1>Νέο Έξοδο</h1>
     </div>
-    <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
+    <a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
+    <a href="{% url 'invoices:invoice_reader' %}" class="btn-gray-b">Καταχώρηση τιμολογίου</a>
 </div>
 
-<div class="form-card">
+<div class="expense-card">
     <form method="post">
         {% csrf_token %}
         <div class="form-grid">
-            <div class="form-group full">
+            <div class="standard-form">
                 <label>Κατάστημα</label>
                 {{ form.store }}
             </div>
-            <div class="form-group">
+            <div class="standard-form">
                 <label>Ημερομηνία</label>
                 {{ form.day }}
             </div>
-            <div class="form-group">
+            <div class="standard-form">
                 <label>Ποσό (€)</label>
                 {{ form.amount }}
             </div>
-            <div class="form-group full">
+            <div class="standard-form">
                 <label>Κατηγορία</label>
                 {{ form.category }}
             </div>
-            <div class="form-group full">
+            <div class="full-form">
                 <label>Σχόλια</label>
                 {{ form.comments }}
             </div>
         </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
-            <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">Ακύρωση</a>
+        <div class="expense-footer">
+            <button type="submit" class="btn-green">Αποθήκευση</button>
+            <a href="{% url 'income_expenses:index' %}" class="btn-purple">Ακύρωση</a>
         </div>
     </form>
 </div>
-<div class="form-card">
-    <a href="{% url 'invoices:invoice_reader' %}" class="btn btn-primary">Καταχώρηση τιμολογίου</a>
 </div>
-
 {% endblock %}

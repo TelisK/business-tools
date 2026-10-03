@@ -899,11 +899,11 @@ input[type="file"]::file-selector-button:hover {
   text-decoration: none;
   display: inline-block;
   font-size: 13.33px;
-  background-color: var(--bg-main);
+  background-color: var(--gray);
   padding: 5px 10px;
   border-color: var(--border);
   border-radius: 10px;
-  color: var(--bg-dark);
+  color: var(--black);
   cursor: pointer;
   transition: background-color 0.5s;
   box-shadow: 1.5px 1.5px 0 #817e7e;
@@ -948,6 +948,9 @@ input[type="file"]::file-selector-button:hover {
 }
 .income-footer {
   margin-top: 20px;
+}
+.income-detail-buttons a:last-child {
+  margin-left: 20px;
 }
 .detail-total {
   display: flex;
@@ -1008,10 +1011,24 @@ input[type="file"]::file-selector-button:hover {
 }
 }
 
+/* submit_expense.html & expense_update.html & expense_detail.html */
 
-
-
-
+.expense-header a:last-child {
+  margin-left: 20px;
+}
+.expense-card {
+  background-color: var(--cards);
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.expense-footer {
+  margin-top: 20px;
+}
+.expense-extra {
+  margin-bottom: 20px;
+}
 
 
 
