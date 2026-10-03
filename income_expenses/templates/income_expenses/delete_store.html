@@ -1,10 +1,13 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<form method="POST">
-    {% csrf_token %}
-    <h2>Will be deleted. Are you sure?</h2>
-    <button type="submit">Delete</button>
-</form>
-
+<a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
+<div class="delete">
+    <form method="POST">
+        {% csrf_token %}
+        <h3>Θα διαγραφεί το κατάστημα: {{ store_to_del.name }}</h3>
+        <p>Είστε σίγουροι;</p>
+        <button class="btn-purple" type="submit">Delete</button>
+    </form>
+</div>
 {% endblock %}

@@ -626,7 +626,8 @@ main {
 .store-list .store-item span a {
   text-decoration: none;
 }
-.btn-edit {
+/* Changed Style. The following buttons will be canceled */
+/* .btn-edit {
   background-color: var(--green-light);
   color: var(--green1);
   padding: 10px;
@@ -646,7 +647,7 @@ main {
 }
 .btn-delete:hover {
   background-color: var(--hover-white);
-}
+} */
 
 /* prediction_with_ml.html */
 .prediction-container {

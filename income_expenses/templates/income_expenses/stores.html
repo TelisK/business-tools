@@ -10,7 +10,7 @@
             <h1>Καταστήματα</h1>
             <p>Διαχείριση καταστημάτων</p>
         </div>
-        <a href="{% url 'income_expenses:add_store' %}" class="btn-store">+ Νέο Κατάστημα</a>
+        <a href="{% url 'income_expenses:add_store' %}" class="btn-gray-b">+ Νέο Κατάστημα</a>
     </div>
 
     <div class="stores">
@@ -18,10 +18,10 @@
             {% for store in stores_list %}
             <li class="store-item">
                 <div class="store">
-                    <span><a href="{% url 'income_expenses:update_store' store.id %}" class="btn-edit">{{ store.name }}</a></span>
+                    <span><a href="{% url 'income_expenses:update_store' store.id %}" class="btn-green-b">{{ store.name }}</a></span>
                     <div class="entry-actions">
                         {% if stores_list.count > 1 %}
-                        <a href="{% url 'income_expenses:delete_store' store.id %}" class="btn-delete">Διαγραφή</a>
+                        <a href="{% url 'income_expenses:delete_store' store.id %}" class="btn-purple">Διαγραφή</a>
                         {% endif %}
 
                     </div>

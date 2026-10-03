@@ -509,9 +509,10 @@ def delete_fixed_expense(request, id):
     fixed_expense = get_object_or_404(FixedExpenses, id=id, store__user=request.user)
     if request.method == 'POST':
         fixed_expense.delete()
+        messages.success(request, f'Το πάγιο έξοδο {fixed_expense.name} διαγράφηκε!')
         return redirect('income_expenses:fixed_expenses')
     else:
-        return render(request,'income_expenses/delete_fixed_expense.html')
+        return render(request,'income_expenses/delete_fixed_expense.html', {'fixed_expense':fixed_expense})
 
 
 @login_required
@@ -606,7 +607,8 @@ def add_store(request):
             store = form.save(commit=False)
             store.user = request.user
             store.save()
-            return redirect('income_expenses:index')
+            messages.success(request, f'Το κατάστημα {store.name} δημιουργήθηκε!')
+            return redirect('income_expenses:stores')
     else:
         form = StoreForm()
         
@@ -620,7 +622,7 @@ def update_store(request, id):
         form = StoreForm(request.POST, instance=store_to_upd)
         if form.is_valid():
             form.save()
-            #store_to_upd.user.add(request.user)
+            messages.success(request, f'Το κατάστημα {store_to_upd.name} ενημερώθηκε')
             return redirect('income_expenses:stores')
         else:
             return redirect('income_expenses/update_store.html')
@@ -632,17 +634,18 @@ def update_store(request, id):
 @login_required
 def delete_store(request, id):
     """User cannot delete the last store. This is for data protection."""
+    store_to_del = get_object_or_404(Store, id=id, user=request.user)
     if request.method == 'POST':
-        store_to_del = get_object_or_404(Store, id=id, user=request.user)
         stores = Store.objects.filter(user=request.user)
         if stores.count() == 1: # If there is one store, it cannot be deleted.
             return redirect('income_expenses:stores')
         
         logger.warning(f'User {request.user} deleted the store: {store_to_del.name}')
         store_to_del.delete()
+        messages.success(request, f'Το κατάστημα {store_to_del.name} διαγράφηκε!')
         return redirect('income_expenses:stores')
     else:
-        return render(request, 'income_expenses/delete_store.html')
+        return render(request, 'income_expenses/delete_store.html', {'store_to_del':store_to_del})
 
 @login_required
 # With pandas and a predefined excel file, that user will complete, and upload it. Tha data will fill the database.
