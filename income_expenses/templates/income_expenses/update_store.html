@@ -1,25 +1,23 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<div class="page-header">
+<div class="add-store-header">
     <div>
-        <h1>Επεξεργασία Εξόδου</h1>
+        <h1>Επεξεργασία Καταστήματος</h1>
     </div>
-    <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">← Πίσω</a>
+    <a href="{% url 'income_expenses:stores' %}" class="btn-gray-b">← Πίσω</a>
 </div>
 
-<div class="form-card">
+<div class="store-card">
     <form method="POST">
         {% csrf_token %}
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Όνομα</label>
+            <div class="store_name">
+                <label>Όνομα Καταστήματος</label>
                 {{ form.name }}
             </div>
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
-            <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">Ακύρωση</a>
+        <div class="form-footer">
+            <button type="submit" class="btn-green">Αποθήκευση</button>
+            <a href="{% url 'income_expenses:stores' %}" class="btn-purple">Ακύρωση</a>
         </div>
     </form>
 </div>

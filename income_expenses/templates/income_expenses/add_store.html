@@ -1,32 +1,30 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<div class="page-header">
+<div class="add-store-header">
     <div>
-        <h1>{% if form.instance.pk %}Επεξεργασία Καταστήματος{% else %}Νέο Κατάστημα{% endif %}</h1>
+        <h1>Δημιουργία Καταστήματος</h1>
     </div>
-    <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">← Πίσω</a>
+    <a href="{% url 'income_expenses:stores' %}" class="btn-gray-b">← Πίσω</a>
 </div>
-    <!-- Display form errors -->
-    {% if form.errors %}
-    <div class="alert-container">
-        <div class="alert alert-message-danger">
-            {{ form.errors }}
-        </div>
+<!-- Display form errors -->
+{% if form.errors %}
+<div class="alert-container">
+    <div class="alert alert-message-danger">
+        {{ form.errors }}
     </div>
-    {% endif %}
-<div class="form-card">
+</div>
+{% endif %}
+<div class="store-card">
     <form method="post">
         {% csrf_token %}
-        <div class="form-grid">
-            <div class="form-group full">
-                <label>Όνομα Καταστήματος</label>
-                {{ form.name }}
-            </div>
+        <div class="store_name">
+            <label>Όνομα Καταστήματος</label>
+            {{ form.name }}
         </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
-            <a href="{% url 'income_expenses:stores' %}" class="btn btn-secondary">Ακύρωση</a>
+        <div class="form-footer">
+            <button type="submit" class="btn-green">Αποθήκευση</button>
+            <a href="{% url 'income_expenses:stores' %}" class="btn-purple">Ακύρωση</a>
         </div>
     </form>
 </div>

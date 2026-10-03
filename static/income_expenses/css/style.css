@@ -946,7 +946,7 @@ input[type="file"]::file-selector-button:hover {
   color: var(--black);
   width: 100%;
 }
-.income-footer {
+.form-footer {
   margin-top: 20px;
 }
 .income-detail-buttons a:last-child {
@@ -1022,9 +1022,6 @@ input[type="file"]::file-selector-button:hover {
   border: 1px solid var(--border);
   border-radius: 8px;
   margin: 20px 0;
-}
-.expense-footer {
-  margin-top: 20px;
 }
 .expense-extra {
   margin-bottom: 20px;
