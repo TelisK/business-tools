@@ -831,6 +831,25 @@ input[type="file"]::file-selector-button:hover {
 .btn-purple:active {
   box-shadow: -1.5px -1.5px 0 #817e7e;
 }
+.btn-green-b {
+  text-decoration: none;
+  display: inline-block;
+  font-size: 13.33px;
+  background-color: var(--bg-main);
+  padding: 5px 10px;
+  border-color: var(--border);
+  border-radius: 10px;
+  color: var(--bg-dark);
+  cursor: pointer;
+  transition: background-color 0.5s;
+  box-shadow: 1.5px 1.5px 0 #817e7e;
+}
+.btn-green-b:hover {
+  background-color: var(--border);
+}
+.btn-green-b:active {
+  box-shadow: -1.5px -1.5px 0 #817e7e;
+}
 @media screen and (min-width: 1000px)  {
   .fixed-expenses-fields {
     display: grid;
@@ -867,7 +886,7 @@ input[type="file"]::file-selector-button:hover {
   justify-content: space-evenly;
 }
 
-/* submit_income.html & income_update.html */
+/* submit_income.html & income_update.html & detail.html */
 
 .income-card {
   background-color: var(--cards);
@@ -930,14 +949,62 @@ input[type="file"]::file-selector-button:hover {
 .income-footer {
   margin-top: 20px;
 }
+.detail-total {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+  background-color: var(--green-light);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.detail-item {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 0.9rem;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--cards);
+  color: var(--black);
+  margin: 10px;
+}
+.comments-card {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--cards);
+  color: var(--black);
+  margin: 10px;
+}
+.created-updated {
+  text-align: center;
+  font-style: italic;
+  color: var(--black);
+  margin-bottom: 20px;
+}
 @media screen and (min-width: 1000px) {
   .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.btn-purple, .btn-gray-b {
+.btn-purple, .btn-gray-b, .btn-green-b {
   font-size: 1.1rem;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 5px;
 }
 }
 

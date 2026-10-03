@@ -1,49 +1,49 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<div class="page-header">
+<div class="income-header">
     <div>
         <h1>Λεπτομέρειες Εσόδου</h1>
         <p>{{ income_detail.day|date:"d/m/Y" }}</p>
     </div>
-    <div class="detail-menu">
-        <a href="{% url 'income_expenses:income_update' income_detail.id %}" class="btn btn-secondary">Επεξεργασία</a>
-        <a href="{% url 'income_expenses:income_delete' income_detail.id %}" class="btn btn-danger">Διαγραφή</a>
-        <a href="{% url 'income_expenses:index' %}" class="btn btn-secondary">← Πίσω</a>
+    <div class="income-detail-buttons">
+        <a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
+        <a href="{% url 'income_expenses:income_update' income_detail.id %}" class="btn-green-b">Επεξεργασία</a>
+        <a href="{% url 'income_expenses:income_delete' income_detail.id %}" class="btn-purple">Διαγραφή</a>
     </div>
 </div>
 
 <div class="detail-total">
-    <span class="detail-total-label">Σύνολο Εσόδων</span>
-    <span class="detail-total-value">{{ income_detail.income_sum }} €</span>
+    <span>Σύνολο Εσόδων</span>
+    <span>{{ income_detail.income_sum }} €</span>
 </div>
 
 <div class="detail-grid">
     <div class="detail-item">
-        <div class="detail-label">Μετρητά</div>
-        <div class="detail-value income">{{ income_detail.income_cash }} €</div>
+        <div>Μετρητά</div>
+        <div>{{ income_detail.income_cash }} €</div>
     </div>
     <div class="detail-item">
-        <div class="detail-label">POS</div>
-        <div class="detail-value income">{{ income_detail.income_pos }} €</div>
+        <div>POS</div>
+        <div>{{ income_detail.income_pos }} €</div>
     </div>
     <div class="detail-item">
-        <div class="detail-label">Κατάθεση</div>
-        <div class="detail-value income">{{ income_detail.income_deposit }} €</div>
+        <div>Κατάθεση</div>
+        <div>{{ income_detail.income_deposit }} €</div>
     </div>
     <div class="detail-item">
-        <div class="detail-label">Επιταγή</div>
-        <div class="detail-value income">{{ income_detail.income_check }} €</div>
+        <div>Επιταγή</div>
+        <div>{{ income_detail.income_check }} €</div>
     </div>
     <div class="detail-item">
-        <div class="detail-label">Άλλο</div>
-        <div class="detail-value income">{{ income_detail.income_other }} €</div>
+        <div>Άλλο</div>
+        <div>{{ income_detail.income_other }} €</div>
     </div>
 </div>
 
 {% if income_detail.comments %}
 <div class="comments-card">
-    <div class="detail-label">Σχόλια</div>
+    <div>Σχόλια</div>
     <p>{{ income_detail.comments }}</p>
 </div>
 {% endif %}
