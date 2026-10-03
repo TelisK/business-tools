@@ -1032,9 +1032,34 @@ input[type="file"]::file-selector-button:hover {
 .expense {
   background-color: var(--purple-light);
 }
-.detail-grid-expense {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+@media screen and (min-width: 1000px) {
+  .detail-grid-expense {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* income_delete.html & expense_delete.html */
+
+.delete {
+  background-color: var(--cards);
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0 40px 0;
+}
+.delete h3 {
+  color: var(--purple1);
+}
+
+@media screen and (min-width: 1000px) {
+  .delete {
+    background-color: var(--cards);
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0 150px 0;
+  }
 }
 
 

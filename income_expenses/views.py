@@ -446,6 +446,7 @@ def submit_income(request):
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
+            messages.success(request, f'Το έσοδο προστέθηκε με επιτυχία!')
             return redirect('income_expenses:index')
         else:
             messages.error(request, 'H Ημερομηνία είναι καταχωρημένη ήδη.')
@@ -468,6 +469,7 @@ def submit_expense(request):
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
+            messages.success(request, f'Το έξοδο προστέθηκε με επιτυχία!')
             return redirect('income_expenses:index')
     
     else:
@@ -517,54 +519,46 @@ def update_income(request, id):
     stores = Store.objects.filter(user=request.user)
     income_update = get_object_or_404(Income, id=id, store__user=request.user)
     
-    next_url = request.GET.get('next') or request.POST.get('next')
     if request.method == 'POST':
         form = IncomeForm(request.POST, instance=income_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
-            if next_url:
-                return redirect(next_url)
+            messages.success(request, f'Το έσοδο με ημερομηνία {income_update.day.strftime("%d/%m/%Y")}\
+                             ενημερώθηκε με επιτυχία!')
             return redirect('income_expenses:detail', id=id)
         else:
             messages.error(request, 'Ελέγξε τη φόρμα')
             return render(request, 'income_expenses/income_update.html', {
-                'form':form,
-                'next':next_url,
-            })
+                'form':form})
     else:
         form = IncomeForm(instance=income_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
         context_to_html = {
-            'form':form,
-            'next':next_url,
-        }
+            'form':form,}
         return render(request,'income_expenses/income_update.html', context=context_to_html)
 
 @login_required
 def update_expense(request, id):
     stores = Store.objects.filter(user=request.user)
     expense_update = get_object_or_404(Expenses, id=id, store__user=request.user)
-    # redirects to the page the user entered on the update. We check below if next_url ...
-    next_url = request.GET.get('next') or request.POST.get('next')
+
     if request.method == 'POST':
         form = ExpenseForm(request.POST, instance=expense_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
         if form.is_valid():
             form.save()
-            if next_url:
-                return redirect(next_url)
+            messages.success(request, f'Το έξοδο με ημερομηνία {expense_update.day.strftime("%d/%m/%Y")}\
+                             ενημερώθηκε με επιτυχία!')
             return redirect('income_expenses:expenses_detail', id=id)
         else:
             messages.error(request, 'Έλεγξε τη φόρμα')
             return render(request, 'income_expenses/expense_update.html', {
-                'form':form,
-                'next':next_url,
-            })
+                'form':form})
     else:
         form = ExpenseForm(instance=expense_update)
         form.fields['store'].queryset = stores  # this filters the dropdown
-        context_to_html = {'form':form, 'next':next_url,}
+        context_to_html = {'form':form,}
         return render(request,'income_expenses/expense_update.html', context=context_to_html)
 
 @login_required
@@ -576,9 +570,11 @@ def delete_income(request, id):
         f'for store {income_to_del.store}'
         )
         income_to_del.delete()
+        messages.success(request, f'Το έσοδο με ημερομηνία {income_to_del.day.strftime("%d/%m/%Y")}\
+                          και ποσό {income_to_del.income_sum} € διαγράφηκε με επιτυχία.')
         return redirect('income_expenses:index')
     else:
-        return render(request, 'income_expenses/income_delete.html')
+        return render(request, 'income_expenses/income_delete.html', {'income_to_del':income_to_del})
 
 @login_required
 def delete_expense(request, id):
@@ -590,9 +586,11 @@ def delete_expense(request, id):
         )
 
         expense_to_del.delete()
+        messages.success(request, f'Το έξοδο με ημερομηνία {expense_to_del.day.strftime("%d/%m/%Y")}\
+                          και ποσό {expense_to_del.amount} € διαγράφηκε με επιτυχία.')
         return redirect('income_expenses:index')
     else:
-        return render(request, 'income_expenses/expense_delete.html')
+        return render(request, 'income_expenses/expense_delete.html', {'expense_to_del':expense_to_del})
     
 @login_required
 def stores(request):
