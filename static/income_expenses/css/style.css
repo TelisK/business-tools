@@ -1029,8 +1029,13 @@ input[type="file"]::file-selector-button:hover {
 .expense-extra {
   margin-bottom: 20px;
 }
-
-
+.expense {
+  background-color: var(--purple-light);
+}
+.detail-grid-expense {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
 
 
 
