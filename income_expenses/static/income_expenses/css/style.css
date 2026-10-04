@@ -1142,8 +1142,23 @@ input[type="file"]::file-selector-button:hover {
 .neutral {
   color: var(--black);
 }
+.chart-card {
+  width: 100%;
+  overflow-x: auto;
+}
+/* modebar controls 'displayModeBar': True on the view */
+.chart-card .modebar {
+  display: none;
+}
 
 
+
+
+@media screen and (min-width: 1000px) {
+  .chart-card .modebar {
+  display: block;
+}
+}
 
 /* a look like button */
 

@@ -321,27 +321,40 @@ def analytics(request):
     if isinstance(end_date, str):
         end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
 
+    def responsive_chart(fig):
+        fig.update_layout(
+        autosize=True,
+        margin=dict(l=10, r=10, t=30, b=30),  # margins for the chart
+        font=dict(size=11),                     # smaller font
+        title=dict(font=dict(size=12)),     # smaller title font size
+        legend_title_text='',     # removes the word variable from legend
+        legend=dict(   # default orientation 'v', legend is on the right side of the chart.
+        orientation='h') 
+        )
+        return fig.to_html(include_plotlyjs='cdn',
+                        config={'responsive': True, 'displayModeBar': True},
+                        full_html=False)
+
     fig = px.line(
         income_df, 
         x='day', 
         y='Καθαρό Εισόδημα', 
-        title=f'Εισοδήματα απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}',
+        title=f'Εισοδήματα: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}',
         labels={'day':'Ημερομηνία', 'Καθαρό Εισόδημα':'Καθαρό Εισόδημα πρό φόρων σε €'}
     )
 
-    chart = fig.to_html(include_plotlyjs='cdn')
+    chart = responsive_chart(fig)
 
 
-    
     fig2 = px.line(
         income_df,
         x='day',
         y=['Μετρητά', 'POS', 'Κατάθεση', 'Επιταγή', 'Άλλο'],
-        title=f'Αναλυτικά απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}',
+        title=f'Τρόποι πληρωμής αναλυτικά: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}',
         labels={'day':'Ημερομηνία', 'value':'Τζίρος σε €'}
     )
 
-    chart2 = fig2.to_html(include_plotlyjs='cdn')
+    chart2 = responsive_chart(fig2)
 
     if expenses_df.empty: # if we have no expenses, it creates the dataframe empty.
         expenses_df = pd.DataFrame(columns=['day', 'Συνολικά_Έξοδα'])
@@ -355,11 +368,11 @@ def analytics(request):
         df,
         x='day',
         y=['Συνολικό_Εισόδημα', 'Συνολικά_Έξοδα'],
-        title=f'Έσοδα - Έξοδα απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')} συμπεριλαμβάνουν ΦΠΑ',
+        title=f'Έσοδα - Έξοδα: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')} με ΦΠΑ',
         labels={'day':'Ημερομηνία', 'value':'Έσοδα - Έξοδα σε €'}
     )
 
-    chart3 = fig3.to_html(include_plotlyjs='cdn')
+    chart3 = responsive_chart(fig3)
 
     if not income_df.empty:
 
@@ -376,9 +389,9 @@ def analytics(request):
 
         fig4 = px.pie(names=list(income_sum_for_pie.keys()),
                     values=list(income_sum_for_pie.values()),
-                    title=f'Ποσοστό χρήσης τρόπων πληρωμής απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}')
+                    title=f'Τρόποι πληρωμής: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}')
 
-        chart4 = fig4.to_html(include_plotlyjs='cdn')
+        chart4 = responsive_chart(fig4)
 
     else:
         chart4 = None
@@ -397,10 +410,10 @@ def analytics(request):
 
         fig5 = px.pie(names = list(income_day_for_pie.keys()),
                       values = list(income_day_for_pie.values()),
-                      title=f'Ποσοστό εισπράξεων ανα ημέρα απο {start_date.strftime('%d/%m/%Y')} έως {end_date.strftime('%d/%m/%Y')}')
+                      title=f'Εισπράξεις ανα ημέρα: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}')
         
 
-        chart5 = fig5.to_html(include_plotlyjs='cdn')
+        chart5 = responsive_chart(fig5)
     else:
         chart5 = None
 
