@@ -1083,6 +1083,66 @@ input[type="file"]::file-selector-button:hover {
   margin-top: 10px;
 }
 
+/* analytics.html */
+
+.analytics {
+  background-color: var(--cards);
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.presets {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+.period-selection button {
+  margin: 10px 0;
+  width: 100%;
+}
+.dates-inform {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 10px;
+}
+.dates-inform span {
+  color: var(--purple1);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.summary-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+.gray-form {
+  background-color: var(--bg-main);
+  /* padding: 2px; */
+  border: var(--border);
+  border-radius: 8px;
+  text-align: center;
+}
+.gray-form h3 {
+  font-weight: 200;
+  font-size: 1rem;
+}
+.amount {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.positive {
+  color: var(--green1);
+}
+.negative {
+  color: var(--purple1);
+}
+.neutral {
+  color: var(--black);
+}
+
 
 
 /* a look like button */

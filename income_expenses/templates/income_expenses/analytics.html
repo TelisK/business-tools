@@ -1,100 +1,105 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
-<div class="analytics-wrapper">
-    <!-- Filter Section -->
-    <div class="filter-card">
+<div class="analytics">
+    <!-- Filter -->
+    <div class="period-selection">
         <h2>Επιλογή Περιόδου</h2>
-        <form method="GET" action="{% url 'income_expenses:analytics' %}" class="filter-form">
+        <form method="GET" action="{% url 'income_expenses:analytics' %}">
             <div class="form-grid">
-                <div class="form-group">
+                <div class="standard-form">
                     <label>Ημερομηνία Έναρξης</label>
-                    <input type="date" name="start_date" value="{{ start_date }}" class="form-control">
+                    <input type="date" name="start_date" value="{{ start_date }} class=" date-input date-from">
                 </div>
-                <div class="form-group">
+                <div class="standard-form">
                     <label>Ημερομηνία Λήξης</label>
-                    <input type="date" name="end_date" value="{{ end_date }}" class="form-control">
+                    <input type="date" name="end_date" value="{{ end_date }}" class="date-input date-to">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Εφαρμογή</button>
+            <div class="presets">
+                <a href="?start_date={{ quick_filters.this_year.from|date:'Y-m-d' }}&end_date={{ quick_filters.this_year.to|date:'Y-m-d' }}"
+                    class="btn-gray-b">Τρέχον Έτος</a>
+                <a href="?start_date={{ quick_filters.last_year_same_period.from|date:'Y-m-d' }}&end_date={{ quick_filters.last_year_same_period.to|date:'Y-m-d' }}"
+                    class="btn-gray-b">Ίδια Περίοδος Πέρυσι</a>
+            </div>
+            <button type="submit" class="btn-gray">Εφαρμογή</button>
         </form>
     </div>
+    <div class="dates-inform">Αποτελέσματα για:
+        <span>{{ start_date }} - {{ end_date }}</span>
+    </div>
+    <div class="analyse-card">
+        <div class="heading">Ανάλυση Εσόδων</div>
+        <div class="analyse">
+            <div>
+                <span class="label">Μετρητά:</span>
+                <span class="value">{{ income_totals.total_cash }} €</span>
+            </div>
+            <div>
+                <span class="label">POS:</span>
+                <span class="value">{{ income_totals.total_pos }} €</span>
+            </div>
+            <div>
+                <span class="label">Κατάθεση:</span>
+                <span class="value">{{ income_totals.total_deposit }} €</span>
+            </div>
+            <div>
+                <span class="label">Επιταγή:</span>
+                <span class="value">{{ income_totals.total_check }} €</span>
+            </div>
+            <div>
+                <span class="label">Άλλο:</span>
+                <span class="value">{{ income_totals.total_other }} €</span>
+            </div>
+        </div>
+    </div>
 
-    <!-- Summary Cards -->
-    <div>Αποτελέσματα για: {{ start_date }} - {{ end_date }}</div>
+
     <div class="summary-cards">
-        <div class="card card-income">
+        <div class="gray-form">
             <h3>Σύνολο Εσόδων</h3>
-            <p class="amount">{{ sum_income_result }} €</p>
+            <p class="positive amount">{{ sum_income_result }} €</p>
         </div>
-        <div class="card card-income">
+        <div class="gray-form">
             <h3>ΦΠΑ Εσόδων</h3>
-            <p class="amount">{{ fpa_income_tax|floatformat:2 }} €</p>
+            <p class="positive amount">{{ fpa_income_tax|floatformat:2 }} €</p>
         </div>
-        <div class="card card-expense">
+        <div class="gray-form">
             <h3>Σύνολο Εξόδων</h3>
-            <p class="amount">{{ sum_expenses_result }} €</p>
+            <p class="negative amount">{{ sum_expenses_result }} €</p>
         </div>
-        <div class="card card-expense">
+        <div class="gray-form">
             <h3>ΦΠΑ Εξόδων</h3>
-            <p class="amount">{{ fpa_expenses_tax|floatformat:2 }} €</p>
+            <p class="negative amount">{{ fpa_expenses_tax|floatformat:2 }} €</p>
         </div>
-        <div class="card card-net">
+        <div class="gray-form">
             <h3>Καθαρό Αποτέλεσμα</h3>
-            <p class="amount {% if net_result >= 0 %}positive{% else %}negative{% endif %}">{{ net_result|floatformat:2
-                }} €</p>
+            <p class="amount {% if net_result >= 0 %}positive{% else %}negative{% endif %}">{{ net_result|floatformat:2}} €</p>
         </div>
-    </div>
-    <div class="summary-cards">
-        <div class="card card-net">
+        <div class="gray-form">
             <h3>Μέγιστο ποσό είσπραξης</h3>
-            <p class="amount">{{ income_max|floatformat:2 }} €</p>
+            <p class="neutral amount">{{ income_max|floatformat:2 }} €</p>
         </div>
-        <div class="card card-net">
+        <div class="gray-form">
+            <h3>Ελάχιστο ποσό είσπραξης</h3>
+            <p class="neutral amount">{{ income_min|floatformat:2 }} €</p>
+        </div>
+        <div class="gray-form">
             <h3>Μέσος όρος ημέρας</h3>
-            <p class="amount">{{ income_average|floatformat:2 }} €</p>
+            <p class="neutral amount">{{ income_average|floatformat:2 }} €</p>
         </div>
-    </div>
-    <div class="summary-cards">
-        <div class="card card-net">
+        <div class="gray-form">
             <h3>Περιθώριο Μικτού Κέρδους</h3>
-            <p class="amount">{{ gross_profit_margin|floatformat:2 }} %</p>
+            <p class="amount {% if gross_profit_margin >= 20 %}positive{% else %}negative{% endif %}">{{ gross_profit_margin|floatformat:2 }} %</p>
         </div>
-        <div class="card card-net">
+        <div class="gray-form">
             <h3>Περιθώριο Καθαρού Κέρδους</h3>
-            <p class="amount">{{ net_profit_margin|floatformat:2 }} %</p>
+            <p class="amount {% if net_profit_margin >= 0 %}positive{% else %}negative{% endif %}">{{ net_profit_margin|floatformat:2 }} %</p>
         </div>
     </div>
 </div>
 
-<!-- Income Breakdown -->
-<div class="card card-breakdown">
-    <h2>Ανάλυση Εσόδων</h2>
-    <div class="breakdown-grid">
-        <div class="breakdown-item">
-            <span>Μετρητά</span>
-            <strong>{{ income_totals.total_cash }} €</strong>
-        </div>
-        <div class="breakdown-item">
-            <span>POS</span>
-            <strong>{{ income_totals.total_pos }} €</strong>
-        </div>
-        <div class="breakdown-item">
-            <span>Κατάθεση</span>
-            <strong>{{ income_totals.total_deposit }} €</strong>
-        </div>
-        <div class="breakdown-item">
-            <span>Επιταγή</span>
-            <strong>{{ income_totals.total_check }} €</strong>
-        </div>
-        <div class="breakdown-item">
-            <span>Άλλο</span>
-            <strong>{{ income_totals.total_other }} €</strong>
-        </div>
-    </div>
-</div>
-
-<!-- Charts Grid -->
+<!-- Charts  -->
 <div class="charts-grid">
     <div class="chart-card">
         <h3>Συνολικό Εισόδημα</h3>
