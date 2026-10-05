@@ -1265,8 +1265,13 @@ input[type="file"]::file-selector-button:hover {
 footer {
   border-top: 1px solid var(--gray);
   padding-top: 10px;
+  background-color: var(--bg-dark);
+  color: var(--bg-main);
 }
-
+footer a {
+  text-decoration: none;
+  color: var(--bg-main);
+}
 /* a look like button */
 
   /* text-decoration: none;
