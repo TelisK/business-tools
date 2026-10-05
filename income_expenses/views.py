@@ -49,8 +49,8 @@ def get_totals(store: int,date_from: str,date_to: str):
     else:
         d_from = date_from
 
-    income_result = Income.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
-    expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to]).order_by('day')
+    income_result = Income.objects.filter(store=store, day__range=[date_from, date_to]).order_by('-day')
+    expenses_result = Expenses.objects.filter(store=store, day__range=[date_from, date_to]).order_by('-day')
     expenses_fpa_taxes = Expenses.objects.filter(
         store=store, day__range=[date_from, date_to],
         category__in=['WITH_FPA_TAX', 'WITH_FPA_13', 'WITH_FPA_6']
@@ -298,6 +298,7 @@ def analytics(request):
     ]].sum(axis=1)
 
     income_max = income_df['total_income'].max()
+    income_min = income_df['total_income'][income_df['total_income'] > 0].min()
     income_average = income_df['total_income'].mean()
 
     income_df['net_income'] = income_df['total_income'].div(Decimal(1.24))
@@ -439,6 +440,7 @@ def analytics(request):
         'income_result' : income_result,
         'expenses_result' : expenses_result,
         'income_max' : income_max,
+        'income_min' : income_min,
         'income_average' : income_average,
         'fpa_income_tax' : fpa_income_tax,
         'fpa_expenses_tax' : fpa_expenses_tax,

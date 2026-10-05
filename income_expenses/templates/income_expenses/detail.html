@@ -7,7 +7,7 @@
         <p>{{ income_detail.day|date:"d/m/Y" }}</p>
     </div>
     <div class="income-detail-buttons">
-        <a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
+        <a href="{% url 'income_expenses:index' %}" onclick="history.back(); return false;" class="btn-gray-b">← Πίσω</a>
         <a href="{% url 'income_expenses:income_update' income_detail.id %}" class="btn-green-b">Επεξεργασία</a>
         <a href="{% url 'income_expenses:income_delete' income_detail.id %}" class="btn-purple">Διαγραφή</a>
     </div>

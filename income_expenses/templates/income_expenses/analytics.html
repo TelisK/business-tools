@@ -1,6 +1,7 @@
 {% extends 'income_expenses/base.html' %}
 {% block body %}
 
+<a href="{% url 'income_expenses:index' %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
 <div class="analytics">
     <!-- Filter -->
     <div class="period-selection">
@@ -74,7 +75,8 @@
         </div>
         <div class="gray-form">
             <h3>Καθαρό Αποτέλεσμα</h3>
-            <p class="amount {% if net_result >= 0 %}positive{% else %}negative{% endif %}">{{ net_result|floatformat:2}} €</p>
+            <p class="amount {% if net_result >= 0 %}positive{% else %}negative{% endif %}">
+                {{ net_result|floatformat:2}} €</p>
         </div>
         <div class="gray-form">
             <h3>Μέγιστο ποσό είσπραξης</h3>
@@ -90,11 +92,13 @@
         </div>
         <div class="gray-form">
             <h3>Περιθώριο Μικτού Κέρδους</h3>
-            <p class="amount {% if gross_profit_margin >= 20 %}positive{% else %}negative{% endif %}">{{ gross_profit_margin|floatformat:2 }} %</p>
+            <p class="amount {% if gross_profit_margin >= 20 %}positive{% else %}negative{% endif %}">
+                {{ gross_profit_margin|floatformat:2 }} %</p>
         </div>
         <div class="gray-form">
             <h3>Περιθώριο Καθαρού Κέρδους</h3>
-            <p class="amount {% if net_profit_margin >= 0 %}positive{% else %}negative{% endif %}">{{ net_profit_margin|floatformat:2 }} %</p>
+            <p class="amount {% if net_profit_margin >= 0 %}positive{% else %}negative{% endif %}">
+                {{ net_profit_margin|floatformat:2 }} %</p>
         </div>
     </div>
 </div>
@@ -134,75 +138,52 @@
 {% endif %}
 
 <!-- Data Table -->
-<div class="card card-table">
+<div class="analytics-card-table">
     <h2>Λεπτομέρειες</h2>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Ημερομηνία</th>
-                    <th>Μετρητά</th>
-                    <th>POS</th>
-                    <th>Κατάθεση</th>
-                    <th>Επιταγή</th>
-                    <th>Άλλο</th>
-                    <th>Σύνολο</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for income in income_result %}
-                <tr>
-                    <td>{{ income.day }}</td>
-                    <td>{{ income.income_cash }}</td>
-                    <td>{{ income.income_pos }}</td>
-                    <td>{{ income.income_deposit }}</td>
-                    <td>{{ income.income_check }}</td>
-                    <td>{{ income.income_other }}</td>
-                    <td><strong>{{ income.income_sum }}</strong></td>
-                    <td><a href="{% url 'income_expenses:detail' income.id %}?next={{ request.path }}"
-                            class="btn btn-edit">Λεπτομέρ.</a></td>
-                    <td><a href="{% url 'income_expenses:income_update' income.id %}?next={{ request.path }}"
-                            class="btn btn-edit">Επεξ.</a></td>
-                    <td><a href="{% url 'income_expenses:income_delete' income.id %}" class="btn btn-danger">Διαγρ.</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="7" class="text-center">Δέν υπάρχουν δεδομένα</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="analytics-details income-details">
+        <h3>Έσοδα</h3>
+        <div class="details-income-table-header">
+            <span>Ημερομηνία</span>
+            <span>Σύνολο</span>
+            <span>Μετρητά</span>
+            <span>POS</span>
+            <span>Κατάθεση</span>
+            <span>Επιταγή</span>
+            <span>Άλλο</span>
+        </div>
+        {% for income in income_result %}
+        <a href="{% url 'income_expenses:detail' income.id %}">
+            <div class="details-income-table">
+                <span>{{ income.day }}</span>
+                <span><strong>{{ income.income_sum }}</strong></span>
+                <span>{{ income.income_cash }}</span>
+                <span>{{ income.income_pos }}</span>
+                <span>{{ income.income_deposit }}</span>
+                <span>{{ income.income_check }}</span>
+                <span>{{ income.income_other }}</span>
+            </div>
+        </a>
+        {% empty %}
+        <span class="nodata">Δέν υπάρχουν δεδομένα</span>
+        {% endfor %}
     </div>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Ημερομηνία</th>
-                    <th>Έξοδα</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for expense in expenses_result %}
-                <tr>
-                    <td>{{ expense.day }}</td>
-                    <td><strong>{{ expense.amount }}</strong></td>
-                    <td><a href="{% url 'income_expenses:expenses_detail' expense.id %}?next={{ request.path }}"
-                            class="btn btn-edit">Λεπτομέριες</a></td>
-                    <td><a href="{% url 'income_expenses:expense_update' expense.id %}?next={{ request.path }}"
-                            class="btn btn-edit">Επεξεργασία</a></td>
-                    <td><a href="{% url 'income_expenses:expense_delete' expense.id %}"
-                            class="btn btn-danger">Διαγραφή</a></td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="7" class="text-center">Δέν υπάρχουν δεδομένα</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="analytics-details expenses-details">
+        <h3>Έξοδα</h3>
+        <div class="details-expense-table-header">
+            <span>Ημερομηνία</span>
+            <span>Έξοδα</span>
+        </div>
+        {% for expense in expenses_result %}
+        <a href="{% url 'income_expenses:expenses_detail' expense.id %}">
+            <div class="details-expense-table">
+                <span>{{ expense.day }}</span>
+                <span><strong>{{ expense.amount }}</strong></span>
+            </div>
+        </a>
+        {% empty %}
+        <span class="nodata">Δέν υπάρχουν δεδομένα</span>
+        {% endfor %}
     </div>
-</div>
 </div>
 
 <!-- dataframe on the html page -->

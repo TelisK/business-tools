@@ -1121,7 +1121,7 @@ input[type="file"]::file-selector-button:hover {
 .gray-form {
   background-color: var(--bg-main);
   /* padding: 2px; */
-  border: var(--border);
+  border: 1px solid var(--border);
   border-radius: 8px;
   text-align: center;
 }
@@ -1146,12 +1146,76 @@ input[type="file"]::file-selector-button:hover {
   width: 100%;
   overflow-x: auto;
 }
+/* modebar controls 'displayModeBar': True on the view */
 .chart-card .modebar {
   display: none;
 }
-
-
-
+/* analytics section */
+.nodata {
+  color: var(--purple1);
+}
+.analytics-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  background-color: var(--cards);
+  border-radius: 8px;
+  max-width: 100%;
+  padding: 0 5px 15px 5px;
+}
+.income-details {
+  border-color: 1px solid var(--green2);
+}
+.details-income-table-header, .details-income-table {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr 1fr 1.2fr 1.1fr 0.9fr;
+  gap: 5px;
+  font-size: 0.8rem;
+}
+.income-details a {
+  text-decoration: none;
+  color: var(--green1);
+}
+.income-details a:hover {
+  background-color: var(--gray);
+  color: var(--green-light);
+}
+.details-income-table-header span {
+  color: var(--gray);
+  font-style:italic ;
+  margin-bottom: 10px;
+}
+.details-income-table {
+  border-bottom: 1px solid var(--gray);
+  margin: 8px 0;
+}
+.expenses-details {
+  border-color: 1px solid var(--purple1);
+  margin-bottom: 20px;
+}
+.details-expense-table-header, .details-expense-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  font-size: 0.8rem;
+}
+.details-expense-table-header span {
+  color: var(--gray);
+  font-style:italic ;
+  margin-bottom: 10px;
+}
+.details-expense-table {
+  border-bottom: 1px solid var(--gray);
+  margin: 8px 0;
+}
+.expenses-details a {
+  text-decoration: none;
+  color: var(--purple1);
+}
+.expenses-details a:hover {
+  background-color: var(--gray);
+  color: var(--purple-light);
+}
 
 @media screen and (min-width: 1000px) {
   .chart-card .modebar {
