@@ -1,0 +1,43 @@
+{% extends 'income_expenses/base.html' %}
+{% load static %}
+
+<!-- Load extra css file -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div class="login-form">
+    <h1>Σύνδεση</h1>
+    {% if form.non_field_errors %}
+    <span class="error">{{ form.non_field_errors }}</span>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="field-wrapper">
+            <div class="standard-form">
+                <label>Όνομα χρήστη</label>
+                {{ form.username }}
+            </div>
+            <div class="standard-form">
+                <label>Κωδικός</label>
+                {{ form.password }}
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-green">Σύνδεση</button>
+
+        </div>
+    </form>
+    <div>
+        <span>Δέν έχεις λογαριασμό;</span>
+        <a class="btn-green-b" href="{% url 'accounts:register' %}">Εγγραφή</a>
+        <br>
+        <span>Ξέχασες τον κωδικο;</span>
+        <a class="btn-purple" href="{% url 'password_reset' %}">Επαναφορά</a>
+    </div>
+
+</div>
+
+{% endblock %}

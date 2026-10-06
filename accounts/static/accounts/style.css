@@ -16,3 +16,10 @@
     justify-content: space-around;
 
 }
+.login-form {
+    background-color: var(--cards);
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+}
