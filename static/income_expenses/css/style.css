@@ -296,7 +296,7 @@ main {
   max-width: 80%;
   margin: 0 auto;
   position: relative;
-  /* text-align: center; */
+  min-height: 100vh;
   margin-top: 120px;
 }
 .btn-income {
@@ -1260,9 +1260,24 @@ input[type="file"]::file-selector-button:hover {
     color: #555;
 }
 
+/* footer */
 
-
-
+footer {
+  border-top: 1px solid var(--gray);
+  padding-top: 10px;
+  background-color: var(--bg-dark);
+  color: var(--bg-main);
+  font-size: 0.8rem;
+}
+footer a {
+  text-decoration: none;
+  color: var(--bg-main);
+}
+@media screen and (min-width: 1000px) {
+  footer {
+    font-size: 0.6rem;
+  }
+}
 
 /* a look like button */
 
