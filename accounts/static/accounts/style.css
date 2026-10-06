@@ -16,10 +16,22 @@
     justify-content: space-around;
 
 }
+
+/* login.html */
+
+
 .login-form {
     background-color: var(--cards);
     padding: 30px;
     border: 1px solid var(--border);
     border-radius: 8px;
     margin: 20px 0;
+    max-width: 500px;
+}
+.login-form .form-actions {
+    margin: 10px;
+    padding: 10px;
+}
+.login-form .options-no-login {
+    margin: 10px;
 }

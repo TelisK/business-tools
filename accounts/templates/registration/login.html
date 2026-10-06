@@ -30,12 +30,16 @@
 
         </div>
     </form>
-    <div>
-        <span>Δέν έχεις λογαριασμό;</span>
-        <a class="btn-green-b" href="{% url 'accounts:register' %}">Εγγραφή</a>
+    <div class="options-no-login">
+        <div>
+            <span>Δέν έχεις λογαριασμό;</span>
+            <a class="btn-green-b" href="{% url 'accounts:register' %}">Εγγραφή</a>
+        </div>
         <br>
-        <span>Ξέχασες τον κωδικο;</span>
-        <a class="btn-purple" href="{% url 'password_reset' %}">Επαναφορά</a>
+        <div>
+            <span>Ξέχασες τον κωδικο;</span>
+            <a class="btn-purple" href="{% url 'password_reset' %}">Επαναφορά</a>
+        </div>
     </div>
 
 </div>
