@@ -31,6 +31,7 @@ services:
         - ./income_expenses/static:/app/income_expenses/static:ro
         - ./invoices/static:/app/invoices/static:ro
         - ./ai_assistant/static:/app/ai_assistant/static:ro
+        - ./accounts/static:/app/accounts/static:ro
       depends_on:
         - web
 
