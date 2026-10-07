@@ -18,7 +18,12 @@ they were not working.  */
 .form-grid {
     display: grid;
     justify-content: space-around;
-
+}
+.field-wrapper {
+    margin: 10px;
+}
+.submit-form button {
+    margin-top: 10px;
 }
 
 /* login.html */
@@ -53,4 +58,37 @@ they were not working.  */
 .pass-reset-form-actions {
     margin: 10px;
     padding: 10px;
+}
+
+/* password_reset_done.html */
+
+.password-reset-done-card {
+    background-color: var(--cards);
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+    max-width: 400px;
+}
+
+/* password_reset_complete.html */
+
+.password-reset-complete-card {
+    background-color: var(--cards);
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+    max-width: 400px;
+}
+
+/* password_reset_confirm.html */
+
+.pass-reset-confirm-card {
+    background-color: var(--cards);
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+    max-width: 400px;
 }
