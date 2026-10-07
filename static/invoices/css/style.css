@@ -1,3 +1,21 @@
+:root {
+    --bg-main: #eef1f0;
+    --bg-dark: #164A3A;
+    --bg-income: #eff8f6;
+    --bg-expenses: #f6f3fa;
+    --hover-white: #f4f4f2;
+    --header:rgb(202, 214, 167);
+    --purple1: #7651A5;
+    --purple-light: #EEE7F6;
+    --green1: #1D6B50;
+    --green2: #164A3A;
+    --green-light: #dff2eb;
+    --gray: #abb2bb;
+    --black: #2d3336;
+    --border: #d5ddda;
+    --cards: #f8faf9;
+}
+
 .invoice-delete-card {
     background-color: var(--cards);
     padding: 30px;
@@ -5,7 +23,23 @@
     border-radius: 8px;
     margin: 20px 0;
     max-width: 400px; 
+    font-size: 0.8rem;
 }
+.invoice-delete-card span {
+    color: var(--purple1);
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 .invoice-upload-wrapper {

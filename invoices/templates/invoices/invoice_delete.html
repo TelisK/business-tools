@@ -8,13 +8,14 @@
 
 {% block body %}
 
+ <a href="{% url 'invoices:invoice_list' %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
 <div class="invoice-delete-card">
     <form method="POST">
         {% csrf_token %}
         <h2>Το τιμολόγιο του προμηθευτή <span>{{ invoice.supplier }}</span>, 
-            με ποσό <span>{{ invoice.total }} €</span><strong>θα διαγραφεί.</strong></h2>
+            με ποσό <span>{{ invoice.total }} € </span><br><strong>θα διαγραφεί.</strong></h2>
         <h2>Είστε σίγουρος;</h2>
-        <button class="btn-purple" type="submit">Delete</button>
+        <button class="btn-purple" type="submit">Διαγραφή</button>
     </form>
 </div>
 {% endblock %}
