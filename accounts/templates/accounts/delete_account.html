@@ -1,11 +1,21 @@
 {% extends 'income_expenses/base.html' %}
+{% load static %}
+
+<!-- Load extra css file -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+{% endblock %}
+
 {% block body %}
 
-<form method="POST">
-    {% csrf_token %}
-    <h2>O Λογαριασμός σας θα διαγραφεί οριστικά και θα διαγραφουν όλα τα δεδομένα. Είστε σίγουρος; </h2>
-    <a href="{% url 'income_expenses:index' %}">Επιστροφή στη Αρχική σελίδα</a>
-    <button type="submit">Διαγραφή</button>
-</form>
+<div class="delete-card">
+    <form method="POST">
+        {% csrf_token %}
+        <h2>O Λογαριασμός σας θα διαγραφεί οριστικά και θα διαγραφουν όλα τα δεδομένα.</h2>
+        <h2>Είστε σίγουρος; </h2>
+        <a class="btn-green-b" href="{% url 'income_expenses:index' %}">Επιστροφή στη Αρχική σελίδα</a>
+        <button class="btn-purple" type="submit">Διαγραφή</button>
+    </form>
+</div>
 
 {% endblock %}
