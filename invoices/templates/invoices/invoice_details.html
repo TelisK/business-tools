@@ -9,21 +9,21 @@
 {% block body %}
 
 
-
-<div class="invoice-detail-wrapper">
+<a href="{% url 'invoices:invoice_list' %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
+<div class="invoice-detail">
     <!-- Invoice Header Card -->
-    <div class="card invoice-header-card">
+    <div class="invoice-card">
         <div class="invoice-header-top">
             <h2>Τιμολόγιο #{{ invoice_detail.invoice_number }}</h2>
             <span class="invoice-date">{{ invoice_detail.date }}</span>
         </div>
         
         <div class="invoice-info-grid">
-            <div class="info-item">
+            <div class="invoice-item">
                 <span class="info-label">Προμηθευτής</span>
                 <strong>{{ invoice_detail.supplier }}</strong>
             </div>
-            <div class="info-item">
+            <div class="invoice-item">
                 <span class="info-label">ΑΦΜ</span>
                 <strong>{{ invoice_detail.afm }}</strong>
             </div>
@@ -38,51 +38,41 @@
                 <span>ΦΠΑ</span>
                 <strong>{{ invoice_detail.fpa }} €</strong>
             </div>
-            <div class="total-item total-final">
+            <div class="total-item">
                 <span>Σύνολο</span>
                 <strong>{{ invoice_detail.total }} €</strong>
             </div>
         </div>
     </div>
 
-    <!-- Products Card -->
-    <div class="card products-card">
+    <!-- Products Table -->
+    <div class="invoice-products-table">
         <h3>Προϊόντα</h3>
         <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Κωδικός</th>
-                        <th>Όνομα Προϊόντος</th>
-                        <th>Μονάδα Μέτρησης</th>
-                        <th>Τιμή</th>
-                        <th>Ποσότητα</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
-                    <tr>
-                        <td>{{ product.product_code }}</td>
-                        <td>{{ product.name }}</td>
-                        <td>{{ product.unit }}</td>
-                        <td>{{ product.price }} €</td>
-                        <td>{{ product.quantity }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center">Δεν υπάρχουν προϊόντα</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-header">
+                <span>Κωδικός</span>
+                <span>Όνομα Προϊόντος</span>
+                <span>Μονάδα Μέτρησης</span>
+                <span>Τιμή</span>
+                <span>Ποσότητα</span>
+            </div>
+            <div class="product-table">
+                {% for product in products %}
+                <span>{{ product.product_code }}</span>
+                <span>{{ product.name }}</span>
+                <span>{{ product.unit }}</span>
+                <span>{{ product.price }} €</span>
+                <span>{{ product.quantity }}</span>
+                {% empty %}
+                <span>Δεν υπάρχουν προϊόντα</span>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
-    <!-- Actions -->
-    <div class="action-buttons">
-        <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">← Πίσω στη Λίστα</a>
-        <a href="{% url 'invoices:invoice_update' invoice_detail.id %}" class="btn btn-secondary">Επεξεργασία</a>
-        <a href="{% url 'invoices:invoice_delete' invoice_detail.id %}" class="btn btn-danger">Διαγραφή Τιμολογίου</a>
+    <div class="invoice-details-buttons">
+        <a href="{% url 'invoices:invoice_update' invoice_detail.id %}" class="btn-gray-b">Επεξεργασία Τιμολογίου</a>
+        <a href="{% url 'invoices:invoice_delete' invoice_detail.id %}" class="btn-purple-b">Διαγραφή Τιμολογίου</a>
     </div>
 </div>
 

@@ -8,7 +8,7 @@
 
 {% block body %}
 
- <a href="{% url 'invoices:invoice_list' %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
+<a href="{% url 'invoices:invoice_list' %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
 <div class="invoice-delete-card">
     <form method="POST">
         {% csrf_token %}

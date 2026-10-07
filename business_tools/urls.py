@@ -23,7 +23,9 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(f'{settings.APP_SUBPATH}/', include('income_expenses.urls')),
-    path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('accounts/login/', auth_views.LoginView.as_view(
+        template_name='registration/login.html',redirect_authenticated_user=True),
+         name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     # I added template name because it gets confused with django's default template
     path('accounts/password-reset/', auth_views.PasswordResetView.as_view(
