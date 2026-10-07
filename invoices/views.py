@@ -301,7 +301,7 @@ def delete_invoice(request, id):
         invoice.delete()
         return redirect('invoices:invoice_list')
     else:
-        return render (request, 'invoices/invoice_delete.html')
+        return render (request, 'invoices/invoice_delete.html', {'invoice':invoice})
 
 @login_required
 def invoice_supplier_summary(request):

@@ -1,10 +1,20 @@
 {% extends 'income_expenses/base.html' %}
+{% load static %}
+
+<!-- Load extra css file -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'invoices/css/style.css' %}">
+{% endblock %}
+
 {% block body %}
 
-<form method="POST">
-    {% csrf_token %}
-    <h2>Will be deleted. Are you sure?</h2>
-    <button type="submit">Delete</button>
-</form>
-
+<div class="invoice-delete-card">
+    <form method="POST">
+        {% csrf_token %}
+        <h2>Το τιμολόγιο του προμηθευτή <span>{{ invoice.supplier }}</span>, 
+            με ποσό <span>{{ invoice.total }} €</span><strong>θα διαγραφεί.</strong></h2>
+        <h2>Είστε σίγουρος;</h2>
+        <button class="btn-purple" type="submit">Delete</button>
+    </form>
+</div>
 {% endblock %}
