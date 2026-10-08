@@ -28,10 +28,11 @@
             </select>
 
             <label for="supplier_select">Επιλογή Προμηθευτή</label>
-            <select name="supplier_select" id="supplier_select" >
+            <select name="supplier_select" id="supplier_select">
                 <option value="" selected disabled hidden>Επίλεξε προμηθευτή</option>
                 {% for s in supplier %}
-                <option value="{{ s.id }}" {% if s.id == selected_supplier.id %}selected{% endif %}>{{ s.supplier }}</option>
+                <option value="{{ s.id }}" {% if s.id == selected_supplier.id %}selected{% endif %}>{{ s.supplier }}
+                </option>
                 {% endfor %}
             </select>
             <button class="btn-green" type="submit">Επιλογή</button>
@@ -48,23 +49,36 @@
         </tr>
         {% endif %}
     </div>
-    <div class="products-table">
-        <table>
-            <ul>
+    <div class="supplier-products-summarize">
+        <label>Προμηθευτής:</label>
+        <span>{{ selected_supplier }}</span>
+        <label>Συνολικές Αγορές:</label>
+        <span>{{ total_amount.total__sum }} €</span>
+    </div>
+    <div class="invoice-products-table">
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Όνομα Προϊόντος</th>
+                    <th>Μονάδα</th>
+                    <th>Ποσότητα</th>
+                    <th>Τιμή</th>
+                </tr>
+            </thead>
+            <tbody>
                 {% if products %}
-                <br>
-                <p>Προμηθευτής: {{ selected_supplier }} - Συνολικές Αγορές: {{ total_amount.total__sum }} €</p>
-                <br>
                 {% for p in products %}
-                <li>{{ p.name_cleaned|title }} - {{ p.price }} € - {{ p.total_quantity }} {{ p.unit }}</li>
-                <br>
-                {% endfor %}
-                {% else %}
-                <br>
-                <p>Δέν υπάρχουν δεδομένα</p>
-                <br>
-                {% endif %}
-            </ul>
+                <tr>
+                    <td data-label="Προϊόν">{{ p.name_cleaned|title }}</td>
+                    <td data-label="Μονάδα">{{ p.unit }}</td>
+                    <td data-label="Ποσότητα">{{ p.total_quantity }}</td>
+                    <td data-label="Τιμή">{{ p.price }} €</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+            {% else %}
+            <td>Δέν υπάρχουν δεδομένα</td>
+            {% endif %}
         </table>
     </div>
 </div>
