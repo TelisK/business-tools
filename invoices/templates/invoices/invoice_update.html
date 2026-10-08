@@ -1,55 +1,60 @@
 {% extends 'income_expenses/base.html' %}
+{% load static %}
+
+<!-- Load this css file to base.html on income_expenses app. -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'invoices/css/style.css' %}">
+{% endblock %}
+
 {% block body %}
 
-<h1>Επεξεργασία Τιμολογίου</h1>
-<div>
- <form method="POST">
-{% csrf_token %}
-            <div class="form-group">
-                <label>Προμηθευτής</label>
-                {{ form.supplier }}
+<a href="{% url 'invoices:invoice_details' invoice.id %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
+<div class="invoice-update-card">
+    <h3>Επεξεργασία Τιμολογίου</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Προμηθευτής</label>
+            {{ invoice.supplier }}
+        </div>
+
+
+        <div class="form-group">
+            <label>Αριθμός Τιμολογίου</label>
+            {{ form.invoice_number }}
+        </div>
+
+
+        <div class="form-group">
+            <label>Ημερομηνία</label>
+            {{ form.date }}
+        </div>
+
+        <div class="form-group">
+            <label>Ποσό (€)</label>
+            {{ form.amount }}
+        </div>
+
+
+        <div class="form-group">
+            <label>Ποσό ΦΠΑ (€)</label>
+            {{ form.fpa }}
+        </div>
+
+        <div class="form-group">
+            <label>Ποσοστό ΦΠΑ (%)</label>
+            {{ form.fpa_persentage }}
+        </div>
+
+        <div class="form-group">
+            <label>Τελικό Σύνολο (€)</label>
+            {{ form.total }}
+        </div>
+
+        <div class="invoice-update-buttons">
+            <button type="submit" class="btn-green">Αποθήκευση</button>
+            <a href="{% url 'invoices:invoice_list' %}" class="btn-purple">Ακύρωση</a>
+        </div>
+    </form>
 </div>
-
-
-            <div class="form-group">
-                <label>Αριθμός Τιμολογίου</label>
-                {{ form.invoice_number }}
-</div>
-
-
-            <div class="form-group">
-                <label>Ημερομηνία</label>
-                {{ form.date }}
-</div>
-
-            <div class="form-group">
-                <label>Ποσό (€)</label>
-                {{ form.amount }}
-</div>
-
-                
-            <div class="form-group">
-                <label>Ποσό ΦΠΑ (€)</label>
-                {{ form.fpa }}
-</div>
-
-                            <div class="form-group">
-                <label>Ποσοστό ΦΠΑ (%)</label>
-                {{ form.fpa_persentage }}
-</div>
-
-                            <div class="form-group">
-                <label>Τελικό Σύνολο (€)</label>
-                {{ form.total }}
-</div>
-
-                        <div class="form-actions">
-
-            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
-            <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Ακύρωση</a>
-            </div>
-
-</form>               
-</div>
-
 {% endblock %}

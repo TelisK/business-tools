@@ -397,17 +397,18 @@ def invoice_update(request, id):
 
             messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
 
-            return redirect('invoices:invoice_list')
+            return redirect('invoices:invoice_details')
         else:
             messages.error(request, 'Έχει γίνει κάποιο λάθος.')
 
     else:
         form = InvoiceUpdateForm(instance=invoice)
-        context_to_html = {
-            'form':form,
-        }
+    context_to_html = {
+        'form':form,
+        'invoice': invoice,
+    }
 
-        return render(request, 'invoices/invoice_update.html', context=context_to_html)
+    return render(request, 'invoices/invoice_update.html', context=context_to_html)
 
 def supplier_update(request,id):
     """

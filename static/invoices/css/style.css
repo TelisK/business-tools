@@ -154,6 +154,20 @@
     .products-table td::before {
         content: none;
     }
+    .product-price {
+        white-space: nowrap; /* Gives the width we need without wrap */
+    }
 }
+
+/* invoice_update.html */
+
+.invoice-update-card {
+    background-color: var(--cards);
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
 /* invoice_list.html */
 
