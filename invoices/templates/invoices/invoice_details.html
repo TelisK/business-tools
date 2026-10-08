@@ -14,18 +14,18 @@
     <!-- Invoice Header Card -->
     <div class="invoice-card">
         <div class="invoice-header-top">
-            <h2>Τιμολόγιο #{{ invoice_detail.invoice_number }}</h2>
+            <h3>Τιμολόγιο #{{ invoice_detail.invoice_number }}</h3>
             <span class="invoice-date">{{ invoice_detail.date }}</span>
         </div>
         
-        <div class="invoice-info-grid">
+        <div class="invoice-info">
             <div class="invoice-item">
                 <span class="info-label">Προμηθευτής</span>
-                <strong>{{ invoice_detail.supplier }}</strong>
+                <strong>{{ invoice_detail.supplier.supplier }}</strong>
             </div>
             <div class="invoice-item">
                 <span class="info-label">ΑΦΜ</span>
-                <strong>{{ invoice_detail.afm }}</strong>
+                <strong>{{ invoice_detail.supplier.afm }}</strong>
             </div>
         </div>
 

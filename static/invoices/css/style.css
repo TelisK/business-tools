@@ -45,7 +45,28 @@
     font-size: 0.8rem; 
 }
 .invoice-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 2fr;
+    grid-template-areas: 
+    'invoice invoice'
+    'supplier prices';
+}
+.invoice-header-top {
+    grid-area: invoice;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    margin: 10px;
+}
+.invoice-item {
+    margin: 0;
+}
+.invoice-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 /* invoice_list.html */
