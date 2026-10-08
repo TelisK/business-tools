@@ -1,66 +1,76 @@
 {% extends 'income_expenses/base.html' %}
+{% load static %}
+
+<!-- Load this css file to base.html on income_expenses app. -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'invoices/css/style.css' %}">
+{% endblock %}
+
 {% block body %}
 
-<p>This is the supplier's page</p>
+<a href="{% url 'invoices:invoice_reader' %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
+<div class="supplier-form">
+    {% if supplier %}
+    <div class="supplier-year-choice">
+        <form method="POST" action="{% url 'invoices:invoice_supplier' %}">
+            {% csrf_token %}
 
-{% if supplier %}
+            <label for="supplier_select">Επιλογή Έτους</label>
+            <!-- onchange="this.form.submit()" javascript to automate post when user selects a year.
+        That way user selects the suppliers available on the selected year. -->
+            <select name="selected_year" id="selected_year" onchange="this.form.submit()">
+                <option value="" selected disabled hidden>Επιλογή Έτους</option>
+                <option value="">Όλα τα έτη</option>
+                {% for y in invoice_years %}
+                <!-- |stringformat:"s" make the value string to be able to compare it. -->
+                <option value="{{ y }}" {% if y|stringformat:"s" == selected_year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
 
-<form method="POST" action="{% url 'invoices:invoice_supplier' %}">
-    {% csrf_token %}
+            <label for="supplier_select">Επιλογή Προμηθευτή</label>
+            <select name="supplier_select" id="supplier_select" >
+                <option value="" selected disabled hidden>Επίλεξε προμηθευτή</option>
+                {% for s in supplier %}
+                <option value="{{ s.id }}" {% if s.id == selected_supplier.id %}selected{% endif %}>{{ s.supplier }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn-green" type="submit">Επιλογή</button>
+            {% if selected_supplier %}
+            <a href="{% url 'invoices:supplier_update' selected_supplier.id %}" class="btn-gray-b">Επεξεργασία
+                Προμηθευτή</a>
+            {% endif %}
 
-    <label for="supplier_select">Επιλογή Έτους</label>
-    <!-- onchange="this.form.submit()" javascript to automate post when user selects a year.
-     That way user selects the suppliers available on the selected year. -->
-    <select name="selected_year" id="selected_year" onchange="this.form.submit()">
-        <option value="">Όλα τα έτη</option>
-        {% for y in invoice_years %}
-        <!-- |stringformat:"s" make the value string to be able to compare it. -->
-        <option value="{{ y }}" {% if y|stringformat:"s" == selected_year %}selected{% endif %}>{{ y }}</option>
-        {% endfor %}
-    </select>
-    
-    <label for="supplier_select">Επιλογή προμηθευτή</label>
-    <select name="supplier_select" id="supplier_select">
-        {% for s in supplier %}
-        <option value="{{ s.id }}" {% if s.id == selected_supplier.id %}selected{% endif %}>{{ s }}</option>
-        {% endfor %}
-    </select>
-    <button type="submit">Επιλογή</button>
-    {% if selected_supplier %}
-    <a href="{% url 'invoices:supplier_update' selected_supplier.id %}" class="btn btn-secondary">Επεξεργασία Προμηθευτή</a>
-    {% endif %}
+        </form>
 
-</form>
-
-{% else %}
-    <tr>
-        <td>Δέν υπάρχουν καταχωρημένα τιμολόγια</td>
-    </tr>
-{% endif %}
-
-<table>
-    <ul>
-
-        {% if products %}
-        <br>
-        <p>Προμηθευτής: {{ selected_supplier }} - Συνολικές Αγορές: {{ total_amount.total__sum }} €</p>
-        <br>
-        {% for p in products %}
-        <li>{{ p.name_cleaned|title }} - {{ p.price }} € - {{ p.total_quantity }} {{ p.unit }}</li>
-        <br>
-        {% endfor %}
         {% else %}
-        <br>
-        <p>Δέν υπάρχουν δεδομένα</p>
-        <br>
+        <tr>
+            <td>Δέν υπάρχουν καταχωρημένα τιμολόγια</td>
+        </tr>
         {% endif %}
-    </ul>
-</table>
-    <div class="back-link">
-        <a href="{% url 'invoices:invoice_reader' %}" class="btn btn-secondary">← Πίσω</a>
     </div>
-        <div class="back-link">
-        <a href="{% url 'invoices:invoice_list' %}" class="btn btn-secondary">Λίστα Τιμολογίων</a>
+    <div class="products-table">
+        <table>
+            <ul>
+                {% if products %}
+                <br>
+                <p>Προμηθευτής: {{ selected_supplier }} - Συνολικές Αγορές: {{ total_amount.total__sum }} €</p>
+                <br>
+                {% for p in products %}
+                <li>{{ p.name_cleaned|title }} - {{ p.price }} € - {{ p.total_quantity }} {{ p.unit }}</li>
+                <br>
+                {% endfor %}
+                {% else %}
+                <br>
+                <p>Δέν υπάρχουν δεδομένα</p>
+                <br>
+                {% endif %}
+            </ul>
+        </table>
     </div>
+</div>
+<div class="buttons">
+    <a href="{% url 'invoices:invoice_list' %}" class="btn-green-b">Καταχωρημένα Τιμολόγια</a>
+</div>
+
 
 {% endblock %}

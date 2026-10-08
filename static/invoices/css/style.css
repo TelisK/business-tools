@@ -189,6 +189,10 @@
   color: var(--black);
   width: 100%;
 }
+.immutable {
+    background-color: var(--gray);
+    color: var(--bg-main);
+}
 .invoice-update-buttons {
     margin-top: 20px;
 }
@@ -198,6 +202,21 @@
     .invoice-update-card {
         max-width: 800px;
     }
+}
+
+/* invoice_supplier.html */
+
+.supplier-form {
+    background-color: var(--cards);
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 400px;
+}
+.supplier-year-choice label {
+    display: flex;
+    flex-direction: column;
 }
 
 /* invoice_list.html */
