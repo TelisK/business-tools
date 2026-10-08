@@ -166,7 +166,38 @@
     padding: 20px;
     border: 1px solid var(--border);
     border-radius: 8px;
-    margin: 20px 0;
+    margin: 20px auto;
+    max-width: 400px;
+}
+.invoice-update-form {
+    display: grid;
+    padding: 5px;
+}
+.invoice-update-form label {
+    margin-bottom: 5px;
+}
+.invoice-update-form select,
+.invoice-update-form input,
+.invoice-update-form textarea,
+.immutable {
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--black);
+  width: 100%;
+}
+.invoice-update-buttons {
+    margin-top: 20px;
+}
+
+
+@media screen and (min-width: 1000px) {
+    .invoice-update-card {
+        max-width: 800px;
+    }
 }
 
 /* invoice_list.html */
