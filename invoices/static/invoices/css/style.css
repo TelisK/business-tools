@@ -37,7 +37,7 @@
 
 .invoice-detail {
     background-color: var(--cards);
-    padding: 30px;
+    padding: 20px;
     border: 1px solid var(--border);
     border-radius: 8px;
     margin: 20px 0;
@@ -104,13 +104,58 @@
     display: flex;
     justify-content: space-between;
 }
-
-
+.products-table,
+.products-table tbody,
+.products-table tr,
+.products-table td {
+  display: block;
+}
+.products-table thead {
+    display: none;
+}
+.products-table tr {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: var(--bg-main);
+}
+.products-table td::before {
+  content: attr(data-label) " :  ";
+  font-style: italic;
+}
 
 
 @media screen and (min-width: 1000px) {
     .invoice-detail {
         max-width: 800px;
+    }
+    .products-table {
+        display: table;
+        margin-bottom: 20px;
+    }
+    .products-table thead {
+        display: table-header-group;
+    }
+    .products-table tbody {
+        display: table-row-group;
+    }
+    .products-table tr,
+    .products-table td {
+        display: table-row;
+    }
+    .products-table th,
+    .products-table td {
+    display: table-cell;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    }
+    .products-table td::before {
+        content: none;
+    }
+    .product-price {
+        white-space: nowrap; /* Gives the width we need without wrap */
     }
 }
 /* invoice_list.html */

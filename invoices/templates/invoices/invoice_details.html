@@ -48,31 +48,37 @@
     <!-- Products Table -->
     <div class="invoice-products-table">
         <h3>Προϊόντα</h3>
-        <div class="table-responsive">
-            <div class="table-header">
-                <span>Κωδικός</span>
-                <span>Όνομα Προϊόντος</span>
-                <span>Μονάδα Μέτρησης</span>
-                <span>Τιμή</span>
-                <span>Ποσότητα</span>
-            </div>
-            <div class="product-table">
-                {% for product in products %}
-                <span>{{ product.product_code }}</span>
-                <span>{{ product.name }}</span>
-                <span>{{ product.unit }}</span>
-                <span>{{ product.price }} €</span>
-                <span>{{ product.quantity }}</span>
+        <div class="invoice-table">
+            <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Κωδικός</th>
+                    <th>Όνομα Προϊόντος</th>
+                    <th>Μονάδα</th>
+                    <th>Ποσότητα</th>
+                    <th>Τιμή</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr>
+                    <td data-label="Κωδικός">{{ p.product_code }}</td>
+                    <td data-label="Προϊόν">{{ p.name }}</td>
+                    <td data-label="Μονάδα">{{ p.unit }}</td>
+                    <td data-label="Ποσότητα">{{ p.quantity }}</td>
+                    <td data-label="Τιμή" class="product-price">{{ p.price }} €</td>
+                </tr>
                 {% empty %}
-                <span>Δεν υπάρχουν προϊόντα</span>
+                <td>Δεν υπάρχουν προϊόντα</td>
                 {% endfor %}
-            </div>
+            </tbody>
+            </table>
         </div>
     </div>
 
     <div class="invoice-details-buttons">
         <a href="{% url 'invoices:invoice_update' invoice_detail.id %}" class="btn-gray-b">Επεξεργασία Τιμολογίου</a>
-        <a href="{% url 'invoices:invoice_delete' invoice_detail.id %}" class="btn-purple-b">Διαγραφή Τιμολογίου</a>
+        <a href="{% url 'invoices:invoice_delete' invoice_detail.id %}" class="btn-purple">Διαγραφή Τιμολογίου</a>
     </div>
 </div>
 

@@ -37,7 +37,7 @@
 
 .invoice-detail {
     background-color: var(--cards);
-    padding: 30px;
+    padding: 20px;
     border: 1px solid var(--border);
     border-radius: 8px;
     margin: 20px 0;
@@ -51,6 +51,9 @@
     grid-template-areas: 
     'invoice invoice'
     'supplier prices';
+    background-color: var(--bg-main);
+    border: 1px solid var(--border);
+    border-radius: 8px;
 }
 .invoice-header-top {
     grid-area: invoice;
@@ -60,6 +63,9 @@
     border-bottom: 1px solid var(--border);
     margin: 10px;
 }
+.invoice-date {
+    color: var(--black);
+}
 .invoice-item {
     margin: 0;
 }
@@ -67,7 +73,87 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    padding-left: 10px;
+    border-right: solid 1px var(--border);
+}
+.invoice-info .info-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--black);
 }
 
+
+.invoice-totals {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 0 10px;
+}
+.invoice-totals span {
+    color: var(--black);
+}
+.invoice-totals .total-item:nth-child(2) {
+    padding-bottom: 10px;
+    border-bottom: solid 1px var(--border);
+}
+.invoice-totals .total-item:last-child, .total-item:last-child span {
+    color: var(--purple1);
+    font-weight: bold;
+}
+.total-item {
+    display: flex;
+    justify-content: space-between;
+}
+.products-table,
+.products-table tbody,
+.products-table tr,
+.products-table td {
+  display: block;
+}
+.products-table thead {
+    display: none;
+}
+.products-table tr {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: var(--bg-main);
+}
+.products-table td::before {
+  content: attr(data-label) " :  ";
+  font-style: italic;
+}
+
+
+@media screen and (min-width: 1000px) {
+    .invoice-detail {
+        max-width: 800px;
+    }
+    .products-table {
+        display: table;
+        margin-bottom: 20px;
+    }
+    .products-table thead {
+        display: table-header-group;
+    }
+    .products-table tbody {
+        display: table-row-group;
+    }
+    .products-table tr,
+    .products-table td {
+        display: table-row;
+    }
+    .products-table th,
+    .products-table td {
+    display: table-cell;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    }
+    .products-table td::before {
+        content: none;
+    }
+}
 /* invoice_list.html */
 
