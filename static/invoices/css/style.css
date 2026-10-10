@@ -218,8 +218,17 @@
     display: flex;
     flex-direction: column;
 }
-
-
+.supplier-year-choice select {
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  margin: 10px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--black);
+  width: 100%;
+}
 .supplier-products-summarize {
     margin: 10px 0;
     display: flex;
@@ -236,5 +245,34 @@
 .supplier-products-summarize span:first-child {
     border-bottom: solid 1px var(--bg-main);
 }
+.buttons {
+    margin-bottom: 10px;
+}
+
+
+
+/*Floating Back-To-Top Button*/
+#myBtn {
+    position: fixed;
+    bottom: 10px;
+    float: right;
+    right: 5%;
+    max-width: 30px;
+    width: 100%;
+    font-size: 12px;
+    border-color: var(--border);
+    background-color: var(--bg-main);
+    padding: 5px;
+    border-radius: 4px;
+}
+#myBtn:hover {
+    background-color: #7dbbf1;
+}
+#myBtn a {
+    text-decoration: none;
+    color: var(--purple1);
+}
+
+
 /* invoice_list.html */
 

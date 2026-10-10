@@ -250,5 +250,28 @@
 }
 
 
+
+/*Floating Back-To-Top Button*/
+#myBtn {
+    position: fixed;
+    bottom: 10px;
+    float: right;
+    right: 4%;
+    max-width: 30px;
+    width: 100%;
+    font-size: 12px;
+    border-color: var(--border);
+    background-color: var(--bg-main);
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 1s, color 1s;
+}
+#myBtn:hover {
+    background-color: var(--black);
+    color: var(--bg-main);
+}
+
+
 /* invoice_list.html */
 
