@@ -264,6 +264,46 @@ content: none;
     }
 }
 
+/* supplier_update.html */
+
+.supplier-update-card {
+    background-color: var(--cards);
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 400px;
+}
+.supplier-update-card .supplier-update-form {
+    display: grid;
+    padding: 5px;
+}
+.supplier-update-card .supplier-update-form {
+    margin-bottom: 5px;
+}
+.supplier-update-card .supplier-update-form input {
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--black);
+  width: 100%;
+}
+
+@media screen and (min-width: 1000px) {
+    .supplier-update-card {
+        max-width: 800px;
+    }
+}
+
+
+
+
+
+/* invoice_list.html */
+
 
 /*Floating Back-To-Top Button*/
 #myBtn {
@@ -285,7 +325,3 @@ content: none;
     background-color: var(--black);
     color: var(--bg-main);
 }
-
-
-/* invoice_list.html */
-

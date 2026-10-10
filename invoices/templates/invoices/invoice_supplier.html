@@ -90,9 +90,9 @@
 <div class="buttons">
     <a href="{% url 'invoices:invoice_list' %}" class="btn-green-b">Καταχωρημένα Τιμολόγια</a>
 </div>
-
+{% if selected_supplier %}
 <a href="#top">
   <button id="myBtn">↑</button>
 </a>
-
+{% endif %}
 {% endblock %}

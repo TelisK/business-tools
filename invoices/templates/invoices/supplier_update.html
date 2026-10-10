@@ -1,25 +1,29 @@
 {% extends 'income_expenses/base.html' %}
+{% load static %}
+
+<!-- Load this css file to base.html on income_expenses app. -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'invoices/css/style.css' %}">
+{% endblock %}
+
 {% block body %}
 
-<h1>Επεξεργασία Προμηθευτή</h1>
-<div>
+<a href="{% url 'invoices:invoice_supplier' %}" onclick="history.back(); return false;" class="btn-gray-b">←Πίσω</a>
+<h3>Επεξεργασία Προμηθευτή</h3>
+<div class="supplier-update-card">
     <form method="POST">
         {% csrf_token %}
-        <div class="form-group">
+        <div class="supplier-update-form">
             <label>Προμηθευτής</label>
             {{ form.supplier }}
         </div>
-
-
-        <div class="form-group">
+        <div class="supplier-update-form">
             <label>ΑΦΜ</label>
             {{ form.afm }}
         </div>
-
         <div class="form-actions">
-
-            <button type="submit" class="btn btn-primary">Αποθήκευση</button>
-            <a href="{% url 'invoices:invoice_supplier' %}" class="btn btn-secondary">Ακύρωση</a>
+            <button type="submit" class="btn-green">Αποθήκευση</button>
+            <a href="{% url 'invoices:invoice_supplier' %}" onclick="history.back(); return false;" class="btn-purple">Ακύρωση</a>
         </div>
 
     </form>
