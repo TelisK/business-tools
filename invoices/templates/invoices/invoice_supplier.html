@@ -19,7 +19,10 @@
             <!-- onchange="this.form.submit()" javascript to automate post when user selects a year.
         That way user selects the suppliers available on the selected year. -->
             <select name="selected_year" id="selected_year" onchange="this.form.submit()">
-                <option value="" selected disabled hidden>Επιλογή Έτους</option>
+
+                <!-- SOS CHECK IT WITH DIFFERENT VIEW -->
+                <!-- <option value="" selected disabled hidden>Επιλογή Έτους</option> -->
+                
                 <option value="">Όλα τα έτη</option>
                 {% for y in invoice_years %}
                 <!-- |stringformat:"s" make the value string to be able to compare it. -->
@@ -28,8 +31,10 @@
             </select>
 
             <label for="supplier_select">Επιλογή Προμηθευτή</label>
-            <select name="supplier_select" id="supplier_select">
-                <option value="" selected disabled hidden>Επίλεξε προμηθευτή</option>
+            <select name="supplier_select" id="supplier_select" required>
+                
+                <!-- <option value="" selected disabled hidden>Επίλεξε προμηθευτή</option> -->
+                
                 {% for s in supplier %}
                 <option value="{{ s.id }}" {% if s.id == selected_supplier.id %}selected{% endif %}>{{ s.supplier }}
                 </option>
@@ -51,7 +56,7 @@
     </div>
     <div class="supplier-products-summarize">
         <label>Προμηθευτής:</label>
-        <span>{{ selected_supplier }}</span>
+        <span>{{ selected_supplier.supplier }}</span>
         <label>Συνολικές Αγορές:</label>
         <span>{{ total_amount.total__sum }} €</span>
     </div>
