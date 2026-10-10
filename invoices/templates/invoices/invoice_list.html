@@ -52,14 +52,14 @@
                     <span>{{ invoice.date }}</span>
                 </div>
                 <div class="invoice-card-amount">
-                    {{ invoice.total }} €
+                    <span class="total">{{ invoice.total }} €</span>
                     <div class="checkbox" id="invoice-{{ invoice.id }}">
                         <!-- we use #invoice-{{ invoice.id }} to redirect at the same point of the page. -->
                         <form method="post"
                             action="{% url 'invoices:paid_checkbox' invoice.id %}#invoice-{{ invoice.id }}">
                             {% csrf_token %}
                             <div class="checkbox-label">
-                                <input type="checkbox" onchange="this.form.submit()" {% if invoice.paid %}checked{% endif %}>
+                                <input class="paid-checkbox" type="checkbox" onchange="this.form.submit()" {% if invoice.paid %}checked{% endif %}>
                                 <label>Εξοφλημένο</label>
                             </div>
                         </form>

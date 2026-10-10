@@ -371,12 +371,24 @@ content: none;
     display: flex;
     align-items: center;
 }
+.paid-checkbox {
+    accent-color: var(--green1);
+    transform: scale(1.3);
+}
+.checkbox {
+    scroll-margin-top: 200px;
+}
+.invoice-card-amount .total {
+    font-weight: bold;
+    color: var(--purple1);
+}
 .invoice-card-actions {
     margin-top: 10px;
     display: flex;
     justify-content: left;
     gap: 30px;
 }
+
 @media screen and (min-width: 1000px) {
     .invoice-list {
         max-width: 800px;
