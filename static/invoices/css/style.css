@@ -124,6 +124,9 @@
   content: attr(data-label) " :  ";
   font-style: italic;
 }
+.products-table .empty::before {
+content: none;
+}
 
 
 @media screen and (min-width: 1000px) {
@@ -229,8 +232,11 @@
   color: var(--black);
   width: 100%;
 }
+.supplier-year-choice button {
+    margin-bottom: 10px;
+}
 .supplier-products-summarize {
-    margin: 10px 0;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -256,7 +262,7 @@
     position: fixed;
     bottom: 10px;
     float: right;
-    right: 5%;
+    right: 4%;
     max-width: 30px;
     width: 100%;
     font-size: 12px;
@@ -264,13 +270,12 @@
     background-color: var(--bg-main);
     padding: 5px;
     border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 1s, color 1s;
 }
 #myBtn:hover {
-    background-color: #7dbbf1;
-}
-#myBtn a {
-    text-decoration: none;
-    color: var(--purple1);
+    background-color: var(--black);
+    color: var(--bg-main);
 }
 
 

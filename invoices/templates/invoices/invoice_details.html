@@ -69,7 +69,7 @@
                     <td data-label="Τιμή" class="product-price">{{ p.price }} €</td>
                 </tr>
                 {% empty %}
-                <td>Δεν υπάρχουν προϊόντα</td>
+                <td class="empty">Δεν υπάρχουν προϊόντα</td>
                 {% endfor %}
             </tbody>
             </table>
@@ -81,5 +81,7 @@
         <a href="{% url 'invoices:invoice_delete' invoice_detail.id %}" class="btn-purple">Διαγραφή Τιμολογίου</a>
     </div>
 </div>
-
+<a href="#top">
+  <button id="myBtn">↑</button>
+</a>
 {% endblock %}

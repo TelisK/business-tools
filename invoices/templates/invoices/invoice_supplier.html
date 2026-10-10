@@ -47,19 +47,19 @@
             {% endif %}
 
         </form>
-
+        </div>
         {% else %}
-        <tr>
-            <td>Δέν υπάρχουν καταχωρημένα τιμολόγια</td>
-        </tr>
+        <p>Δέν υπάρχουν καταχωρημένα τιμολόγια</p>
         {% endif %}
-    </div>
+    
+    {% if selected_supplier %}
     <div class="supplier-products-summarize">
         <label>Προμηθευτής:</label>
         <span>{{ selected_supplier.supplier }}</span>
         <label>Συνολικές Αγορές:</label>
         <span>{{ total_amount.total__sum }} €</span>
     </div>
+    {% endif %}
     <div class="invoice-products-table">
         <table class="products-table">
             <thead>
@@ -82,7 +82,7 @@
             </tbody>
             {% endfor %}
             {% else %}
-            <td>Δέν υπάρχουν δεδομένα</td>
+            <td class="empty">Δέν υπάρχουν δεδομένα</td>
             {% endif %}
         </table>
     </div>
