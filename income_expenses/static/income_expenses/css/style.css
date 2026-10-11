@@ -341,6 +341,9 @@ main {
   'start dash end'
   'apply apply apply';
 }
+.fast-search input {
+  font-size: 0.7rem;
+}
 .fast-search h3 {
   grid-area: h3;
   color: var(--bg-dark);
@@ -506,13 +509,16 @@ main {
 .table-header,
 .table {
     display: grid;
-    grid-template-columns: 1fr 1.2fr 1.5fr 3fr;
+    grid-template-columns: 1fr 1.2fr 1.4fr 3fr;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     padding: 15px 5px;
 }
 .table-header {
   border-bottom: solid 1px var(--border);
+}
+.heading .registered-date {
+  font-size: 0.7rem;
 }
 .table {
   text-decoration: none;
@@ -541,10 +547,14 @@ main {
 .income-amount { 
   color: var(--green1);
   font-weight: 600;
+  white-space: nowrap;
+  font-size: 0.8rem;
 }
 .expense-amount { 
   color: var(--purple1);
   font-weight: 600;
+  white-space: nowrap;
+  font-size: 0.8rem;
 }
 
 
@@ -552,6 +562,9 @@ main {
   main {
     max-width: 50%;
   }
+  .fast-search input {
+  font-size: 1rem;
+}
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1090,6 +1103,14 @@ input[type="file"]::file-selector-button:hover {
   margin: 10px 0;
   width: 100%;
 }
+.presets {
+  display: flex;
+  justify-content: space-between;
+}
+.presets a {
+  text-align: center;
+  margin: 0 5px;
+}
 .dates-inform {
   display: flex;
   flex-direction: column;
@@ -1100,6 +1121,30 @@ input[type="file"]::file-selector-button:hover {
   color: var(--purple1);
   font-size: 1.2rem;
   margin-bottom: 10px;
+}
+.analytics .analyse-card .heading {
+  margin: 20px 0;
+  background-color: var(--cards);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  padding: 20px;
+  color: var(--green1);
+  font-variant: small-caps;
+}
+.analytics .analyse-card .analyse{
+  margin: 0 40px;
+  display: flex;
+  gap: 10px;
+}
+.analytics .analyse-card .analyse .analyse-result {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  gap: 10px;
+  padding: 0 12px;
+  white-space: nowrap;
 }
 .summary-cards {
   display: flex;
@@ -1118,7 +1163,7 @@ input[type="file"]::file-selector-button:hover {
   font-weight: 200;
   font-size: 1rem;
 }
-.amount {
+.summary-cards .amount {
   font-weight: 600;
   font-size: 1.2rem;
 }
@@ -1157,9 +1202,9 @@ input[type="file"]::file-selector-button:hover {
 }
 .details-income-table-header, .details-income-table {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1.2fr 1fr 1.2fr 1.1fr 0.9fr;
+  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr;
   gap: 5px;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
 }
 .income-details a {
   text-decoration: none;
