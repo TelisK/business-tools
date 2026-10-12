@@ -11,34 +11,36 @@
 <div>
     <a href="{% url 'income_expenses:index' %}" class="btn-gray-b">← Πίσω</a>
 </div>
-<div class="container mt-5">
-    <div class="card col-md-8 mx-auto shadow">
-        <div class="card-header bg-dark text-white">
-            AI Οικονομικός Βοηθός - Κατάστημα: {{ store.name }}
+<div class="chat-container">
+    <div class="chat-card">
+        <div class="card-header" id="ai-assist">
+            <span>AI Οικονομικός Βοηθός</span>
+            <span>Κατάστημα: {{ store.name }}</span>
         </div>
         <div class="card-body">
             
-            <div class="border rounded p-3 mb-3 bg-white" id="ai-assist">
+            <div id="prompt">
                 {% if prompt %}
-                    <div class="mb-3 text-end">
-                        <span class="badge bg-primary text-wrap p-2 text-start" id="prompt">
+                    <div class="chat-question">
+                        <span>
                             {{ prompt }}
                         </span>
                     </div>
-                    <div class="mb-3">
-                        <div class="p-2 bg-light rounded" id="answer">
+                    <div>
+                        <div class="chat-answer" id="answer">
                             {{ answer }}
                         </div>
                     </div>
                 {% else %}
-                    <p class="text-muted text-center mt-5">Κάντε μια ερώτηση για τα οικονομικά του καταστήματος.</p>
+                    <p>Κάντε μια ερώτηση για τα οικονομικά του καταστήματος.</p>
                 {% endif %}
             </div>
 
             <form method="POST" action="">
-                {% csrf_token %} <div class="input-group">
-                    <input type="text" name="prompt" class="form-control" placeholder="Ερώτηση..." required>
-                    <button type="submit" class="btn btn-dark">Αποστολή</button>
+                {% csrf_token %} 
+                <div class="chat-question-button">
+                    <input type="text" name="prompt" placeholder="Ερώτηση..." required>
+                    <button type="submit" class="btn-green">Αποστολή</button>
                 </div>
             </form>
 
