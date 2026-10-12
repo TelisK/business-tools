@@ -593,6 +593,12 @@ main {
 .comments {
   font-size: 0.9rem;
 }
+.heading .registered-date {
+  font-size: 1rem;
+}
+.income-amount { 
+  font-size: 1rem;
+}
 }
 
 
