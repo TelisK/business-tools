@@ -593,6 +593,12 @@ main {
 .comments {
   font-size: 0.9rem;
 }
+.heading .registered-date {
+  font-size: 1rem;
+}
+.income-amount { 
+  font-size: 1rem;
+}
 }
 
 
@@ -761,6 +767,10 @@ input[type="file"]::file-selector-button:hover {
     grid-template-columns: 1.2fr 1.2fr 1.4fr 1.4fr;
     align-items: center;
     padding: 15px 0;
+    font-size: 0.7rem;
+}
+.small-btn {
+  font-size: 0.7rem;
 }
 .entry-list-heading {
   border-bottom: solid 1px var(--border);
@@ -1103,6 +1113,14 @@ input[type="file"]::file-selector-button:hover {
   margin: 10px 0;
   width: 100%;
 }
+.presets {
+  display: flex;
+  justify-content: space-between;
+}
+.presets a {
+  text-align: center;
+  margin: 0 5px;
+}
 .dates-inform {
   display: flex;
   flex-direction: column;
@@ -1115,26 +1133,19 @@ input[type="file"]::file-selector-button:hover {
   margin-bottom: 10px;
 }
 .analytics .analyse-card .heading {
-  /* margin: 20px 0; */
+  margin: 20px 0;
   background-color: var(--cards);
   border: 1px solid var(--border);
   border-radius: 8px;
   text-align: center;
-  /* padding: 20px; */
+  padding: 20px;
   color: var(--green1);
-  /* font-variant: small-caps; */
+  font-variant: small-caps;
 }
 .analytics .analyse-card .analyse{
-  /* margin: 0; */
-  /* padding: 0; */
+  margin: 0 40px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  /* width: 100%;
-  margin: 0;
-  display: flex;
-  gap: 5px; */
-  /* justify-content: space-between; */
+  gap: 10px;
 }
 .analytics .analyse-card .analyse .analyse-result {
   display: flex;
@@ -1142,6 +1153,8 @@ input[type="file"]::file-selector-button:hover {
   justify-content: space-between;
   font-size: 0.9rem;
   gap: 10px;
+  padding: 0 12px;
+  white-space: nowrap;
 }
 .summary-cards {
   display: flex;
@@ -1199,9 +1212,9 @@ input[type="file"]::file-selector-button:hover {
 }
 .details-income-table-header, .details-income-table {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1.2fr 1fr 1.2fr 1.1fr 0.9fr;
+  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr;
   gap: 5px;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
 }
 .income-details a {
   text-decoration: none;
