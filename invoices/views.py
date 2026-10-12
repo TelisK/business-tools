@@ -213,7 +213,7 @@ def invoice_reader(request):
 
 
 
-                            messages.success(request, 'Data Uploaded Successfully')
+                            messages.success(request, 'Το τιμολόγιο καταχωρήθηκε επιτυχώς!')
 
                             return redirect('invoices:invoice_list')
                         
@@ -397,7 +397,7 @@ def invoice_update(request, id):
 
             messages.info(request, 'Οι αλλαγές πραγματοποιήθηκανε επιτυχώς!')
 
-            return redirect('invoices:invoice_details')
+            return redirect('invoices:invoice_details', id=id)
         else:
             messages.error(request, 'Έχει γίνει κάποιο λάθος.')
 
