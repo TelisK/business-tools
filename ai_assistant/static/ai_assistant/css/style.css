@@ -38,9 +38,9 @@
     margin-top: 10px;
 }
 #answer {
-    max-width: 100%; 
     text-align: center;
-    white-space: pre-wrap;
+    white-space: wrap;
+    padding: 20px 10px 0 10px;
 }
 .chat-container {
     background-color: var(--cards);
@@ -69,4 +69,9 @@
   background: var(--bg-main);
   color: var(--black);
   width: 100%;
+}
+@media screen and (min-width: 1000px) {
+    .chat-container {
+    max-width: 800px;
+    }
 }
