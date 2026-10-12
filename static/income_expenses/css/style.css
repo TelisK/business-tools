@@ -750,7 +750,7 @@ input[type="file"]::file-selector-button:hover {
 }
 .fixed-expenses-card {
   background-color: var(--cards);
-  padding: 30px;
+  padding: 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
   margin: 20px 0;
@@ -770,7 +770,7 @@ input[type="file"]::file-selector-button:hover {
     font-size: 0.7rem;
 }
 .small-btn {
-  font-size: 0.7rem;
+  transform: scale(0.8);
 }
 .entry-list-heading {
   border-bottom: solid 1px var(--border);

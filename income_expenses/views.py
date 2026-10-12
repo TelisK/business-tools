@@ -351,7 +351,7 @@ def analytics(request):
         income_df,
         x='day',
         y=['Μετρητά', 'POS', 'Κατάθεση', 'Επιταγή', 'Άλλο'],
-        title=f'Τρόποι πληρωμής αναλυτικά: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}',
+        title=f'Τρόποι πληρωμής: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}',
         labels={'day':'Ημερομηνία', 'value':'Τζίρος σε €'}
     )
 
