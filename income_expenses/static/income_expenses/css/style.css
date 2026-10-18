@@ -14,6 +14,7 @@
     --black: #2d3336;
     --border: #d5ddda;
     --cards: #f8faf9;
+    --warning: #e37787;
 }
 
 /* alert & messages */
@@ -725,6 +726,7 @@ input[type="file"]::file-selector-button {
   background-color: var(--purple-light);
   padding: 7px;
   cursor: pointer;
+  margin-bottom: 8px;
 }
 
 input[type="file"]::file-selector-button:hover {
@@ -1310,14 +1312,23 @@ input[type="file"]::file-selector-button:hover {
 
 footer {
   border-top: 1px solid var(--gray);
-  padding-top: 10px;
+  padding: 10px;
   background-color: var(--bg-dark);
   color: var(--bg-main);
   font-size: 0.8rem;
 }
 footer a {
+  display: block;
   text-decoration: none;
   color: var(--bg-main);
+  transition: color 0.5s;
+  margin-top: 10px;
+}
+footer a:last-child {
+  color: var(--warning);
+}
+footer a:hover {
+  color: var(--gray);
 }
 @media screen and (min-width: 1000px) {
   footer {
