@@ -27,7 +27,14 @@
         </div>
         <div class="login-form-actions">
             <button type="submit" class="btn-green">Σύνδεση</button>
-
+            <button type="button" onclick="fillDemoCredentials()" class="btn-gray">Σύνδεση στο Demo</button>
+            <script type="text/javascript">
+                'use strict'
+                function fillDemoCredentials() {
+                    document.getElementById('id_username').value = 'demo'
+                    document.getElementById('id_password').value = 'Demo2026!'
+                }
+            </script>
         </div>
     </form>
     <div class="options-no-login">
