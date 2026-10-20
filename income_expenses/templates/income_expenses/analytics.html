@@ -18,9 +18,11 @@
                 </div>
             </div>
             <div class="presets">
-                <a href="?start_date={{ quick_filters.this_year.from|date:'Y-m-d' }}&end_date={{ quick_filters.this_year.to|date:'Y-m-d' }}"
-                    class="btn-gray-b">Τρέχον Έτος</a>
-                <a href="?start_date={{ quick_filters.last_year_same_period.from|date:'Y-m-d' }}&end_date={{ quick_filters.last_year_same_period.to|date:'Y-m-d' }}"
+                <a href="?start_date={{ date_filters.one_year|date:'Y-m-d' }}&end_date={{ date_filters.today|date:'Y-m-d' }}"
+                    class="btn-gray-b">Ένα Έτος</a>
+                <a href="?start_date={{ date_filters.six_months|date:'Y-m-d' }}&end_date={{ date_filters.today|date:'Y-m-d' }}"
+                    class="btn-gray-b">Έξι Μήνες</a>
+                <a href="?start_date={{ date_filters.last_year_same_period.start|date:'Y-m-d' }}&end_date={{ date_filters.last_year_same_period.end|date:'Y-m-d' }}"
                     class="btn-gray-b">Ίδια Περίοδος Πέρυσι</a>
             </div>
             <button type="submit" class="btn-gray">Εφαρμογή</button>

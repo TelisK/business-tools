@@ -252,7 +252,19 @@ def analytics(request):
 
     start_date = request.GET.get('start_date', first_day_of_the_year)
     end_date = request.GET.get('end_date', today)
-
+    print(type(start_date), type(end_date))
+    print(start_date, end_date)
+    date_format = '%Y-%m-%d'
+    date_filters = {
+        'today' : today,
+        'one_year' : today + relativedelta(years=-1),
+        'six_months' : today + relativedelta(months=-6),
+        'last_year_same_period' : {
+            'start' : datetime.strptime(start_date, date_format) if type(start_date) == str else start_date + relativedelta(years=-1),
+            'end' : datetime.strptime(end_date, date_format) if type(end_date) == str else end_date + relativedelta(years=-1)
+        },
+    }
+    print(date_filters)
 # User can lookup for one day, with just use the one of the two date selections.
     if not end_date:
         end_date = start_date
@@ -448,6 +460,7 @@ def analytics(request):
         'net_profit_margin' : net_profit_margin,
         'start_date': start_date,
         'end_date': end_date,
+        'date_filters':date_filters,
     }
     return render(request, 'income_expenses/analytics.html', context=context_to_html)
 
