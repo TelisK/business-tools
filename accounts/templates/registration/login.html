@@ -27,12 +27,14 @@
         </div>
         <div class="login-form-actions">
             <button type="submit" class="btn-green">Σύνδεση</button>
-            <button type="button" onclick="fillDemoCredentials()" class="btn-gray">Σύνδεση στο Demo</button>
+            <button type="button" onclick="fillDemoCredentials()" class="demo btn-gray">Σύνδεση στο Demo</button>
             <script type="text/javascript">
                 'use strict'
+                // the 'id_username' and id_password are the defaults id's of Django's login. By using
+                // these on the js code, it works automaticaly without adding id on username and password.
                 function fillDemoCredentials() {
-                    document.getElementById('id_username').value = 'demo'
-                    document.getElementById('id_password').value = 'Demo2026!'
+                    document.getElementById('id_username').value = 'demo';
+                    document.getElementById('id_password').value = 'Demo2026!';
                 }
             </script>
         </div>

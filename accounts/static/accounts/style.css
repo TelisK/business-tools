@@ -44,6 +44,12 @@ they were not working.  */
 .login-form .options-no-login {
     margin: 10px;
 }
+.login-form-actions .demo {
+    margin-top: 10px;
+}
+.options-no-login a {
+    margin-top: 10px;
+}
 
 /* password-reset.html */
 
